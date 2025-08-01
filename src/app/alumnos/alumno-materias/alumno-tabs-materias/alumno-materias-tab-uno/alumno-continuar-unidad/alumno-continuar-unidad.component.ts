@@ -18,6 +18,20 @@ import { SubunidadesAdmin } from "app/administradores/administradores";
 import { SubUnidadesAlumno } from "app/alumnos/alumnos";
 import { AlumnosService } from "app/alumnos/alumnos.service";
 import Swal from "sweetalert2";
+interface AudioData {
+    blob?: Blob;
+    url?: string;
+    status: "draft" | "submitted";
+    recording: boolean;
+    chunks: BlobPart[];
+    mediaRecorder?: MediaRecorder;
+    audioEl?: HTMLAudioElement;
+    playing?: boolean;
+    duration?: number;
+    currentTime?: number;
+    progress?: number; // 0..1
+    rafId?: number;
+}
 
 @Component({
     selector: "academy-course",
@@ -51,6 +65,28 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
 
     // sirve para cheackear si vio el video o no (es solo un timer de 5 segundos)
     vioVideo: boolean;
+    //VARIABLES PARA GRABACION DE AUDIO
+    // Solo el estudiante graba; el profesor viene con audio pregrabado
+    studentAudio: AudioData = {
+        status: "draft",
+        recording: false,
+        chunks: [],
+        playing: false,
+        currentTime: 0,
+        progress: 0,
+        duration: 0,
+    };
+
+    professorAudio: AudioData = {
+        status: "submitted",
+        recording: false,
+        chunks: [],
+        url: "",
+        playing: false,
+        currentTime: 0,
+        progress: 0,
+        duration: 0,
+    };
 
     constructor(
         private _formBuilder: FormBuilder,
@@ -81,6 +117,14 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
         console.log("valor inicial", this.vioVideo);
 
         this.checkVioVideo();
+
+        // profesor tiene audio ya enviado
+        // inicializar audio fake del profesor
+        // inicializar audio fake del profesor
+        const fakeProfessorBlob = this.createSilentAudio(1500);
+        this.professorAudio.blob = fakeProfessorBlob;
+        this.professorAudio.url = URL.createObjectURL(fakeProfessorBlob);
+        this.setupAudioElement("professor");
     }
 
     getSubUnidad(id_unidad) {
@@ -88,7 +132,19 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
         Swal.showLoading();
 
         this.alumnoService.getSubUnidades(id_unidad).subscribe((data: any) => {
-            this.subunidades = data;
+            data.push({
+                arrayRespuestas: data[0].arrayRespuestas,
+                stepCompletado: true,
+                CORRECTA: 1,
+                ID: 999,
+                PREGUNTA: data[0].PREGUNTA,
+                RESPUESTA1: data[0].RESPUESTA1,
+                RESPUESTA2: data[0].RESPUESTA2,
+                TEXTO: "Expresion Oral",
+                TITULO: "Expresion Oral",
+                LINK_VIDEO: data[0].LINK_VIDEO,
+            });
+            this.subunidades = data.reverse();
 
             for (let s of this.subunidades) {
                 this.subunidades.map((x) => {
@@ -287,5 +343,218 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
 
             console.log("ya vio el video", this.vioVideo);
         }, 5000);
+    }
+
+    // ------------------
+    // UTIL: crear audio silencioso (fake) para el profesor
+    // ------------------
+    createSilentAudio(durationMs = 1000): Blob {
+        const sampleRate = 44100;
+        const numSamples = (sampleRate * durationMs) / 1000;
+        const buffer = new ArrayBuffer(44 + numSamples * 2);
+        const view = new DataView(buffer);
+        const writeString = (offset: number, str: string) => {
+            for (let i = 0; i < str.length; i++)
+                view.setUint8(offset + i, str.charCodeAt(i));
+        };
+        writeString(0, "RIFF");
+        view.setUint32(4, 36 + numSamples * 2, true);
+        writeString(8, "WAVE");
+        writeString(12, "fmt ");
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, 1, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * 2, true);
+        view.setUint16(32, 2, true);
+        view.setUint16(34, 16, true);
+        writeString(36, "data");
+        view.setUint32(40, numSamples * 2, true);
+        // silencio, datos ya son cero
+        return new Blob([view], { type: "audio/wav" });
+    }
+
+    // ------------------
+    // MEDIA / GRABACIÓN
+    // ------------------
+    private getMediaStream(): Promise<MediaStream> {
+        return navigator.mediaDevices.getUserMedia({ audio: true });
+    }
+
+    async startRecording() {
+        if (this.studentAudio.recording) return;
+
+        try {
+            const stream = await this.getMediaStream();
+            const recorder = new MediaRecorder(stream);
+            this.studentAudio.chunks = [];
+            this.studentAudio.mediaRecorder = recorder;
+
+            recorder.ondataavailable = (e: BlobEvent) => {
+                if (e.data && e.data.size > 0) {
+                    this.studentAudio.chunks.push(e.data);
+                }
+            };
+
+            recorder.onstop = () => {
+                const blob = new Blob(this.studentAudio.chunks, {
+                    type: "audio/webm",
+                });
+                this.studentAudio.blob = blob;
+                if (this.studentAudio.url) {
+                    URL.revokeObjectURL(this.studentAudio.url);
+                }
+                this.studentAudio.url = URL.createObjectURL(blob);
+                this.studentAudio.recording = false;
+                // preparar elemento para playback con metadata
+                this.setupAudioElement("student");
+            };
+
+            recorder.start();
+            this.studentAudio.recording = true;
+        } catch (err) {
+            console.error("No se pudo acceder al micrófono", err);
+            Swal.fire("Error", "No se pudo acceder al micrófono.", "error");
+        }
+    }
+
+    stopRecording() {
+        if (this.studentAudio.mediaRecorder && this.studentAudio.recording) {
+            this.studentAudio.mediaRecorder.stop();
+            this.studentAudio.recording = false;
+            this.studentAudio.mediaRecorder.stream
+                ?.getTracks()
+                .forEach((t) => t.stop());
+        }
+    }
+
+    // ------------------
+    // REPRODUCCIÓN / CONTROL
+    // ------------------
+    private setupAudioElement(who: "student" | "professor") {
+        const target =
+            who === "student" ? this.studentAudio : this.professorAudio;
+        if (!target.url) return;
+
+        // Si ya existía, limpiamos
+        if (target.audioEl) {
+            target.audioEl.pause();
+            target.audioEl.currentTime = 0;
+            cancelAnimationFrame(target.rafId!);
+        } else {
+            target.audioEl = new Audio(target.url);
+        }
+
+        target.audioEl.src = target.url!;
+        target.audioEl.preload = "metadata";
+
+        target.audioEl.onloadedmetadata = () => {
+            target.duration = target.audioEl!.duration || 0;
+            target.currentTime = 0;
+            target.progress = 0;
+        };
+
+        target.audioEl.ontimeupdate = () => {
+            target.currentTime = target.audioEl!.currentTime;
+            target.progress = target.duration
+                ? target.currentTime! / target.duration!
+                : 0;
+        };
+
+        target.audioEl.onended = () => {
+            target.playing = false;
+            cancelAnimationFrame(target.rafId!);
+            target.currentTime = target.duration;
+            target.progress = 1;
+        };
+    }
+
+    togglePlay(who: "student" | "professor") {
+        const target =
+            who === "student" ? this.studentAudio : this.professorAudio;
+        if (!target.url) return;
+        this.setupAudioElement(who);
+        if (!target.audioEl) return;
+
+        if (target.playing) {
+            target.audioEl.pause();
+            target.playing = false;
+            cancelAnimationFrame(target.rafId!);
+        } else {
+            target.audioEl.play();
+            target.playing = true;
+            this.updateFrame(who);
+        }
+    }
+
+    private updateFrame(who: "student" | "professor") {
+        const target =
+            who === "student" ? this.studentAudio : this.professorAudio;
+        if (!target.audioEl) return;
+
+        target.currentTime = target.audioEl.currentTime;
+        target.duration = target.audioEl.duration;
+        target.progress = target.duration
+            ? target.currentTime! / target.duration!
+            : 0;
+
+        if (target.playing) {
+            target.rafId = requestAnimationFrame(() => this.updateFrame(who));
+        }
+    }
+
+    seek(event: MouseEvent, who: "student" | "professor") {
+        const target =
+            who === "student" ? this.studentAudio : this.professorAudio;
+        if (!target.audioEl) return;
+
+        const wrapper = (event.currentTarget as HTMLElement).querySelector(
+            ".progress-base"
+        ) as HTMLElement;
+        if (!wrapper) return;
+
+        const rect = wrapper.getBoundingClientRect();
+        const clickX = event.offsetX;
+        const ratio = Math.min(Math.max(clickX / rect.width, 0), 1);
+
+        target.audioEl.currentTime = (target.duration || 0) * ratio;
+        target.currentTime = target.audioEl.currentTime;
+        target.progress = ratio;
+    }
+
+    formatTime(sec: number = 0): string {
+        if (isNaN(sec)) return "0:00";
+        const minutes = Math.floor(sec / 60);
+        const seconds = Math.floor(sec % 60)
+            .toString()
+            .padStart(2, "0");
+        return `${minutes}:${seconds}`;
+    }
+
+    // ------------------
+    // ACCIONES DE ENVÍO / RESET
+    // ------------------
+    sendStudentAudio() {
+        if (!this.studentAudio.url) return;
+        this.studentAudio.status = "submitted";
+        this.setupAudioElement("student");
+    }
+
+    resetStudent() {
+        if (this.studentAudio.url) {
+            URL.revokeObjectURL(this.studentAudio.url);
+        }
+        this.studentAudio.blob = undefined;
+        this.studentAudio.url = undefined;
+        this.studentAudio.status = "draft";
+        this.studentAudio.chunks = [];
+        this.studentAudio.recording = false;
+        this.studentAudio.playing = false;
+        this.studentAudio.currentTime = 0;
+        this.studentAudio.progress = 0;
+        if (this.studentAudio.audioEl) {
+            this.studentAudio.audioEl.pause();
+            this.studentAudio.audioEl = undefined;
+        }
     }
 }

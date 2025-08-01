@@ -1,23 +1,38 @@
-<div fxFlex="100" fxLayout="row" id="academy-course" *ngIf="subunidades.length > 0">
+<div
+    fxFlex="100"
+    fxLayout="row"
+    id="academy-course"
+    *ngIf="subunidades.length > 0"
+>
     <!--STEPER DE LA IZQ-->
 
     <!-- SIDEBAR -->
-    <fuse-sidebar class="sidebar" name="academy-course-left-sidebar-1" position="left" lockedOpen="gt-sm">
+    <fuse-sidebar
+        class="sidebar"
+        name="academy-course-left-sidebar-1"
+        position="left"
+        lockedOpen="gt-sm"
+    >
         <!-- SIDEBAR CONTENT -->
         <div class="content" fusePerfectScrollbar>
             <div class="steps">
                 <!-- ESTO MUESTRA LOS STEPS QUE SON CLICKEABLES -->
-                <div class="step" *ngFor="
+                <div
+                    class="step"
+                    *ngFor="
                         let step of subunidades;
                         let i = index;
                         let last = last;
                         let first = first
-                    " (click)="gotoStep(i)" [ngClass]="{
+                    "
+                    (click)="gotoStep(i)"
+                    [ngClass]="{
                         current: pos === i,
                         completed: pos > i,
                         last: last,
                         first: first
-                    }">
+                    }"
+                >
                     <div class="index">
                         <span>{{ i + 1 }}</span>
                     </div>
@@ -35,7 +50,10 @@
         <!--HEADER-->
         <div class="header" fxLayout="row" fxLayoutAlign="start center">
             <div>
-                <button mat-button [routerLink]="['/tabs-materias', id_materia]">
+                <button
+                    mat-button
+                    [routerLink]="['/tabs-materias', id_materia]"
+                >
                     <mat-icon>arrow_back</mat-icon>
                 </button>
             </div>
@@ -46,22 +64,32 @@
         <!--HEADER-->
 
         <!-- SIDEBAR MOBILE -->
-        <fuse-sidebar class="sidebar" name="academy-course-left-sidebar-2" position="left" lockedOpen="lt-md">
+        <fuse-sidebar
+            class="sidebar"
+            name="academy-course-left-sidebar-2"
+            position="left"
+            lockedOpen="lt-md"
+        >
             <!-- SIDEBAR CONTENT -->
             <div class="content" fusePerfectScrollbar>
                 <div class="steps">
                     <!-- ESTO MUESTRA LOS STEPS QUE SON CLICKEABLES -->
-                    <div class="step" *ngFor="
-                        let step of subunidades;
-                        let i = index;
-                        let last = last;
-                        let first = first
-                    " (click)="gotoStep(i)" [ngClass]="{
-                        current: pos === i,
-                        completed: pos > i,
-                        last: last,
-                        first: first
-                    }">
+                    <div
+                        class="step"
+                        *ngFor="
+                            let step of subunidades;
+                            let i = index;
+                            let last = last;
+                            let first = first
+                        "
+                        (click)="gotoStep(i)"
+                        [ngClass]="{
+                            current: pos === i,
+                            completed: pos > i,
+                            last: last,
+                            first: first
+                        }"
+                    >
                         <div class="index">
                             <span>{{ i + 1 }}</span>
                         </div>
@@ -78,8 +106,13 @@
         <div class="p-24" fxLayoutAlign="center center" fxLayout="column">
             <div style="height: auto" class="mb-12 ancho">
                 <div class="container">
-                    <iframe class="responsive-iframe" [src]="subunidades[pos].videoSeguro" frameborder="0"
-                        allow=" autoplay;  encrypted-media;" allowfullscreen></iframe>
+                    <iframe
+                        class="responsive-iframe"
+                        [src]="subunidades[pos].videoSeguro"
+                        frameborder="0"
+                        allow=" autoplay;  encrypted-media;"
+                        allowfullscreen
+                    ></iframe>
                 </div>
             </div>
 
@@ -104,26 +137,203 @@
             <div fxLayout="column" class="mb-12 ancho">
                 <div class="mt-12 mb-12">
                     <label class="titulo-pregunta">
-                        {{subunidades[pos].PREGUNTA}}</label>
+                        {{ subunidades[pos].PREGUNTA }}</label
+                    >
                 </div>
 
-
-                <mat-radio-group [(ngModel)]="subunidades[pos].arrayRespuestas.respuestaSeleccionada"
-                    aria-label="Select an option" fxLayout="column">
-                    <mat-radio-button *ngFor="let r of subunidades[pos].arrayRespuestas" [value]="r.correcta"
-                        (click)="seleccionada(r.correcta)">
-                        {{r.texto}}
+                <mat-radio-group
+                    *ngIf="subunidades[pos].TEXTO !== 'Expresion Oral'"
+                    [(ngModel)]="
+                        subunidades[pos].arrayRespuestas.respuestaSeleccionada
+                    "
+                    aria-label="Select an option"
+                    fxLayout="column"
+                >
+                    <mat-radio-button
+                        *ngFor="let r of subunidades[pos].arrayRespuestas"
+                        [value]="r.correcta"
+                        (click)="seleccionada(r.correcta)"
+                    >
+                        {{ r.texto }}
                     </mat-radio-button>
                 </mat-radio-group>
-            </div>
+                <!-- justo antes de la pregunta -->
+                <!-- SOLO PARA LA SUBUNIDAD CON AUDIO -->
+                <div
+                    *ngIf="subunidades[pos].TEXTO === 'Expresion Oral'"
+                    class="mb-6"
+                >
+                    <div class="voice-exchange-container">
+                        <!-- PROFESOR -->
+                        <div class="voice-panel professor-panel">
+                            <div class="header">
+                                <div class="role">Profesor</div>
+                                <div class="status">Corrección recibida</div>
+                            </div>
+                            <div class="voice-message bubble received">
+                                <!-- play/pause -->
+                                <button
+                                    class="btn-play"
+                                    (click)="togglePlay('professor')"
+                                >
+                                    <mat-icon>{{
+                                        professorAudio.playing
+                                            ? "pause"
+                                            : "play_arrow"
+                                    }}</mat-icon>
+                                </button>
+                                <!-- progress bar + time -->
+                                <div
+                                    class="progress-wrapper"
+                                    (click)="seek($event, 'professor')"
+                                >
+                                    <div class="progress-base">
+                                        <div
+                                            class="progress-filled"
+                                            [style.width.%]="
+                                                professorAudio.progress * 100
+                                            "
+                                        ></div>
+                                    </div>
+                                    <div class="time">
+                                        {{
+                                            formatTime(
+                                                professorAudio.currentTime
+                                            )
+                                        }}
+                                        /
+                                        {{
+                                            formatTime(professorAudio.duration)
+                                        }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="note">
+                                Este audio viene del profesor y no se puede
+                                editar.
+                            </div>
+                        </div>
 
-            <div class="mt-8 ancho" fxLayoutAlign="end">
-                <button mat-raised-button color="accent" class="boton-con-fondo"
-                    (click)="modalRespuesta(subunidades[pos])">
-                    Responder
-                </button>
+                        <!-- ESTUDIANTE -->
+                        <div class="voice-panel student-panel">
+                            <div class="header">
+                                <div class="role">Estudiante</div>
+                                <div
+                                    class="status"
+                                    [ngClass]="{
+                                        sent:
+                                            studentAudio.status === 'submitted'
+                                    }"
+                                >
+                                    {{
+                                        studentAudio.status === "submitted"
+                                            ? "Enviado"
+                                            : "Preparando"
+                                    }}
+                                </div>
+                            </div>
+
+                            <div class="voice-message bubble sent">
+                                <!-- play/pause -->
+                                <button
+                                    class="btn-play"
+                                    (click)="togglePlay('student')"
+                                    [disabled]="!studentAudio.url"
+                                >
+                                    <mat-icon>{{
+                                        studentAudio.playing
+                                            ? "pause"
+                                            : "play_arrow"
+                                    }}</mat-icon>
+                                </button>
+
+                                <!-- progress bar + time -->
+                                <div
+                                    class="progress-wrapper"
+                                    (click)="seek($event, 'student')"
+                                >
+                                    <div class="progress-base">
+                                        <div
+                                            class="progress-filled"
+                                            [style.width.%]="
+                                                studentAudio.progress * 100
+                                            "
+                                        ></div>
+                                    </div>
+                                    <div class="time">
+                                        {{
+                                            formatTime(studentAudio.currentTime)
+                                        }}
+                                        /
+                                        {{ formatTime(studentAudio.duration) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- controles fijos abajo -->
+                            <div class="controls">
+                                <button
+                                    mat-icon-button
+                                    (click)="
+                                        studentAudio.recording
+                                            ? stopRecording()
+                                            : startRecording()
+                                    "
+                                >
+                                    <mat-icon>{{
+                                        studentAudio.recording ? "stop" : "mic"
+                                    }}</mat-icon>
+                                </button>
+                                <button
+                                    mat-icon-button
+                                    (click)="togglePlay('student')"
+                                    [disabled]="!studentAudio.url"
+                                >
+                                    <mat-icon>{{
+                                        studentAudio.playing
+                                            ? "pause"
+                                            : "play_arrow"
+                                    }}</mat-icon>
+                                </button>
+                                <button
+                                    mat-flat-button
+                                    color="primary"
+                                    (click)="sendStudentAudio()"
+                                    [disabled]="
+                                        !studentAudio.url ||
+                                        studentAudio.recording
+                                    "
+                                >
+                                    Enviar
+                                </button>
+                                <button
+                                    mat-icon-button
+                                    (click)="resetStudent()"
+                                    [disabled]="studentAudio.recording"
+                                >
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                            <div *ngIf="!studentAudio.url" class="hint">
+                                Presioná el micrófono para grabar, podés
+                                reproducir antes de enviar.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 ancho" fxLayoutAlign="end">
+                    <button
+                        mat-raised-button
+                        color="accent"
+                        class="boton-con-fondo"
+                        (click)="modalRespuesta(subunidades[pos])"
+                    >
+                        Responder
+                    </button>
+                </div>
             </div>
+            <!-- / CONTENIDO-->
         </div>
-        <!-- / CONTENIDO-->
     </div>
 </div>
