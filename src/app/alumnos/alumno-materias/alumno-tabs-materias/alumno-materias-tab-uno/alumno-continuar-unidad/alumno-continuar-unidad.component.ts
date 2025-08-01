@@ -18,6 +18,7 @@ import { SubunidadesAdmin } from "app/administradores/administradores";
 import { SubUnidadesAlumno } from "app/alumnos/alumnos";
 import { AlumnosService } from "app/alumnos/alumnos.service";
 import Swal from "sweetalert2";
+import { stream } from "xlsx";
 interface AudioData {
     blob?: Blob;
     url?: string;
@@ -32,6 +33,9 @@ interface AudioData {
     progress?: number; // 0..1
     rafId?: number;
 }
+// parche rápido: evita errores de tipo, no es tan estricto
+declare var MediaRecorder: any;
+type BlobEvent = any;
 
 @Component({
     selector: "academy-course",
@@ -119,6 +123,7 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
         this.checkVioVideo();
 
         // profesor tiene audio ya enviado
+        // inicializar audio fake del profesor
         // inicializar audio fake del profesor
         // inicializar audio fake del profesor
         const fakeProfessorBlob = this.createSilentAudio(1500);
@@ -345,9 +350,7 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
         }, 5000);
     }
 
-    // ------------------
-    // UTIL: crear audio silencioso (fake) para el profesor
-    // ------------------
+    // ------------------ util: crear audio fake para el profesor ------------------
     createSilentAudio(durationMs = 1000): Blob {
         const sampleRate = 44100;
         const numSamples = (sampleRate * durationMs) / 1000;
@@ -370,27 +373,33 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
         view.setUint16(34, 16, true);
         writeString(36, "data");
         view.setUint32(40, numSamples * 2, true);
-        // silencio, datos ya son cero
         return new Blob([view], { type: "audio/wav" });
     }
 
-    // ------------------
-    // MEDIA / GRABACIÓN
-    // ------------------
+    // ------------------ acceso a micrófono ------------------
     private getMediaStream(): Promise<MediaStream> {
         return navigator.mediaDevices.getUserMedia({ audio: true });
     }
 
+    // ------------------ grabación del alumno ------------------
     async startRecording() {
         if (this.studentAudio.recording) return;
 
+        if (!("MediaRecorder" in window)) {
+            Swal.fire("Error", "Tu navegador no soporta grabación de audio.");
+            return;
+        }
+
         try {
-            const stream = await this.getMediaStream();
-            const recorder = new MediaRecorder(stream);
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+            });
+            const recorder: any = new (window as any).MediaRecorder(stream); // fallback sin tipos estrictos
+
             this.studentAudio.chunks = [];
             this.studentAudio.mediaRecorder = recorder;
 
-            recorder.ondataavailable = (e: BlobEvent) => {
+            recorder.ondataavailable = (e: any) => {
                 if (e.data && e.data.size > 0) {
                     this.studentAudio.chunks.push(e.data);
                 }
@@ -406,14 +415,15 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
                 }
                 this.studentAudio.url = URL.createObjectURL(blob);
                 this.studentAudio.recording = false;
-                // preparar elemento para playback con metadata
                 this.setupAudioElement("student");
+                this._changeDetectorRef.detectChanges();
             };
 
             recorder.start();
             this.studentAudio.recording = true;
+            this._changeDetectorRef.detectChanges();
         } catch (err) {
-            console.error("No se pudo acceder al micrófono", err);
+            console.error("Error accediendo al micrófono", err);
             Swal.fire("Error", "No se pudo acceder al micrófono.", "error");
         }
     }
@@ -424,23 +434,22 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
             this.studentAudio.recording = false;
             this.studentAudio.mediaRecorder.stream
                 ?.getTracks()
-                .forEach((t) => t.stop());
+                .forEach((t: any) => t.stop());
         }
     }
 
-    // ------------------
-    // REPRODUCCIÓN / CONTROL
-    // ------------------
+    // ------------------ reproducción y control ------------------
     private setupAudioElement(who: "student" | "professor") {
         const target =
             who === "student" ? this.studentAudio : this.professorAudio;
         if (!target.url) return;
 
-        // Si ya existía, limpiamos
         if (target.audioEl) {
             target.audioEl.pause();
             target.audioEl.currentTime = 0;
-            cancelAnimationFrame(target.rafId!);
+            if (target.rafId) {
+                cancelAnimationFrame(target.rafId);
+            }
         } else {
             target.audioEl = new Audio(target.url);
         }
@@ -449,23 +458,33 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
         target.audioEl.preload = "metadata";
 
         target.audioEl.onloadedmetadata = () => {
-            target.duration = target.audioEl!.duration || 0;
+            const dur = target.audioEl!.duration;
+            target.duration = isFinite(dur) ? dur : 0;
             target.currentTime = 0;
             target.progress = 0;
+            this._changeDetectorRef.detectChanges();
         };
 
         target.audioEl.ontimeupdate = () => {
-            target.currentTime = target.audioEl!.currentTime;
-            target.progress = target.duration
-                ? target.currentTime! / target.duration!
+            target.currentTime = isFinite(target.audioEl!.currentTime)
+                ? target.audioEl!.currentTime
                 : 0;
+            if (target.duration && isFinite(target.duration)) {
+                target.progress = target.currentTime! / target.duration!;
+            } else {
+                target.progress = 0;
+            }
+            this._changeDetectorRef.detectChanges();
         };
 
         target.audioEl.onended = () => {
             target.playing = false;
-            cancelAnimationFrame(target.rafId!);
+            if (target.rafId) {
+                cancelAnimationFrame(target.rafId);
+            }
             target.currentTime = target.duration;
             target.progress = 1;
+            this._changeDetectorRef.detectChanges();
         };
     }
 
@@ -479,12 +498,15 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
         if (target.playing) {
             target.audioEl.pause();
             target.playing = false;
-            cancelAnimationFrame(target.rafId!);
+            if (target.rafId) {
+                cancelAnimationFrame(target.rafId);
+            }
         } else {
             target.audioEl.play();
             target.playing = true;
             this.updateFrame(who);
         }
+        this._changeDetectorRef.detectChanges();
     }
 
     private updateFrame(who: "student" | "professor") {
@@ -492,8 +514,12 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
             who === "student" ? this.studentAudio : this.professorAudio;
         if (!target.audioEl) return;
 
-        target.currentTime = target.audioEl.currentTime;
-        target.duration = target.audioEl.duration;
+        target.currentTime = isFinite(target.audioEl.currentTime)
+            ? target.audioEl.currentTime
+            : 0;
+        target.duration = isFinite(target.audioEl.duration)
+            ? target.audioEl.duration
+            : 0;
         target.progress = target.duration
             ? target.currentTime! / target.duration!
             : 0;
@@ -501,6 +527,7 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
         if (target.playing) {
             target.rafId = requestAnimationFrame(() => this.updateFrame(who));
         }
+        this._changeDetectorRef.detectChanges();
     }
 
     seek(event: MouseEvent, who: "student" | "professor") {
@@ -520,10 +547,11 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
         target.audioEl.currentTime = (target.duration || 0) * ratio;
         target.currentTime = target.audioEl.currentTime;
         target.progress = ratio;
+        this._changeDetectorRef.detectChanges();
     }
 
     formatTime(sec: number = 0): string {
-        if (isNaN(sec)) return "0:00";
+        if (!isFinite(sec) || sec < 0) return "0:00";
         const minutes = Math.floor(sec / 60);
         const seconds = Math.floor(sec % 60)
             .toString()
@@ -531,13 +559,12 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
         return `${minutes}:${seconds}`;
     }
 
-    // ------------------
-    // ACCIONES DE ENVÍO / RESET
-    // ------------------
+    // ------------------ acciones del alumno ------------------
     sendStudentAudio() {
         if (!this.studentAudio.url) return;
         this.studentAudio.status = "submitted";
         this.setupAudioElement("student");
+        this._changeDetectorRef.detectChanges();
     }
 
     resetStudent() {
@@ -556,5 +583,6 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
             this.studentAudio.audioEl.pause();
             this.studentAudio.audioEl = undefined;
         }
+        this._changeDetectorRef.detectChanges();
     }
 }
