@@ -1,0 +1,230 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <!--HEADER NORMAL-->
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Grupos
+                </h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto">
+            <mat-tab-group
+                [(selectedIndex)]="tabIndex"
+                (selectedTabChange)="tabChage($event)"
+            >
+                <!-- EMPIEZA TAB GRUPOS -->
+                <mat-tab label="Materias">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div
+                            class="mat-card card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                            fxLayoutAlign="start center"
+                        >
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                Acá puedes
+                                <strong>crear una grupos de materias</strong>
+                            </label>
+                        </div>
+
+                        <div
+                            class="mat-card card p-12"
+                            fxLayout="column"
+                            fxFlex="100"
+                            style="border-radius: 5px"
+                        >
+                            <div
+                                fxFlex="100"
+                                fxLayout="row"
+                                fxLayoutAlign="end center"
+                            >
+                                <!-- <div class="matFormField mr-16" fxFlex="70">
+                                    <input style="
+                                            border-radius: 50px;
+                                            height: 55px;
+                                            background: rgb(240, 240, 240);
+                                            width: 100%;
+                                        " placeholder="Buscar..." />
+                                </div> -->
+
+                                <div
+                                    fxFlex="30"
+                                    style="
+                                        padding-bottom: 21.5px;
+                                        margin-top: 4px;
+                                        margin-bottom: 4px;
+                                    "
+                                >
+                                    <button
+                                        mat-flat-button
+                                        color="accent"
+                                        class="boton-con-fondo"
+                                        style="width: 100%"
+                                        (click)="crearGrupo()"
+                                    >
+                                        Crear grupo <mat-icon>add</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <mat-table
+                                fxFlex="1 0 auto"
+                                class="products-table"
+                                #table
+                                [dataSource]="lista"
+                                [@animateStagger]="{ value: '50' }"
+                                fusePerfectScrollbar
+                            >
+                                <!-- Columna NOMBRE -->
+                                <ng-container matColumnDef="nombre">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                    >
+                                        <mat-form-field
+                                            appearance="outline"
+                                            style="width: 90%"
+                                        >
+                                            <mat-label>
+                                                {{ "Nombre" }}</mat-label
+                                            >
+                                            <input
+                                                (click)="
+                                                    $event.stopPropagation()
+                                                "
+                                                (keydown.space)="
+                                                    $event.stopPropagation()
+                                                "
+                                                (keyup)="filter('nombre')"
+                                                [(ngModel)]="filters.nombre"
+                                                matInput
+                                                type="text"
+                                                placeholder="Nombre"
+                                            />
+                                            <button
+                                                mat-icon-button
+                                                matSuffix
+                                                (click)="filters.nombre = ''"
+                                                (click)="filter('nombre')"
+                                            >
+                                                <mat-icon>clear</mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let g"
+                                    >
+                                        <p>{{ g.nombre }}</p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna IMAGEN -->
+                                <ng-container matColumnDef="imagen">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                    >
+                                        Imagen
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let g"
+                                    >
+                                        <img
+                                            style="width: 90px; padding: 10px 0"
+                                            [src]="
+                                                'https://apilms.central.edu.py/media/files/' +
+                                                g.link_imagen
+                                            "
+                                        />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="Acciones">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start start"
+                                        *matHeaderCellDef
+                                        >Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let g"
+                                        fxLayout="row"
+                                        style="
+                                            justify-content: space-evenly;
+                                            padding: 5px 0;
+                                        "
+                                    >
+                                        <button
+                                            mat-flat-button
+                                            color="accent"
+                                            class="mr-4"
+                                            (click)="editarGrupo(g)"
+                                        >
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+
+                                        <button
+                                            mat-flat-button
+                                            color="warn"
+                                            (click)="eliminarGrupo(g)"
+                                        >
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row
+                                    *matHeaderRowDef="
+                                        displayedColumns;
+                                        sticky: true
+                                    "
+                                ></mat-header-row>
+
+                                <mat-row
+                                    *matRowDef="
+                                        let lista;
+                                        columns: displayedColumns
+                                    "
+                                    class="product"
+                                    matRipple
+                                >
+                                </mat-row>
+                            </mat-table>
+                            <mat-paginator
+                                [pageSize]="10"
+                                [pageSizeOptions]="[10, 20, 50, 100]"
+                            ></mat-paginator>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!-- TERMINA TAB GRUPOS -->
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

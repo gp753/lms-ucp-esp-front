@@ -1,0 +1,56 @@
+<mat-horizontal-stepper [linear]="false" #stepper class="stepper-desktop">
+
+    <mat-step>
+        <ng-template matStepLabel>Bienvenida</ng-template>
+        <div>
+            <h1>Bienvenido a la encuesta de:</h1>
+            <p>{{preguntas[0].encuesta}}</p>
+        </div>
+
+        <div style="justify-content: center; width: 100%; display: flex;margin-top: 50px;">
+            <button mat-flat-button color="primary" matStepperNext>Iniciar encuesta</button>
+        </div>
+    </mat-step>
+
+    <mat-step *ngFor="let p of preguntas; let i = index">
+        <ng-template matStepLabel>Pregunta N° {{i+1}}</ng-template>
+
+        <div>
+            <h1>{{p.pregunta}}</h1>
+
+
+            <mat-radio-group [fxShow]="p.id_tipo == 1" [(ngModel)]="respuestaSeleccionada"
+                style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                <mat-radio-button (click)="asd()" *ngFor="let r of p.respuestas; let i = index" [value]="r"
+                    style="width: 49%;">
+                    {{r.respuesta}}
+                </mat-radio-button>
+            </mat-radio-group>
+
+
+            <mat-form-field [fxShow]="p.id_tipo == 2" appearance="outline" style="width: 100%; height: 50px;">
+                <mat-label>Respuesta</mat-label>
+                <textarea [(ngModel)]="p.respuestaTexto" matInput></textarea>
+            </mat-form-field>
+        </div>
+
+        <div style="justify-content: center; width: 100%; display: flex;margin-top: 50px">
+            <button mat-flat-button color="primary" class="mr-8" (click)="borrarRespuesta()"
+                matStepperPrevious>Atras</button>
+            <button mat-flat-button color="primary" (click)="guardarRespuesta(p.id_tipo, p.id)"
+                matStepperNext>Siguiente</button>
+        </div>
+    </mat-step>
+
+    <mat-step>
+        <ng-template matStepLabel>Fin</ng-template>
+        <p>Has finalizado la encuesta.</p>
+
+        <div style="justify-content: center; width: 100%; display: flex;margin-top: 50px">
+            <button mat-flat-button color="primary" class="mr-8" matStepperPrevious>Atras</button>
+            <button mat-flat-button color="warn" class="mr-8"
+                (click)="resetEncuesta();stepper.reset();">Reiniciar</button>
+            <button mat-flat-button color="accent" (click)="finalizar()">Finalizar encuesta</button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>

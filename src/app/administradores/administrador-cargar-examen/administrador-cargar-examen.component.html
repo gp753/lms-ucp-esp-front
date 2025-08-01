@@ -1,0 +1,498 @@
+<div class="page-layout simple">
+    <div fxLayout="column">
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <!--<div>
+                <button mat-button>
+                  <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Cargar Examen
+                </h1>
+            </div>
+        </div>
+
+        <!--CONTENIDO-->
+        <mat-tab-group (selectedTabChange)="tabChange($event)">
+            <!-- EMPIEZA TAB CREAR EXAMEN -->
+            <mat-tab label="Crear examen">
+                <div
+                    class="p-24 card"
+                    fxLayout="column"
+                    fxFlex="1 0 auto"
+                    style="width: 100% !important"
+                >
+                    <div
+                        class="mat-card card p-12 mb-24"
+                        fxLayout="row"
+                        fxFlex="1 0 auto"
+                        style="border-radius: 5px"
+                    >
+                        <div fxLayoutAlign="start center" class="mr-12">
+                            <mat-icon class="info">info</mat-icon>
+                        </div>
+                        <div fxLayoutAlign="start center">
+                            <label
+                                >Acá puedes
+                                <strong>crear tus examenes.</strong></label
+                            >
+                        </div>
+                    </div>
+
+                    <div
+                        class="mat-card card p-12"
+                        fxLayout="column"
+                        fxFlex="100"
+                        style="border-radius: 5px"
+                    >
+                        <div [formGroup]="formExamen">
+                            <div fxFlex="100" fxLayout="row">
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="40"
+                                    class="pr-4"
+                                >
+                                    <mat-label>Titulo</mat-label>
+                                    <input matInput formControlName="TITULO" />
+                                    <mat-error
+                                        >El titulo es requerido</mat-error
+                                    >
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="40"
+                                    class="pl-4 pr-4"
+                                >
+                                    <mat-label>Seleccione la materia</mat-label>
+                                    <mat-select formControlName="ID_MATERIA">
+                                        <mat-option
+                                            *ngFor="let m of materias"
+                                            [value]="m.ID"
+                                            >{{ m.NOMBRE }}</mat-option
+                                        >
+                                    </mat-select>
+                                    <mat-error
+                                        >La materia es requerido</mat-error
+                                    >
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="20"
+                                    class="pl-4"
+                                >
+                                    <mat-label>Cantidad de intentos</mat-label>
+                                    <input
+                                        matInput
+                                        formControlName="CANTIDAD_INTENTOS"
+                                        type="number"
+                                    />
+                                    <mat-error
+                                        >La cantidad de intentos es
+                                        requerido</mat-error
+                                    >
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div
+                            fxFlex="100"
+                            fxLayout="column"
+                            *ngFor="
+                                let arrayP of arrayPreguntasCreadas;
+                                let i = index
+                            "
+                        >
+                            <div
+                                style="
+                                    display: flex;
+                                    flex-direction: row;
+                                    justify-content: space-between;
+                                "
+                            >
+                                <mat-form-field
+                                    appearance="outline"
+                                    style="width: 90%"
+                                >
+                                    <mat-label>Pregunta {{ i + 1 }}</mat-label>
+                                    <textarea
+                                        matInput
+                                        style="min-height: 50px"
+                                        [(ngModel)]="arrayP['PREGUNTA']"
+                                    ></textarea>
+                                    <mat-error
+                                        >La pregunta {{ i + 1 }} es
+                                        requerida</mat-error
+                                    >
+                                </mat-form-field>
+
+                                <button
+                                    mat-flat-button
+                                    color="warn"
+                                    style="max-height: 50px; margin-top: 4px"
+                                    (click)="
+                                        eliminarPregunta(i, arrayP['PREGUNTA'])
+                                    "
+                                >
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+
+                            <div
+                                style="
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    justify-content: space-between;
+                                "
+                            >
+                                <div
+                                    *ngFor="
+                                        let res of arrayP.respuestas;
+                                        let ind = index
+                                    "
+                                    style="width: 49%"
+                                >
+                                    <mat-checkbox
+                                        style="width: 5%"
+                                        [(ngModel)]="res.correcta"
+                                        (click)="
+                                            soloUnaRepuestaTrue(
+                                                arrayP.respuestas,
+                                                ind
+                                            )
+                                        "
+                                    >
+                                    </mat-checkbox>
+
+                                    <mat-form-field
+                                        appearance="outline"
+                                        style="width: 95%"
+                                    >
+                                        <mat-label
+                                            >Respuesta {{ ind + 1 }}</mat-label
+                                        >
+                                        <input
+                                            matInput
+                                            [(ngModel)]="res.respuesta"
+                                        />
+                                        <mat-error
+                                            >La respuesta {{ ind + 1 }} es
+                                            requerida</mat-error
+                                        >
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--BOTON AGREGAR-->
+
+                        <div
+                            style="
+                                margin-top: 20px;
+                                justify-content: space-between;
+                            "
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                        >
+                            <button
+                                mat-flat-button
+                                color="primary"
+                                (click)="agregarPregunta()"
+                            >
+                                Agregar pregunta
+                            </button>
+
+                            <button
+                                mat-flat-button
+                                color="accent"
+                                [disabled]="
+                                    this.formExamen.invalid ||
+                                    this.arrayPreguntasCreadas.length == 0
+                                "
+                                (click)="crearExamen()"
+                            >
+                                Crear examen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- FIN TAB CREAR EXAMEN -->
+
+            <mat-tab label="Listado de examenes">
+                <div
+                    class="p-24 card"
+                    fxLayout="column"
+                    fxFlex="1 0 auto"
+                    style="width: 100% !important"
+                >
+                    <div
+                        class="mat-card card p-12 mb-24"
+                        fxLayout="row"
+                        fxFlex="1 0 auto"
+                        style="border-radius: 5px"
+                    >
+                        <div fxLayoutAlign="start center" class="mr-12">
+                            <mat-icon class="info">info</mat-icon>
+                        </div>
+                        <div fxLayoutAlign="start center">
+                            <label
+                                >Acá puedes ver<strong
+                                    >toda la lista de examenes y examenes de una
+                                    materia.</strong
+                                ></label
+                            >
+                        </div>
+                    </div>
+
+                    <div
+                        class="mat-card card p-12"
+                        fxFlex="1 0 auto"
+                        fxLayout="column"
+                        style="border-radius: 5px"
+                        fxLayoutAlign="start center"
+                    >
+                        <!-- <div style="width: 100%; display: flex; flex-direction: row; justify-content: space-between;">
+                            <div class="mr-16" style="padding-bottom: 21.5px; margin: 4px 0; width: 69%;">
+                                <input
+                                    style="border-radius: 50px; height: 55px; background: rgb(240, 240, 240); width: 100%;"
+                                    placeholder="Buscar...">
+                            </div>
+
+                            <mat-form-field appearance="outline" style="width: 29%;">
+                                <mat-label>Buscar por materia</mat-label>
+                                <mat-select [(ngModel)]="materiaSeleccionada">
+                                    <mat-option (click)="getExamenes()">Todos los examenes</mat-option>
+                                    <mat-option *ngFor="let m of materias" [value]="m.ID"
+                                        (click)="getExamenPorMateria()">
+                                        {{m.NOMBRE}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div> -->
+
+                        <mat-table
+                            style="width: 100%"
+                            class="products-table"
+                            #table
+                            [dataSource]="lista"
+                            [@animateStagger]="{ value: '50' }"
+                            fusePerfectScrollbar
+                            matSort
+                            (matSortChange)="sortData($event)"
+                        >
+                            <!-- Columna MATERIA -->
+                            <ng-container matColumnDef="materia">
+                                <mat-header-cell
+                                    fxLayoutAlign="start"
+                                    *matHeaderCellDef
+                                    mat-sort-header="materia"
+                                >
+                                    <mat-form-field
+                                        appearance="outline"
+                                        style="width: 80%"
+                                    >
+                                        <mat-label> {{ "Materia" }}</mat-label>
+                                        <input
+                                            (click)="$event.stopPropagation()"
+                                            (keydown.space)="
+                                                $event.stopPropagation()
+                                            "
+                                            (keyup)="filter('MATERIA')"
+                                            [(ngModel)]="filters.MATERIA"
+                                            matInput
+                                            type="text"
+                                            placeholder="Materia"
+                                        />
+                                        <button
+                                            mat-icon-button
+                                            matSuffix
+                                            (click)="filters.MATERIA = ''"
+                                            (click)="filter('MATERIA')"
+                                        >
+                                            <mat-icon>clear</mat-icon>
+                                        </button>
+                                    </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell
+                                    fxLayoutAlign="start"
+                                    *matCellDef="let e"
+                                >
+                                    <p class="text-truncate">
+                                        {{ e.MATERIA }}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Columna TITULO -->
+                            <ng-container matColumnDef="titulo">
+                                <mat-header-cell
+                                    fxLayoutAlign="start"
+                                    *matHeaderCellDef
+                                    mat-sort-header="titulo"
+                                >
+                                    <mat-form-field
+                                        appearance="outline"
+                                        style="width: 80%"
+                                    >
+                                        <mat-label> {{ "Titulo" }}</mat-label>
+                                        <input
+                                            (click)="$event.stopPropagation()"
+                                            (keydown.space)="
+                                                $event.stopPropagation()
+                                            "
+                                            (keyup)="filter('TITULO')"
+                                            [(ngModel)]="filters.TITULO"
+                                            matInput
+                                            type="text"
+                                            placeholder="Titulo"
+                                        />
+                                        <button
+                                            mat-icon-button
+                                            matSuffix
+                                            (click)="filters.TITULO = ''"
+                                            (click)="filter('TITULO')"
+                                        >
+                                            <mat-icon>clear</mat-icon>
+                                        </button>
+                                    </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell
+                                    fxLayoutAlign="start"
+                                    *matCellDef="let e"
+                                >
+                                    <p class="category text-truncate">
+                                        {{ e.TITULO }}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Columna INTENTOS -->
+                            <ng-container matColumnDef="cantidad_intentos">
+                                <mat-header-cell
+                                    fxLayoutAlign="start"
+                                    *matHeaderCellDef
+                                    mat-sort-header="intentos"
+                                >
+                                    <mat-form-field
+                                        appearance="outline"
+                                        style="width: 85%"
+                                    >
+                                        <mat-label>
+                                            {{ "Cantidad Intentos" }}</mat-label
+                                        >
+                                        <input
+                                            (click)="$event.stopPropagation()"
+                                            (keydown.space)="
+                                                $event.stopPropagation()
+                                            "
+                                            (keyup)="
+                                                filter('CANTIDAD_INTENTOS')
+                                            "
+                                            [(ngModel)]="
+                                                filters.CANTIDAD_INTENTOS
+                                            "
+                                            matInput
+                                            type="text"
+                                            placeholder="Cantidad Intentos"
+                                        />
+                                        <button
+                                            mat-icon-button
+                                            matSuffix
+                                            (click)="
+                                                filters.CANTIDAD_INTENTOS = ''
+                                            "
+                                            (click)="
+                                                filter('CANTIDAD_INTENTOS')
+                                            "
+                                        >
+                                            <mat-icon>clear</mat-icon>
+                                        </button>
+                                    </mat-form-field>
+                                </mat-header-cell>
+                                <mat-cell
+                                    fxLayoutAlign="start"
+                                    *matCellDef="let e"
+                                >
+                                    <p class="category text-truncate">
+                                        {{ e.CANTIDAD_INTENTOS }}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Columna ACCIONES -->
+                            <ng-container matColumnDef="acciones">
+                                <mat-header-cell
+                                    fxLayoutAlign="start start"
+                                    *matHeaderCellDef
+                                    >Acciones
+                                </mat-header-cell>
+
+                                <mat-cell
+                                    fxLayoutAlign="start"
+                                    style="
+                                        justify-content: space-evenly;
+                                        padding: 5px 0;
+                                    "
+                                    *matCellDef="let e"
+                                    fxLayout="row"
+                                >
+                                    <button
+                                        mat-flat-button
+                                        color="accent"
+                                        class="mr-4"
+                                        (click)="editarExamen(e)"
+                                    >
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+
+                                    <button
+                                        mat-flat-button
+                                        color="warn"
+                                        (click)="eliminarExamen(e)"
+                                    >
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row
+                                *matHeaderRowDef="
+                                    displayedColumns;
+                                    sticky: true
+                                "
+                            ></mat-header-row>
+
+                            <mat-row
+                                *matRowDef="
+                                    let product;
+                                    columns: displayedColumns
+                                "
+                                class="product"
+                                matRipple
+                            >
+                            </mat-row>
+                        </mat-table>
+                        <mat-paginator
+                            [pageSize]="10"
+                            [pageSizeOptions]="[10, 20, 50, 100]"
+                        ></mat-paginator>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+        <!-- / CONTENIDO -->
+    </div>
+</div>

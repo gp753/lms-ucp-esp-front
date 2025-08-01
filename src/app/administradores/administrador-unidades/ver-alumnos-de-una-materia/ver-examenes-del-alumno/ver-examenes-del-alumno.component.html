@@ -1,0 +1,198 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <!--HEADER NORMAL-->
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <div (click)="volver()">
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Examenes de un alumno
+                </h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto">
+            <div class="p-24" fxLayout="column" fxFlex="100">
+                <div
+                    class="mat-card card p-12 mb-24"
+                    fxLayout="row"
+                    style="border-radius: 5px"
+                    fxLayoutAlign="start center"
+                >
+                    <div class="mr-12">
+                        <mat-icon class="info">info</mat-icon>
+                    </div>
+                    <label>
+                        <label
+                            >Acá puedes ver los examenes<strong
+                                >del alumno seleccionado previamente.</strong
+                            ></label
+                        >
+                    </label>
+                </div>
+
+                <div
+                    class="mat-card card p-12"
+                    fxLayout="column"
+                    style="border-radius: 5px"
+                    fxLayoutAlign="start center"
+                >
+                    <mat-table
+                        style="width: 100%"
+                        class="products-table"
+                        #table
+                        [dataSource]="lista"
+                        [@animateStagger]="{ value: '50' }"
+                        fusePerfectScrollbar
+                        matSort
+                        (matSortChange)="sortData($event)"
+                    >
+                        <!-- Columna MATERIA -->
+                        <ng-container matColumnDef="materia">
+                            <mat-header-cell
+                                mat-sort-header
+                                fxLayoutAlign="start"
+                                *matHeaderCellDef
+                            >
+                                Materia
+                            </mat-header-cell>
+                            <mat-cell
+                                fxLayoutAlign="start"
+                                *matCellDef="let item"
+                            >
+                                <p class="text-truncate">
+                                    {{ item.materia }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna NOMBRE -->
+                        <ng-container matColumnDef="nombre">
+                            <mat-header-cell
+                                mat-sort-header
+                                fxLayoutAlign="start"
+                                *matHeaderCellDef
+                            >
+                                Nombre
+                            </mat-header-cell>
+                            <mat-cell
+                                fxLayoutAlign="start"
+                                *matCellDef="let item"
+                            >
+                                <p class="text-truncate">
+                                    {{ item.nombre }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna INTNETOS REALIZADOS -->
+                        <ng-container matColumnDef="intentosRealizados">
+                            <mat-header-cell
+                                mat-sort-header
+                                fxLayoutAlign="start"
+                                *matHeaderCellDef
+                            >
+                                Intentos Realizados
+                            </mat-header-cell>
+                            <mat-cell
+                                fxLayoutAlign="start"
+                                *matCellDef="let item"
+                            >
+                                <p class="text-truncate">
+                                    {{ item.intentosRealizados }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna LIOMITE ACTUAL -->
+                        <ng-container matColumnDef="limiteActual">
+                            <mat-header-cell
+                                mat-sort-header
+                                fxLayoutAlign="start"
+                                *matHeaderCellDef
+                            >
+                                Limite Atual
+                            </mat-header-cell>
+                            <mat-cell
+                                fxLayoutAlign="start"
+                                *matCellDef="let item"
+                            >
+                                <p class="text-truncate">
+                                    {{ item.limiteActual }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna ACCIONES -->
+                        <ng-container matColumnDef="acciones">
+                            <mat-header-cell
+                                fxLayoutAlign="start center"
+                                *matHeaderCellDef
+                                >Acciones
+                            </mat-header-cell>
+
+                            <mat-cell
+                                fxLayoutAlign="start"
+                                style="
+                                    justify-content: space-evenly;
+                                    padding: 5px 0;
+                                "
+                                *matCellDef="let item"
+                                fxLayout="row"
+                            >
+                                <button
+                                    mat-flat-button
+                                    color="accent"
+                                    (click)="cambiarIntentos(item)"
+                                    class="mr-4"
+                                >
+                                    Modificar
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row
+                            *matHeaderRowDef="displayedColumns; sticky: true"
+                        ></mat-header-row>
+
+                        <mat-row
+                            *matRowDef="let product; columns: displayedColumns"
+                            class="product"
+                            matRipple
+                        >
+                        </mat-row>
+                    </mat-table>
+
+                    <div
+                        style="
+                            width: 100%;
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: flex-start;
+                        "
+                    >
+                        <mat-paginator
+                            [pageSize]="10"
+                            [pageSizeOptions]="[10, 20, 50, 100]"
+                        ></mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

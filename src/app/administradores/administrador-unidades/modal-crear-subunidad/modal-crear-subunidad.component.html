@@ -1,0 +1,65 @@
+<div fxFlex="100" fxLayoutAlign="start" fxLayout="column" style="width: 700px">
+    <div class="mb-24" fxLayoutAlign="center center">
+        <label style="font-size: 20px; color: #656565; font-weight: bold">Creando Sub-unidad </label>
+    </div>
+
+    <div [formGroup]="form" fxFlex="100" fxLayout="column">
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Titulo</mat-label>
+            <input matInput formControlName="TITULO">
+            <mat-error>El titulo es requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Texto</mat-label>
+            <input matInput formControlName="TEXTO">
+            <mat-error>El texto es requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Link video</mat-label>
+            <input matInput formControlName="LINK_VIDEO">
+            <mat-error>El link es requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Pregunta</mat-label>
+            <input matInput formControlName="PREGUNTA">
+            <mat-error>La pregunta es requerida</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Respuesta 1</mat-label>
+            <input matInput formControlName="RESPUESTA1">
+            <mat-error>La respuesta 1 es requerida</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Respuesta 2</mat-label>
+            <input matInput formControlName="RESPUESTA2">
+            <mat-error>La respuesta 2 es requerida</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Respuesta correcta</mat-label>
+            <mat-select formControlName="CORRECTA">
+                <mat-option [value]="1">Respuesta 1</mat-option>
+                <mat-option [value]="2">Respuesta 2</mat-option>
+            </mat-select>
+            <mat-error>La respuesta correcta es requerida</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" style="width: 100%">
+        <div class="mr-24" style="width: 50%">
+            <button mat-raised-button color="accent" class="boton-sin-fondo" (click)="cerrar()">
+                Cancelar
+            </button>
+        </div>
+        <div style="width: 50%">
+            <button fxFlex="100" mat-raised-button color="accent" class="boton-con-fondo" (click)="crear()">
+                Crear
+            </button>
+        </div>
+    </div>
+</div>

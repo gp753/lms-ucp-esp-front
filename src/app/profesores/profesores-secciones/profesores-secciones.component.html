@@ -1,0 +1,117 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <div>
+                <button mat-button routerLink="/profesor-materias">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Secciones de materia</h1>
+            </div>
+        </div>
+
+
+        <div fxFlex="1 0 auto">
+            <div class="p-24" fxLayout="column" style="width: 100% !important;">
+
+                <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto" style="border-radius: 5px;"
+                    fxLayoutAlign="start center">
+
+                    <div class="mr-12">
+                        <mat-icon class="info">info</mat-icon>
+                    </div>
+                    <label>
+                        Acá podrás
+                        <strong>ver todas las secciones de la materia</strong>
+                    </label>
+                </div>
+
+                <div class="mat-card card p-24" fxLayout="column" style="border-radius: 5px;">
+                    <!-- <div class="h2 mb-24">Preguntas</div>-->
+                    <!--ACA EMPIEZA LA TABLA-->
+
+                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-24">
+                        <mat-form-field appearance="outline" fxFlex="75" class="pr-4">
+                            <mat-label>Buscar</mat-label>
+                            <input [(ngModel)]="term" matInput [ngModelOptions]="{ standalone: true }" />
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" fxFlex="25">
+                            <mat-label>Mostrar</mat-label>
+                            <mat-select [(value)]="itemsPerPage" (selectionChange)="p = 1">
+                                <mat-option value="5"> 5 </mat-option>
+                                <mat-option value="10"> 10 </mat-option>
+                                <mat-option value="15"> 15 </mat-option>
+                                <mat-option value="20"> 20 </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <!--ACA TERMINA SELECCIONAR MOSTRAR-->
+
+                    <mat-table fxFlex="1 0 auto" class="products-table" #table [dataSource]="
+                                listaSecciones
+                                    | filter: term
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            " [@animateStagger]="{ value: '50' }" fusePerfectScrollbar matSort
+                        (matSortChange)="sortData($event)">
+
+                        <!-- Columna NOMBRE -->
+                        <ng-container matColumnDef="nombre">
+                            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="nombre">
+                                Nombre
+                            </mat-header-cell>
+                            <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                                <p class="text-truncate">
+                                    {{ lista.nombre }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna FECHA -->
+                        <ng-container matColumnDef="fecha">
+                            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="fecha">
+                                Fecha
+                            </mat-header-cell>
+                            <mat-cell fxLayoutAlign="start" *matCellDef="let lista;">
+                                <p class="text-truncate">
+                                    Del <strong>{{ lista.inicio | date:'dd/MM/yyyy' }}</strong> al <strong>{{ lista.fin
+                                        | date:'dd/MM/yyyy' }}</strong>
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna ACCIONES -->
+                        <ng-container matColumnDef="acciones">
+                            <mat-header-cell fxLayoutAlign="start start" *matHeaderCellDef>Acciones
+                            </mat-header-cell>
+
+                            <mat-cell fxLayoutAlign="center" *matCellDef="let product" fxLayout="column">
+                                <button mat-raised-button color="accent" class="boton-con-fondo"
+                                    (click)='verHorarios(product)'>
+                                    Ver horarios
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+                        <mat-row *matRowDef="let product; columns: displayedColumns" class="product" matRipple>
+                        </mat-row>
+                    </mat-table>
+                    <div fxLayoutAlign="center center" class="mt-16">
+                        <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"
+                            previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

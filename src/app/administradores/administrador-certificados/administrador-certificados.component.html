@@ -1,0 +1,231 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+
+        <!--HEADER NORMAL-->
+        <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Certificados</h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div class="p-24 card" fxLayout="column">
+
+            <mat-form-field appearance="outline">
+                <mat-label>Seleccione un grupo</mat-label>
+                <mat-select [(ngModel)]="grupoSeleccionado">
+                    <mat-option *ngFor="let g of grupos" [value]="g" (click)="this.getMaterias(g.id)">{{g.nombre}} -
+                        {{g.cliente}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" *ngIf="grupoSeleccionado">
+                <mat-label>Seleccione una materia</mat-label>
+                <mat-select [(ngModel)]="materiaSeleccionada">
+                    <mat-option *ngFor="let m of materias" [value]="m" (click)="this.getDatos(m.ID)">{{m.NOMBRE}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- <div *ngIf="materiaSeleccionada != null" fxLayout="row wrap"
+                style="border-radius: 5px; justify-content: space-around;">
+
+                <div class="mat-card recuadro" (click)="getLista() ;seleccionado = 'Inscriptos'">
+                    <h1 style=" color: #305cac;">{{datos[0].INSCRIPTOS}}</h1>
+                    <span style=" color: #305cac;">Inscriptos</span>
+                </div>
+
+                <div class="mat-card recuadro" (click)="getLista(); seleccionado = 'Inicios de sesión'">
+                    <h1 style=" color: #FFBD2E;">{{datos[0].SESIONES}}</h1>
+                    <span style=" color: #FFBD2E;">Inicios de sesión</span>
+                </div>
+
+                <div class="mat-card recuadro" (click)="getLista(); seleccionado = 'No iniciaron sesión'">
+                    <h1 style=" color: #7827a7;"> {{datos[0].INSCRIPTOS - datos[0].SESIONES }} </h1>
+                    <span style=" color: #7827a7;">No iniciaron sesión</span>
+                </div>
+
+                <div class="mat-card recuadro" (click)="getLista(); seleccionado = 'Aprobados'">
+                    <h1 style=" color: #2aa559">{{datos[0].APROBADOS}}</h1>
+                    <span style=" color: #2aa559">Aprobados</span>
+                </div>
+
+                <div class="mat-card recuadro" (click)="getLista(); seleccionado = 'Reprobados'">
+                    <h1 style=" color: #c41818;">{{datos[0].REPROBADOS}}</h1>
+                    <span style=" color: #c41818;">Reprobados</span>
+                </div>
+            </div> -->
+
+            <!-- LISTAS DEPENDIENDO QUE SELECCIONO -->
+            <div *ngIf="materiaSeleccionada != null" class="mat-card card p-12" fxLayout="column" fxFlex="100"
+                style="border-radius: 5px;">
+
+                <h1 style="font-weight: bold; margin-bottom: 40px; ">Lista aprobados de
+                    {{materiaSeleccionada['NOMBRE']}}</h1>
+
+                <div class="matFormField">
+                    <input [(ngModel)]="termino" style="
+                                border-radius: 50px;
+                                height: 55px;
+                                background: rgb(240, 240, 240);
+                                width: 100%;
+                            " placeholder="Buscar..." />
+                </div>
+
+                <button mat-flat-button color="primary" style="border-radius: 50px;"
+                    [disabled]="this.alumnosSeleccionados.length === 0" (click)="descargarCertificados()">Descargar
+                    {{this.alumnosSeleccionados.length}} certificados</button>
+
+                <mat-table style="width: 100%" class="products-table" #table [dataSource]="lista | filter: termino | paginate: {itemsPerPage: itemsPerPage,currentPage: p}
+            " [@animateStagger]="{ value: '50' }" fusePerfectScrollbar matSort (matSortChange)="sortData($event)">
+
+                    <!-- Columna INDEX-->
+                    <ng-container matColumnDef="index">
+                        <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="INDEX">
+                            #
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate">
+                                {{list.INDEX}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <!-- Columna NOMBRE-->
+                    <ng-container matColumnDef="nombre">
+                        <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="NOMBRE">
+                            Nombre
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate">
+                                {{list.NOMBRE}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna APELLIDO -->
+                    <ng-container matColumnDef="apellido">
+                        <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="APELLIDO">
+                            Apellido
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="category text-truncate">
+                                {{list.APELLIDO}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna DOCUMENTO -->
+                    <ng-container matColumnDef="documento">
+                        <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="DOCUMENTO">
+                            Documento
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate">
+                                {{list.DOCUMENTO}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna ULTIMO INGRESO -->
+                    <ng-container matColumnDef="ultimo_ingreso">
+                        <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="LAST_LOGIN">
+                            Ultimo ingreso
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="category text-truncate">
+                                {{list.LAST_LOGIN | date:'dd/MM/YYYY'}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna MATERIA -->
+                    <!-- <ng-container matColumnDef="materia">
+                        <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef>
+                            Materia
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate">
+                                {{materiaSeleccionada['NOMBRE']}}
+                            </p>
+                        </mat-cell>
+                    </ng-container> -->
+
+                    <!-- Columna ESTADO -->
+                    <ng-container matColumnDef="estado">
+                        <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="PUNTAJE">
+                            Estado
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate" style=" color: #FFBD2E;" *ngIf="list.PUNTAJE < 0">
+                                Pendiente
+                            </p>
+
+                            <p class="text-truncate" style=" color: #c41818;"
+                                *ngIf="list.PUNTAJE <= 60 && list.PUNTAJE > -1">
+                                Reprobado
+                            </p>
+
+                            <p class="text-truncate" style=" color: #2aa559" *ngIf="list.PUNTAJE > 60">
+                                Aprobado
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna INTENTOS -->
+                    <ng-container matColumnDef="intentos">
+                        <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="INTENTOS_EVALUACION">
+                            Intentos de evaluacion
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate">
+                                {{list.INTENTOS_EVALUACION}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna ACCIONES -->
+                    <ng-container matColumnDef="acciones">
+                        <mat-header-cell fxLayoutAlign="center center" *matHeaderCellDef>
+                            <mat-checkbox class="checkbox" [(ngModel)]="seleccionarTodo"
+                                (click)="seleccionarTodoFuncion()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+
+                        <mat-cell fxLayoutAlign="start center" style="padding: 5px 0 0 12px;" *matCellDef="let list"
+                            fxLayout="row">
+
+                            <div>
+                                <mat-checkbox style="font-size: 10px !important;" class="checkbox"
+                                    [(ngModel)]="list.CHECKED" (click)="check(list)">
+                                </mat-checkbox>
+                            </div>
+
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+                    <mat-row *matRowDef="let list; columns: displayedColumns" class="product" matRipple>
+                    </mat-row>
+                </mat-table>
+                <div fxLayoutAlign="center center" class="mt-16">
+                    <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"
+                        previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                </div>
+            </div>
+            <!-- LISTAS DEPENDIENDO QUE SELECCIONO -->
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+
+    <div fxFlex="100" fxLayout="column" class="mb-12" [formGroup]="formulario" style="width: 100% !important;">
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <!--INPUT NOMBRE-->
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="NOMBRE" />
+
+                <mat-error>Por favor ingrese un nombre.</mat-error>
+            </mat-form-field>
+
+            <!--INPUT SUBDOMINIO-->
+            <mat-form-field appearance="outline" fxFlex="50">
+                <mat-label>Subdominio</mat-label>
+                <input matInput formControlName="SUBDOMINIO" />
+
+                <mat-error>Por favor ingrese un subdominio.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <div fxLayout="column" fxLayoutAlign="center" fxFlex="100" class="mb-24 pr-4">
+                <div class="mb-24">
+                    <input style="display: none" type="file" (change)="onSelectFile($event,'fondo')" #fileInput1 />
+                    <button mat-flat-button color="accent" class="boton-con-fondo" (click)="fileInput1.click()">
+                        Subir fondo <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div class="mb-24" fxLayoutAlign="center" *ngIf="this.formulario.get('FONDO_URL').value">
+                    <img [src]="'https://apilms.central.edu.py/media/files/' + this.formulario.get('FONDO_URL').value"
+                        style="max-width: 300px; height: auto" />
+                </div>
+            </div>
+
+            <div fxLayout="column" fxLayoutAlign="center" fxFlex="100" class="mb-24 pl-4">
+                <div class="mb-24">
+                    <input style="display: none" type="file" (change)="onSelectFile($event,'logo')" #fileInput2 />
+                    <button mat-flat-button color="accent" class="boton-con-fondo" (click)="fileInput2.click()">
+                        Subir logo <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <div class="mb-24" fxLayoutAlign="center" *ngIf="this.formulario.get('LOGO_URL').value">
+                    <img [src]="'https://apilms.central.edu.py/media/files/' + this.formulario.get('LOGO_URL').value"
+                        style="max-width: 300px; height: auto" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div fxLayout="row" style="width: 100%;">
+        <div class="mr-24" style="width: 50%;">
+            <button mat-flat-button color="accent" class="boton-sin-fondo" mat-dialog-close>Cancelar</button>
+        </div>
+        <div style="width: 50%;">
+            <button [disabled]="this.formulario.invalid" fxFlex="100" mat-flat-button color="accent"
+                [ngClass]="this.formulario.invalid ? 'disabled':'boton-con-fondo'" (click)="guardar()">Guardar</button>
+        </div>
+    </div>
+</div>

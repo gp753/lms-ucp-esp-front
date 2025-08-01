@@ -1,0 +1,38 @@
+<div class="fondo" fxFlex=" 1 0 auto" fxLayout="column">
+    <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+        <!--<div>
+            <button mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>-->
+        <div>
+            <h1 [@animate]="{
+                value: '*',
+                params: { delay: '100ms', y: '25px' }
+            }">Capacitaciones</h1>
+        </div>
+    </div>
+
+    <div class="contenido">
+        <div class="p-12" fxLayout="row wrap" fxLayoutAlign="center center" [@animateStagger]="{ value: '50' }">
+            <div class="p-12" *ngFor="let c of cursos">
+                <div class="mat-card card" fxLayout="column" [@animate]="{ value: '*', params: { y: '100%' } }">
+                    <div>
+                        <img style="border-top-left-radius: 5px; border-top-right-radius: 5px;"
+                            [src]="'https://apilms.central.edu.py/media/files/' +c.imagen">
+                    </div>
+
+                    <div fxLayout="column" class="p-12" style="padding-bottom: 0%;">
+                        <h2 style="font-weight: bold; text-align: center;">{{c.nombre}}</h2>
+                        <!-- <label style="color: #656565;">Libro: <strong>{{libro.numero}}</strong></label> -->
+                    </div>
+
+                    <div class="p-12" fxLayoutAlign="center end" fxFlex="1 0 auto">
+                        <button mat-raised-button color="accent" class="boton-sin-fondo"
+                            (click)="ingresarCurso(c.id)">Iniciar Curso</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,233 @@
+<!-- / VISTA DE LISTA DE TRABAJOS-->
+<div [fxHide]="realizarTrabajo === true" class="p-24" fxFlex="100" fxLayout="column">
+    <div class="mat-card mb-24 p-12" fxFlex="100" fxLayout="row" style="border-radius: 5px;"
+        fxLayoutAlign="start center">
+        <div class="mr-16">
+            <mat-icon class="info">info</mat-icon>
+        </div>
+        <div>
+            <label>Aquí puedes revisar tus <strong>trabajos prácticos</strong></label>
+        </div>
+    </div>
+
+    <div>
+        <mat-accordion [multi]="true">
+            <mat-expansion-panel [expanded]="true" class="mb-24">
+                <mat-expansion-panel-header style="background: #285ba7 !important; height: 48px !important;">
+                    <mat-panel-title style="color: #fff;">
+                        Nombre trabajo practico
+                    </mat-panel-title>
+                    <!--<mat-panel-description>
+                        This is a summary of the content
+                    </mat-panel-description>-->
+
+                </mat-expansion-panel-header>
+                <!--<p>This is the primary content of the panel.</p>-->
+                <div fxFlex="100" fxLayout="row wrap" fxLayoutAlign="start" class="pt-16">
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Estado</label>
+                        <label
+                            style="font-weight: bold; color: rgb(30, 170, 72); white-space: nowrap;">Entregado</label>
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Calificacion total</label>
+                        <label style="font-weight: bold; white-space: nowrap">10 / 10</label>
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Fecha de entrega</label>
+                        <label style="font-weight: bold; white-space: nowrap">05/12/2020</label>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutAlign="center center" fxFlex>
+                        <button mat-raised-button color="accent" class="editar mr-12">Editar trabajo</button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header style="background: #285ba7 !important; height: 48px !important;">
+                    <mat-panel-title style="color: #fff;">
+                        Nombre trabajo practico
+                    </mat-panel-title>
+                    <!--<mat-panel-description>
+                        This is a summary of the content
+                    </mat-panel-description>-->
+
+                </mat-expansion-panel-header>
+                <!--<p>This is the primary content of the panel.</p>-->
+                <div fxFlex="100" fxLayout="row wrap" fxLayoutAlign="start" class="pt-16">
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Estado</label>
+                        <label style="font-weight: bold; color: #FFBD2E; white-space: nowrap;">Pendiente</label>
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Calificacion total</label>
+                        <label style="font-weight: bold; white-space: nowrap">_ / 10</label>
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Fecha de entrega</label>
+                        <label style="font-weight: bold; white-space: nowrap">05/12/2020</label>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutAlign="center center" fxFlex>
+                        <button mat-raised-button color="accent" class="boton-con-fondo mr-12"
+                            (click)="realizarTrabajoFuncion()">Realizar trabajo</button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>
+<!-- / VISTA DE LISTA DE TRABAJOS-->
+
+<!--CUANDO SE ESTA HACIENDO EL TRABAJO-->
+<div [fxShow]="realizarTrabajo === true" class="p-24" fxFlex="100" fxLayout="column">
+
+    <div class="mat-card card mb-24 p-12" fxFlex="100" fxLayout="row" style="border-radius: 5px;">
+
+        <div fxLayout="column" fxLayoutAlign="start" fxFlex>
+            <label class="mb-24" style="font-size: 24px; font-weight: bold;">Nombre Trabajo</label>
+            <label class="mb-4">Materia: <strong>Anatomia I</strong></label>
+            <label>Turno: <strong>"A"</strong></label>
+        </div>
+
+        <div fxLayoutAlign="end" fxFlex>
+            <div fxLayout="column" class="mr-16">
+                <label class="mb-4">Calificacion total:</label>
+                <label><strong>10/10</strong></label>
+            </div>
+
+            <div fxLayout="column" class="mr-16">
+                <label class="mb-4">Fecha entrega:</label>
+                <label class="mb-4"><strong>20/12/21</strong></label>
+                <label><strong>20:00</strong> hrs</label>
+            </div>
+
+            <div fxLayout="column" class="mr-16">
+                <label class="mb-4">Formato entrega</label>
+                <label><strong>Word</strong></label>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mat-card card mb-24 p-12" fxFlex="100" fxLayout="row" style="border-radius: 5px;">
+        <mat-tab-group fxFlex="100">
+            <mat-tab label="Instrucciones">
+                <div fxLayout="column" class="mt-24">
+                    <div fxLayout="column">
+                        <label style="font-weight: bold;" class="mb-12">PASO A PASO</label>
+                        <label>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut blanditiis alias soluta
+                            harum, inventore minus, voluptatem quod perferendis dolorem rem molestias repellendus
+                            necessitatibus, cupiditate aperiam dicta veritatis vitae perspiciatis. Repudiandae. Lorem
+                            ipsum dolor sit amet consectetur adipisicing elit. Et alias veritatis ratione sit quod
+                            aperiam laborum aliquam illo nulla itaque nam ad, officia dolorum minus doloribus eaque
+                            repellendus, blanditiis incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Aspernatur fugit enim odio hic saepe repellat temporibus sequi earum. Impedit, consectetur
+                            quas minus deserunt nesciunt consequuntur non quisquam expedita! Totam, dolore. Lorem ipsum
+                            dolor sit amet consectetur adipisicing elit. Aliquid, natus. Repellendus cupiditate qui
+                            placeat. Natus consectetur ut temporibus quis non, exercitationem numquam est dolorum
+                            officia dolorem cum at aliquam quam.</label>
+                        <hr>
+                    </div>
+
+                    <div fxLayout="column">
+                        <label style="font-weight: bold;" class="mb-12">ANEXOS</label>
+                        <a
+                            style="cursor: pointer;">https://xd.adobe.com/view/3eebbc09-75a4-4f4d-a1d7-22762b6a00ae-6bb8/screen/41f8133b-352c-430b-99b1-501fa5a0a28a</a>
+                        <hr>
+                    </div>
+
+                    <div fxLayout="column">
+                        <button mat-raised-button color="accent" class="boton-con-fondo">Descargar trabajo
+                            practico</button>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Mi entrega">
+
+                <div fxLayoutAlign="start">
+                    <div fxLayout="column" fxFlex="1 0 auto" fxLayoutAlign="start" [formGroup]="enviarTrabajo">
+                        <mat-form-field style="margin-top: 50px;" appearance="outline">
+                            <mat-label>Titulo del trabajo</mat-label>
+                            <input matInput formControlName="titulo" required />
+                            <mat-error>Por favor ingrese el titulo del trabajo.</mat-error>
+                        </mat-form-field>
+
+                        <div fxLayout="column" fxLayoutAlign="start">
+                            <mat-form-field appearance="outline" required>
+                                <mat-label>Cargar Archivo</mat-label>
+                                <ngx-mat-file-input formControlName="file" [multiple]="false"></ngx-mat-file-input>
+                                <mat-error>Por favor verifique que el archivo no supere los 100mb y que sea del formato
+                                    correcto</mat-error>
+                            </mat-form-field>
+                            <button mat-raised-button color="accent" class="boton-con-fondo">Enviar Trabajo</button>
+                        </div>
+                    </div>
+                </div>
+
+            </mat-tab>
+
+            <mat-tab label="Comentarios del profesor">
+                <div fxLayout="column" fxLayoutAlign="start" class="mt-24">
+                    <div class="mb-16">
+                        <label style="color:#028CCC">Calificacion: <strong>10/10</strong></label>
+                    </div>
+
+                    <div fxLayout="row">
+
+                        <div class="mr-24">
+                            <div class="card-foto">
+                                <img class="foto"
+                                    src="https://static1.squarespace.com/static/53aadf1de4b0a0a817640cca/58de71662994caa7c7bc193b/5b159db81ae6cfbba8b7cc6f/1528216829951/bigstock-A-young-ambitious-geography-te-241377898.jpg?format=1500w">
+                            </div>
+                        </div>
+
+                        <div fxLayout="column">
+                            <label class="mb-12"><strong>Cristian Gimenez</strong> - hace 56 min</label>
+                            <label>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae vero eaque amet quae
+                                ipsa. Necessitatibus, ducimus. Eos eveniet, odit mollitia asperiores dolor, nihil
+                                facilis hic exercitationem architecto veritatis in ab. Lorem, ipsum dolor sit amet
+                                consectetur adipisicing elit. Consequatur deleniti iure, numquam minus quod sequi
+                                pariatur nesciunt culpa magnam voluptas quia assumenda ea possimus inventore! Inventore
+                                aspernatur reprehenderit quaerat dolor.</label>
+                        </div>
+
+                    </div>
+
+                    <hr>
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="start" class="mt-24">
+                    <div fxLayout="row">
+
+                        <div class="mr-24">
+                            <div class="card-foto">
+                                <img class="foto"
+                                    src="https://static1.squarespace.com/static/53aadf1de4b0a0a817640cca/58de71662994caa7c7bc193b/5b159db81ae6cfbba8b7cc6f/1528216829951/bigstock-A-young-ambitious-geography-te-241377898.jpg?format=1500w">
+                            </div>
+                        </div>
+
+                        <div fxLayout="column">
+                            <label class="mb-12"><strong>Cristian Gimenez</strong> - hace 1h 22 min</label>
+                            <label>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae vero eaque amet quae
+                                ipsa. Necessitatibus, ducimus. Eos eveniet, odit mollitia asperiores dolor, nihil
+                                facilis hic exercitationem architecto veritatis in ab. Lorem, ipsum dolor sit amet
+                                consectetur adipisicing elit.</label>
+                        </div>
+
+                    </div>
+
+                    <hr>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+
+</div>
+<!-- / CUANDO SE ESTA HACIENDO EL TRABAJO-->

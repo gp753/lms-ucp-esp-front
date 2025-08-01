@@ -1,0 +1,84 @@
+<div class="fondo" fxFlex="100" fxLayout="column">
+
+    <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+        <!--<div>
+            <button mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>-->
+        <div>
+            <h1 [@animate]="{
+                value: '*',
+                params: { delay: '100ms', y: '25px' }
+            }">Financiero</h1>
+        </div>
+    </div>
+
+    <div class="p-24" fxLayout="column">
+
+        <div class="mat-card mb-24 p-12" fxLayout="row" style="border-radius: 5px;" fxLayoutAlign="start center">
+            <div class="mr-16">
+                <mat-icon class="info">info</mat-icon>
+            </div>
+            <div>
+                <label>En esta pagina podras <strong>pagar tus pagos pendientes y/o vencidos,</strong> y ver el
+                    historial de pagos realizados.</label>
+            </div>
+        </div>
+
+        <mat-tab-group>
+            <mat-tab label="Pagos pendientes">
+                <div style="display: flex; flex-wrap: wrap; margin-top: 20px;">
+                    <div class="card-cuota" *ngFor="let c of cuotasPendientes">
+                        <h1>{{c.nombre}}</h1>
+                        <h2 *ngIf="c.estado === 'Pendiente'" style="color: goldenrod;">{{c.estado}}</h2>
+                        <h2 *ngIf="c.estado === 'Vencida'" style="color: red;">{{c.estado}}</h2>
+                        <p>{{c.monto}} Gs.</p>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Historial de pagos">
+                <div class="mat-card p-12" style="border-radius: 5px; margin-top: 30px;">
+                    <mat-table class="products-table"
+                        [dataSource]="historialDePagos | paginate: {itemsPerPage: itemsPerPage,currentPage: p, id:'tabla_cuotas'}"
+                        matSort [@animateStagger]="{ value: '50' }" fusePerfectScrollbar>
+
+                        <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate" style="white-space: normal;">{{ tabla.nombre }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fecha_pago">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de pago</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">{{ tabla.fecha_pago }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="monto">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Monto</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">
+                                    {{tabla.monto}} Gs.
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="tablaCuotas; sticky: true"></mat-header-row>
+
+                        <mat-row *matRowDef="let product; columns: tablaCuotas" class="product" matRipple>
+                        </mat-row>
+                    </mat-table>
+
+                    <div fxLayoutAlign="center center" class="mt-16">
+                        <pagination-controls id="tabla_cuotas" (pageChange)="p = $event" autoHide="true"
+                            responsive="true" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

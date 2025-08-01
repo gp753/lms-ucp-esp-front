@@ -1,0 +1,440 @@
+<div class="fondo" fxFlex="100" fxLayout="column">
+    <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+        <!--<div>
+            <button mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>-->
+        <div>
+            <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">
+                Información Fundamental
+            </h1>
+        </div>
+    </div>
+
+    <div class="p-24" fxLayout="column">
+        <div class="mat-card mb-24 p-12" fxLayout="row" style="border-radius: 5px" fxLayoutAlign="start center">
+            <div class="mr-16">
+                <mat-icon class="info">info</mat-icon>
+            </div>
+            <div>
+                <label>Aquí podrás
+                    <strong>observar toda la información de su carrera.</strong></label>
+            </div>
+        </div>
+
+        <div class="mat-card mb-24 p-12" fxLayout="column" style="border-radius: 5px">
+            <!-- 1 -->
+            <div class="mb-24" fxFlex="100" fxLayout="column">
+
+                <div style="background: #285ba7; border-radius: 5px" class="p-8 mb-12">
+                    <label style="color: #fff; font-weight: bold">1. Modelo pedagógico</label>
+                </div>
+
+                <div fxFlex="100" fxLayout="column">
+                    <p>La modalidad de implementación de la Especialización en Didáctica Universitaria
+                        es la
+                        modalidad a Distancia y su diseño curricular está basado en el modelo educativo por
+                        competencias. En tal sentido, las actividades de enseñanza aprendizaje se sustentan sobre el
+                        aprender a aprender, aprender a hacer, aprender a ser y aprender a convivir.</p>
+
+                    <p>El currículo se organiza en ocho módulos que se disponibilizan en la plataforma
+                        educativa
+                        utilizada por la UCP y las tareas educativas están direccionadas para adquirir las competencias
+                        de aprender a aprender a partir de las lecturas dadas como soporte teórico de cada unidad
+                        temática, así como con las guías de trabajo que propician instancias de aprender a aprender y
+                        aprender a hacer. Igualmente, se ejercitan el aprender a ser y aprender a convivir mediante
+                        actividades tales como foros, chat, tareas colaborativas y cooperativas, que van perfilando las
+                        habilidades interpersonales y de comunicación didáctica de los futuros profesionales docentes de
+                        educación superior.</p>
+
+                    <p>La investigación se transversaliza durante todo el proceso formativo mediante
+                        actividades que
+                        acompañan a cada unidad temática, sean investigaciones bibliográficas o de campo, estudio de
+                        casos, resolución de problemas, entre otras estrategias que permiten que el docente en formación
+                        internalice los procesos investigativos, las diferentes estrategias para hacerlo y a la vez
+                        dimensione su importancia como uno de los fines de la educación superior.</p>
+
+                    <p>Igualmente, se hace énfasis en la extensión universitaria mediante actividades
+                        acordadas
+                        entre docentes y estudiantes, reconociendo de esa manera el rol de las extensiones en la
+                        educación superior y aprendiendo las diferentes acepciones de extensión universitaria que luego
+                        el docente formado podrá aplicarlo en su desempeño pedagógico.</p>
+
+                    <p>La evaluación es de proceso y de producto y con ello se garantiza un seguimiento sistemático
+                        y continuo de la adquisición de competencias por parte de los docentes en formación permitiendo
+                        realizar tareas de retroalimentación que permitan la adquisición de competencias integrales y
+                        pertinentes acordes al perfil de salida propuesto.</p>
+                </div>
+            </div>
+            <!-- / 1 -->
+
+            <!-- 2 -->
+            <div class="mb-24">
+                <div style="background: #285ba7; border-radius: 5px" class="p-8 mb-12">
+                    <label style="color: #fff; font-weight: bold">2. Modo de cursado / calendario</label>
+                </div>
+                <p>A lo largo de tu programa de posgrado, estarás cursando módulos consecutivos que están diseñados de
+                    manera estratégica, para abarcar una duración de un mes en función de la carga horaria de los
+                    mismos. Tendrás un espacio para cursar las clases tanto sincrónicas como asincrónicas en un promedio
+                    durante las dos primeras semanas hasta tener tu primera evaluación, normalmente las dos semanas
+                    restantes, continuaras del mismo modo, cursando el componente teórico practico, ya sean estos
+                    sincrónicos o asincrónicos, hasta llegar a la semana cuatro con la evaluación final del módulo.
+                    Nuestros docentes contenidistas, elaboran los contenidos y las actividades evaluativas adaptándose
+                    de la mejor manera a los contenidos programáticos con que cuenta el módulo, pudiendo estas
+                    actividades ser abiertas o cerradas y en todas sus distintas variantes, preservando siempre tu
+                    aprendizaje.</p>
+                <p>De manera general, cada módulo que cursarás se estructurará de la manera en que te mostramos a
+                    continuación:</p>
+
+                <div class="contenedorCalendario mt-12">
+                    <img src="../../../assets/images/modo curso grafico.png" />
+                </div>
+                <!-- <div fxLayout="row" class="mt-12">
+
+                    <div fxLayout="column" fxFlex="50">
+                        <div style="background: rgb(20, 33, 109); border-radius: 5px; text-align: center;"
+                            class="mr-8 p-8">
+                            <label style="color: #fff; font-weight: bold;">MES 1</label>
+                        </div>
+
+                        <div fxLayout="row" fxFlex="100" class="mt-8">
+                            <div style="background: rgb(143, 143, 143); border-radius: 5px; text-align: center;"
+                                fxFlex="25" class="p-8 mr-8">
+                                <label style="color: #fff; font-weight: bold;">SEMANA 1</label>
+                            </div>
+                            <div style="background: rgb(143, 143, 143); border-radius: 5px; text-align: center;"
+                                fxFlex="25" class="p-8 mr-8">
+                                <label style="color: #fff; font-weight: bold;">SEMANA 2</label>
+                            </div>
+                            <div style="background: rgb(143, 143, 143); border-radius: 5px; text-align: center;"
+                                fxFlex="25" class="p-8 mr-8">
+                                <label style="color: #fff; font-weight: bold;">SEMANA 3</label>
+                            </div>
+                            <div style="background: rgb(143, 143, 143); border-radius: 5px; text-align: center;"
+                                fxFlex="25" class="p-8 mr-8">
+                                <label style="color: #fff; font-weight: bold;">SEMANA 4</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div fxFlex="50" fxLayout="column">
+                        <div style="background: rgb(20, 33, 109); border-radius: 5px; text-align: center;" class="p-8">
+                            <label style="color: #fff; font-weight: bold;">MES 2</label>
+                        </div>
+
+                        <div fxLayout="row" fxFlex="100" class="mt-8">
+                            <div style="background: rgb(143, 143, 143); border-radius: 5px; text-align: center;"
+                                fxFlex="25" class="p-8 mr-8">
+                                <label style="color: #fff; font-weight: bold;">SEMANA 5</label>
+                            </div>
+                            <div style="background: rgb(143, 143, 143); border-radius: 5px; text-align: center;"
+                                fxFlex="25" class="p-8 mr-8">
+                                <label style="color: #fff; font-weight: bold;">SEMANA 6</label>
+                            </div>
+                            <div style="background: rgb(143, 143, 143); border-radius: 5px; text-align: center;"
+                                fxFlex="25" class="p-8 mr-8">
+                                <label style="color: #fff; font-weight: bold;">SEMANA 7</label>
+                            </div>
+                            <div style="background: rgb(143, 143, 143); border-radius: 5px; text-align: center;"
+                                fxFlex="25" class="p-8 mr-8">
+                                <label style="color: #fff; font-weight: bold;">SEMANA 8</label>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <!-- / 2 -->
+
+            <!-- 3 -->
+            <div class="mb-24">
+                <div style="background: #285ba7; border-radius: 5px" class="p-8 mb-12">
+                    <label style="color: #fff; font-weight: bold">3. Objetivos de la carrera</label>
+                </div>
+                <label style="font-weight: bold;">Objetivo General:</label>
+                <p>Ofrecer espacios de formación pedagógica y didáctica a profesionales de todas las áreas del saber que
+                    deseen ejercer la docencia en Educación Superior a través de un currículo educativo integral que les
+                    permita la adquisición de competencias profesionales docentes eficientes, eficaces y pertinentes en
+                    pos de una educación superior de calidad</p>
+
+                <label style="font-weight: bold;">Objetivos Específicos:</label>
+                <p> * Brindar una formación pedagógica y didáctica sólida en el modelo educativo basado en competencias.
+                    Fomentar la investigación y la extensión como fines de la Educación Superior mediante la apropiación
+                    de estrategias didácticas que las posibiliten.
+                </p>
+                <p>* Concienciar acerca de la trascendencia del rol del docente de Educación Superior en el devenir
+                    socio económico y cultural para la sostenibilidad y sustentabilidad local, regional y global.
+                </p>
+
+                <label style="font-weight: bold;">Fundamentación del programa:</label>
+                <p>La Educación Superior requiere de profesionales docentes que ejerzan su rol con un profundo
+                    conocimiento y apropiación de las competencias pedagógicas y didácticas que conlleven a obtener los
+                    resultados de aprendizaje esperados.</p>
+
+                <p>En tal sentido, la Universidad Central del Paraguay, respondiendo a su misión de formar en base a
+                    estándares de calidad educativa nacional e internacional, plantea la formación de profesionales
+                    docentes para la educación superior que puedan desarrollar los diferentes programas de su currículo
+                    educativo o de currículos educativos de otras instituciones de educación superior con eficiencia,
+                    eficacia, ética y solvencia didáctica.</p>
+
+                <p>La modalidad educativa del presente proyecto curricular responde al modelo educativo basado en
+                    competencias, modelo que cumple dos roles, uno como modelo educativo de enseñanza y otro como modelo
+                    educativo enseñado, ya que en la actualidad la propuesta metodológica para la educación del siglo
+                    XXI es la basada en competencias, asociada a la vez a la implementación del sistema de créditos
+                    académicos.</p>
+
+                <p>Por otro lado, la modalidad a distancia resuelve la problemática del tiempo disponible del
+                    profesional para su formación continua, del tiempo empleado para el traslado de los estudiantes
+                    hasta la sede universitaria, el acceso a centros de formación y capacitación continuas, la calidad
+                    de los servicios educativos, y actualmente, el contexto de pandemia desatado a nivel mundial, todas
+                    éstas son fundamentaciones válidas para la decisión académica de asumir dicha modalidad. En tal
+                    sentido, la universidad cuenta con una plataforma virtual que permite el desarrollo efectivo y
+                    dinámico del proyecto educativo curricular planteado para este posgrado.</p>
+
+            </div>
+            <!-- / 3 -->
+
+            <!-- 4 -->
+            <div class="mb-24">
+                <div style="background: #285ba7; border-radius: 5px" class="p-8 mb-12">
+                    <label style="color: #fff; font-weight: bold">4. Plan de estudios</label>
+                </div>
+
+                <div class="contenedorPlanDeEstudio">
+                    <img src="../../../assets/images/plan de estudios.png" />
+                </div>
+            </div>
+            <!-- / 4 -->
+
+            <!-- 5 -->
+            <div class="mb-24">
+                <div style="background: #285ba7; border-radius: 5px" class="p-8 mb-12">
+                    <label style="color: #fff; font-weight: bold">5. Perfil de egreso</label>
+                </div>
+                <label style="font-weight: bold;">Competencias Genéricas:</label>
+
+                <p>• &nbsp;&nbsp; Valora la acción docente como generadora de instancias de aprendizaje que posibiliten
+                    la formación
+                    y el desarrollo de personas profesionales integras
+                </p>
+                <p>• &nbsp;&nbsp; Asume la relevancia del rol docente en la sociedad del conocimiento, la información y
+                    la tecnología
+                </p>
+                <p>• &nbsp;&nbsp; Trabaja en equipos multidisciplinarios de manera participativa y altruista</p>
+                <p>• &nbsp;&nbsp; Utilizar tecnologías de la información y de la comunicación como medios didácticos</p>
+                <p>• &nbsp;&nbsp; Ajustar su conducta a las normas éticas universalmente establecidas.</p>
+                <p>• &nbsp;&nbsp; Asumir el compromiso y la responsabilidad social que se desprenden de la labor docente
+                    en la
+                    búsqueda del mejoramiento de la calidad de vida. </p>
+                <p>• &nbsp;&nbsp; Tener capacidad de adaptarse a situaciones nuevas y cambiantes.</p>
+
+                <label style="font-weight: bold;">Competencias Genéricas:</label>
+
+                <p>• &nbsp;&nbsp; Dimensionar la función del currículo y de los planes de estudios como recurso
+                    normativo del proceso
+                    enseñanza aprendizaje que garantice la calidad de la educación.</p>
+                <p>• &nbsp;&nbsp; Manejar los fundamentos y las teorías de la Educación como base de su desempeño
+                    profesional docente
+                    en la educación superior.</p>
+                <p>• &nbsp;&nbsp; Internalizar el modelo educativo basado en competencias para direccionar su desempeño
+                    docente</p>
+                <p>• &nbsp;&nbsp; Planificar pertinentemente el proceso de enseñanza aprendizaje respecto al proyecto
+                    educativo de la
+                    carrera o programa, como eje fundamental de la calidad educativa a ser ofrecida.</p>
+                <p>• &nbsp;&nbsp; Internalizar los componentes fundamentales del proceso de evaluación del aprendizaje
+                    para
+                    implementar estrategias de evaluación pertinentes, oportunas y eficaces que permitan la adquisición
+                    de competencias</p>
+                <p>• &nbsp;&nbsp; Interpretar la aplicación de la economía de la educación en la intervención del Estado
+                    para abordar
+                    los problemas educativos y sociales históricos, presentes y emergentes así como en la gestión
+                    institucional de la educación superior.</p>
+                <p>• &nbsp;&nbsp; Aplicar la estadística a situaciones concretas del contexto educativo, como medio para
+                    obtener
+                    información para toma de decisiones en resolución de problemas.</p>
+                <p>• &nbsp;&nbsp; Aplicar la estadística a situaciones concretas del contexto educativo, como medio para
+                    obtener
+                    información para toma de decisiones en resolución de problemas.</p>
+                <p>• &nbsp;&nbsp; Aplicar Tics en el proceso enseñanza aprendizaje de manera pertinentemente, creativa,
+                    basados en
+                    estándares de calidad educativa</p>
+                <p>• &nbsp;&nbsp; Utilizar el método científico como herramienta didáctica a partir del conocimiento de
+                    diferentes
+                    técnicas y procedimientos de investigación para el análisis, planteamiento y resolución de problemas
+                </p>
+            </div>
+            <!-- / 5 -->
+
+            <!-- 6 -->
+            <div class="mb-24">
+                <div style="background: #285ba7; border-radius: 5px" class="p-8 mb-12">
+                    <label style="color: #fff; font-weight: bold">6. Reglamentos generales</label>
+                </div>
+
+                <div fxLayout="row">
+                    <div fxLayout="column" style="
+                            width: 150px;
+                            align-items: center;
+                            text-align: center;
+                        " (click)="abrirGeneral()">
+                        <mat-icon class="info" style="cursor: pointer">save_alt</mat-icon>
+                        <label style="cursor: pointer">Reglamento general académico administrativo</label>
+                    </div>
+
+                    <div fxLayout="column" style="
+                            width: 150px;
+                            align-items: center;
+                            text-align: center;
+                        " (click)="abrirCodigoEtica()">
+                        <mat-icon class="info" style="cursor: pointer">save_alt</mat-icon>
+                        <label style="cursor: pointer">Código de ética</label>
+                    </div>
+
+                    <div fxLayout="column" style="
+                            width: 150px;
+                            align-items: center;
+                            text-align: center;
+                        " (click)="abrirAdminision()">
+                        <mat-icon class="info" style="cursor: pointer">save_alt</mat-icon>
+                        <label style="cursor: pointer">Reglamento de admisión</label>
+                    </div>
+
+                    <div fxLayout="column" style="
+                            width: 150px;
+                            align-items: center;
+                            text-align: center;
+                        " (click)="reglamentoPasantia()">
+                        <mat-icon class="info" style="cursor: pointer">save_alt</mat-icon>
+                        <label style="cursor: pointer">Reglamento de pasantía</label>
+                    </div>
+                </div>
+            </div>
+            <!-- / 6 -->
+
+            <!-- 7 8 9 -->
+            <div class="mb-24" fxLayout="row">
+                <div fxFlex="33" class="mr-8">
+                    <div style="background: #285ba7; border-radius: 5px" class="p-8 mb-12">
+                        <label style="color: #fff; font-weight: bold">7. Especificaciones de la carrera</label>
+                    </div>
+
+                    <div fxLayout="row">
+                        <div style="align-self: center">
+                            <mat-icon class="icono">stars</mat-icon>
+                        </div>
+
+                        <div fxLayout="column">
+                            <p style="margin: 0;">Estas son las especificaciones técnicas del programa que has elegido
+                                llevar adelante.</p>
+                            <p style="margin: 0;  margin-top: 5px !important;"><strong>•Programa:</strong>
+                                Especialización en Didáctica Universitaria</p>
+                            <p style="margin: 0;"><strong>•Título que otorga:</strong> Especialista en Didáctica
+                                Superior Universitaria</p>
+                            <p style="margin: 0;"><strong>•Duración (Hs):</strong> 360 Hs.</p>
+                            <p style="margin: 0;"><strong>•Créditos:</strong> 30</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div fxFlex="34" class="mr-8">
+                    <div style="background: #285ba7; border-radius: 5px" class="p-8 mb-12">
+                        <label style="color: #fff; font-weight: bold">8. Espacios de consulta</label>
+                    </div>
+
+                    <div fxLayout="row">
+                        <div style="align-self: center">
+                            <mat-icon class="icono">phone</mat-icon>
+                        </div>
+                        <div fxLayout="column">
+                            <p style="margin: 0;">Este es uno de los aspectos mas importantes, queremos que sepas que
+                                estamos atentos a vos y a todas tus consultas, queremos que tengas la mejor experiencia
+                                de aprendizaje con nosotros, para el efecto, ponemos a disposición los medios de
+                                consulta más importantes:</p>
+                            <p style="margin: 0;  margin-top: 5px !important;">• Para consultas generales puedes
+                                comunicarte con la central telefónica de la Universidad: +595983798050</p>
+                            <p style="margin: 0;">• Para consultas sobre el módulo, podes comunicarte con el tutor del
+                                módulo a través del mail de la plataforma, el chat o los foros disponibles en cada
+                                módulo.</p>
+                            <p style="margin: 0;">• Para consultas académicas específicas, el coordinador académico del
+                                programa Lic. Gustavo Cabrera está a tu disposición a través del mail:
+                                coordinación.academica@ucp.edu.py</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div fxFlex="33">
+                    <div style="background: #285ba7; border-radius: 5px" class="p-8 mb-12">
+                        <label style="color: #fff; font-weight: bold">9. Reglas de etiqueta</label>
+                    </div>
+
+                    <div fxLayout="row">
+                        <div style="align-self: center">
+                            <mat-icon class="icono">fact_check</mat-icon>
+                        </div>
+                        <div fxLayout="column">
+                            <p style="margin: 0;">Este camino que inicias hoy, lo recorrerás en un entorno virtual de
+                                aprendizaje en el que fomentamos las buenas formas y modales, por lo que queremos que
+                                conozcas las reglas de etiqueta de cursado que fomentamos:</p>
+                            <p style="margin: 0;  margin-top: 5px !important;">• Fomentamos el trato cordial, amigable y
+                                comprensivo en los espacios de comunicación.</p>
+                            <p style="margin: 0;">• Creemos en el respeto y la empatía como medio de análisis de
+                                cualquier opinión emitida.</p>
+                            <p style="margin: 0;">• La plataforma de aprendizaje que te presentamos es un medio de
+                                aprendizaje no de recreación, nos tomamos muy en serio tu formación.</p>
+                            <p style="margin: 0;">• Recuerda que, en nuestro medio, escribir en mayúsculas puede ser
+                                interpretado como ira o irritación si escribes un reclamo.</p>
+                            <p style="margin: 0;">• Queremos que creemos juntos un espacio inolvidable de aprendizaje.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / 7 8 9 -->
+
+            <!-- 10 -->
+            <div class="mb-24">
+                <div style="background: #285ba7; border-radius: 5px" class="p-8 mb-12">
+                    <label style="color: #fff; font-weight: bold">10. Carga de bienvenida de las autoridades</label>
+                </div>
+
+                <div fxLayout="row">
+                    <div fxLayout="column" class="mr-8">
+                        <div style="width: 200px" class="mb-8">
+                            <img src="../../../assets/images/director.png" />
+                        </div>
+                        <label class="mb-4"> <strong>Nombre:</strong> Mg. Gustavo Cabrera</label>
+                        <label> <strong>Cargo:</strong> Director de Carrera</label>
+                    </div>
+                    <div fxLayout="column">
+                        <p>
+                            Estimado Alumno, estamos muy orgullosos de que hayas decidido iniciar tus estudios en
+                            nuestra Universidad, queremos que sepas que vamos a brindarte una educación de calidad y
+                            excelencia absoluta, porque creemos en tu capacidad de cambiar nuestra sociedad y es por
+                            ello que nuestro compromiso trasciende este medio.
+                        </p>
+                        <p>
+                            Esperamos poder apoyarte en todo y que te sientas acompañado en este hermoso espacio de
+                            aprendizaje en el que estarás forjando tu formación profesional, de hecho, en poco tiempo
+                            mas esperamos verte convertirte en un gran profesional o afianzando tu formación y poder ser
+                            parte de ello.
+                        </p>
+                        <p>
+                            Bienvenido a este maravilloso mundo de la formación, te deseamos todo el éxito del mundo y
+                            queremos que sepas que en la gran familia Universidad Central del Paraguay, sos el gran
+                            protagonista y estaremos a tu lado en todo momento.
+                        </p>
+                        <p>
+                            ¡Éxitos!
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+            <!-- / 10 -->
+        </div>
+    </div>
+</div>

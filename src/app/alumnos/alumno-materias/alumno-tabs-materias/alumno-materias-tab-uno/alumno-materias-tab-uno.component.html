@@ -1,0 +1,80 @@
+<div class="p-24" fxFlex="100" fxLayout="column">
+
+    <h1 *ngIf="unidades.length === 0">Aun no hay unidades en esta materia.</h1>
+
+    <div>
+        <mat-accordion [multi]="true">
+            <mat-expansion-panel [expanded]="true" *ngFor="let unidad of unidades; let i = index">
+                <mat-expansion-panel-header style="
+                        background: #285ba7 !important;
+                        height: 48px !important;
+                    ">
+                    <mat-panel-title style="color: #fff">
+                        Unidad {{ unidad.orden }}
+                    </mat-panel-title>
+                    <!--<mat-panel-description>
+                        This is a summary of the content
+                    </mat-panel-description>-->
+                </mat-expansion-panel-header>
+                <!--<p>This is the primary content of the panel.</p>-->
+
+                <div fxFlex="100" fxLayout="column" fxLayoutAlign="start" class="pt-16">
+                    <div fxLayout="row" fxLayout.xs="column" fxFlex="100">
+                        <div fxLayout="column" fxFlex.xs="100" fxFlex="60" fxLayoutAlign="center center"
+                            ngClass.gt-xs="pr-16">
+                            <label style="
+                                    font-weight: bold;
+                                    font-size: large;
+                                    margin-bottom: 15px;
+                                    
+                                ">
+                                {{ unidad.nombre }}</label>
+                            <p align="justify">{{ unidad.texto }}</p>
+                        </div>
+
+                        <div fxLayout="column" fxFlex="40" class="pl-16"
+                            style="justify-content: space-evenly; align-items: center;">
+
+                            <div fxLayout="column" class="mt-16 mb-16" style="width: 100%; align-items: center;">
+                                <mat-progress-bar mode="determinate" [value]="unidad.avance" color="warn">
+                                </mat-progress-bar>
+                                <label
+                                    style="font-weight: bold; font-size: large; margin-top: 15px;">{{unidad.avance}}%</label>
+                            </div>
+
+                            <div fxLayout="row wrap" fxLayoutAlign="center">
+                                <button mat-raised-button color="accent" class="boton-con-fondo mr-12 mb-12"
+                                    (click)="continuarUnidad(unidad)">
+                                    Continuar Lección
+                                </button>
+
+                                <button (click)="sendToParent()" mat-raised-button color="accent"
+                                    class="boton-sin-fondo mr-12 mb-12">
+                                    Ver Foro
+                                </button>
+
+                                <!-- <button *ngIf="unidad.materialesUrl !== undefined" mat-raised-button (click)="rendir()"
+                                    color="accent" class="boton-sin-fondo mb-12">
+                                    Evaluación de cierre
+                                </button> -->
+
+                                <button *ngIf="unidad.mostrar === true" (click)="realizarTest(unidad.linK_EDUCAPLAY)"
+                                    mat-raised-button color="accent" class="boton-sin-fondo mb-12 mr-12">
+                                    Autoevaluación
+                                </button>
+
+                                <button mat-raised-button color="accent" class="boton-sin-fondo mb-12 mr-12"
+                                    (click)="openManuales(unidad.linK_MANUAL)">
+                                    Manual <img style="width: 25px; margin-bottom:2px ;"
+                                        src="assets/icons/iconos-angular-material/download.svg">
+                                </button>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>

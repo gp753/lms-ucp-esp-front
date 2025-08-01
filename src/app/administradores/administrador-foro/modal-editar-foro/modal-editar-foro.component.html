@@ -1,0 +1,39 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+
+    <div fxFlex="100" fxLayout="column" class="mb-12" [formGroup]="form" style="width: 100% !important;">
+        <div fxLayout="column" fxFlex="100">
+            <div fxFlex="100" fxLayout="row">
+                <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                    <mat-label>Titulo</mat-label>
+                    <input matInput formControlName="TITULO">
+                    <mat-error>El titulo es requerido</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                    <mat-label>Seleccione la materia</mat-label>
+                    <mat-select formControlName="ID_MATERIA">
+                        <mat-option *ngFor="let m of materias" [value]="m.ID">{{m.NOMBRE}}</mat-option>
+                    </mat-select>
+                    <mat-error>La materia es requerido</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Descripcion</mat-label>
+            <input matInput formControlName="DESCRIPCION">
+            <mat-error>La descipcion es requerida</mat-error>
+        </mat-form-field>
+    </div>
+
+
+    <div fxLayout="row" style="width: 100%;">
+        <div class="mr-24" style="width: 50%;">
+            <button mat-flat-button color="accent" class="boton-sin-fondo" (click)="cerrar()">Cancelar</button>
+        </div>
+        <div style="width: 50%;">
+            <button [disabled]="this.form.invalid" fxFlex="100" mat-flat-button color="accent"
+                [ngClass]="this.form.invalid ? 'disabled':'boton-con-fondo'" (click)="guardar()">Guardar</button>
+        </div>
+    </div>
+</div>

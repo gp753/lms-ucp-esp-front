@@ -1,0 +1,253 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+
+        <!--HEADER NORMAL-->
+        <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Usuarios</h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto">
+            <mat-tab-group>
+
+                <!--EMPIEZA TAB CREAR USUARIOS-->
+                <mat-tab label="Crear usuario">
+                    <!--CONTENIDO-->
+                    <div class="p-24 card" fxLayout="column" [formGroup]="formulario" fxFlex="1 0 auto"
+                        style="width: 100% !important;">
+
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;">
+                            <div fxLayoutAlign="start center" class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <div fxLayoutAlign="start center">
+                                <label>Acá puedes <strong>crear usuarios.</strong></label>
+                            </div>
+                        </div>
+
+                        <div class="mat-card card p-12" fxLayout="column" fxFlex="100" style="border-radius: 5px;">
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                <!--INPUT NOMBRE-->
+                                <mat-form-field appearance="outline" fxFlex="33" class="pr-4">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput formControlName="NOMBRE" />
+
+                                    <mat-error>Por favor ingrese un nombre.</mat-error>
+                                </mat-form-field>
+
+                                <!--INPUT APELLIDO-->
+                                <mat-form-field appearance="outline" fxFlex="34" class="pr-4 pl-4">
+                                    <mat-label>Apellido</mat-label>
+                                    <input matInput formControlName="APELLIDO" />
+
+                                    <mat-error>Por favor ingrese un apellido.</mat-error>
+                                </mat-form-field>
+
+                                <!--INPUT DOCUMENTO-->
+                                <mat-form-field appearance="outline" fxFlex="33" class="pl-4">
+                                    <mat-label>Documento</mat-label>
+                                    <input matInput formControlName="DOCUMENTO" />
+
+                                    <mat-error>Por favor ingrese un documento.</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                <!--INPUT CORREO-->
+                                <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                                    <mat-label>Correo</mat-label>
+                                    <input matInput formControlName="EMAIL" type="email" email />
+
+                                    <mat-error>Por favor ingrese un correo valido.</mat-error>
+                                </mat-form-field>
+
+                                <!--SELECT ROL-->
+                                <mat-form-field appearance="outline" fxFlex="50">
+                                    <mat-label>Rol</mat-label>
+                                    <mat-select formControlName="ID_ROL">
+                                        <mat-option *ngFor="let rol of roles" [value]="rol.ID">{{rol.NOMBRE}}
+                                        </mat-option>
+                                    </mat-select>
+
+                                    <mat-error>Por favor seleccione unu rol.</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <!--SELECT CLIENTES-->
+                            <mat-form-field appearance="outline">
+                                <mat-label>Clientes</mat-label>
+                                <mat-select formControlName="CLIENTES" multiple>
+                                    <mat-option *ngFor="let c of listaClientes" [value]="c.ID">{{c.NOMBRE}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <!--BOTON AGREGAR-->
+
+                            <button mat-flat-button color="accent"
+                                [ngClass]="this.formulario.invalid ? 'disabled':'boton-con-fondo'"
+                                [disabled]="this.formulario.invalid" (click)="crearUsuario()">
+                                Crear usuario
+                            </button>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB CREAR USUARIO-->
+
+                <!--EMPIEZA TAB LISTA DE USUARIOS-->
+                <mat-tab label="Lista de usuarios">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;" fxLayoutAlign="start center">
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                En esta vista <strong>podrás ver y modificar los datos de los usuarios.</strong>
+                            </label>
+                        </div>
+
+                        <div class="mat-card card p-12" fxFlex="1 0 auto" fxLayout="column" style="border-radius: 5px;"
+                            fxLayoutAlign="start center">
+
+                            <div style="display: flex; flex-direction: row; width: 100%;">
+                                <mat-form-field appearance="outline" style="width: 50%;" class="pr-4">
+                                    <mat-label>Seleccione para filtrar por cliente</mat-label>
+                                    <mat-select disabled>
+                                        <mat-option value="todos" (click)="filtarUsuariosPorCliente('todos')">Todos
+                                        </mat-option>
+                                        <mat-option *ngFor="let c of listaClientes" [value]="c.ID"
+                                            (click)="filtarUsuariosPorCliente(c)">{{c.NOMBRE}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" style="width: 50%;" class="pl-4">
+                                    <mat-label>Seleccione para filtrar por rol</mat-label>
+                                    <mat-select>
+                                        <mat-option value="todos" (click)="filtarUsuariosPorRol('todos')">Todos
+                                        </mat-option>
+                                        <mat-option *ngFor="let r of roles" [value]="r.ID"
+                                            (click)="filtarUsuariosPorRol(r)">{{r.NOMBRE}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <mat-table style="width: 100%" class="products-table" #table [dataSource]="
+                            listaUsuariosFiltrada
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            " [@animateStagger]="{ value: '50' }" fusePerfectScrollbar matSort
+                                (matSortChange)="sortData($event)">
+                                <!-- Columna NOMBRE -->
+                                <ng-container matColumnDef="nombre">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="nombre">
+                                        Nombre
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let usuario">
+                                        <p class="text-truncate">
+                                            {{usuario.NOMBRE}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna APELLIDO -->
+                                <ng-container matColumnDef="apellido">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="apellido">
+                                        Apellido
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let usuario">
+                                        <p class="category text-truncate">
+                                            {{usuario.APELLIDO}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna CORREO -->
+                                <ng-container matColumnDef="email">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="email">
+                                        Correo
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let usuario">
+                                        <p class="text-truncate">
+                                            {{usuario.EMAIL}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ROL -->
+                                <ng-container matColumnDef="rol">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="rol">
+                                        Rol
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let usuario">
+                                        <p class="category text-truncate">
+                                            {{usuario.ROL}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna CLIENTES -->
+                                <ng-container matColumnDef="clientes">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="clientes">
+                                        Clientes
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let usuario">
+                                        <p class="category text-truncate">
+                                            {{usuario.CLIENTES}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell fxLayoutAlign="start start" *matHeaderCellDef>Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell fxLayoutAlign="start"
+                                        style="justify-content: space-evenly; padding: 5px 0;" *matCellDef="let usuario"
+                                        fxLayout="row">
+                                        <button mat-flat-button color="accent" class="mr-4"
+                                            (click)="editarUsuario(usuario)">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+
+                                        <button mat-flat-button color="warn" (click)='eliminarUsuario(usuario)'>
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+                                <mat-row *matRowDef="let product; columns: displayedColumns" class="product" matRipple>
+                                </mat-row>
+                            </mat-table>
+                            <div fxLayoutAlign="center center" class="mt-16">
+                                <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"
+                                    previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB LISTA DE USUARIOS-->
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

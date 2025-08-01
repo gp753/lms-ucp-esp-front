@@ -1,0 +1,52 @@
+.boton-sin-fondo {
+    background: transparent !important;
+    border-radius: 50px;
+    border-color: #285ba7 !important;
+    border: solid;
+    border-width: 1px;
+    color: #285ba7 !important;
+}
+
+.boton-con-fondo {
+    background: #285ba7 !important;
+    border-radius: 50px;
+}
+
+.fondo {
+    background: #f7f7f7;
+}
+
+.header {
+    background: linear-gradient(to right, #2d323e 0%, #285ba7 100%);
+    max-height: 65px;
+    color: #fff;
+}
+.info {
+    font-size: 50px;
+    width: fit-content;
+    height: auto;
+    color: #285ba7;
+}
+.card {
+    max-width: 1000px;
+    width: 100%;
+}
+
+hr {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: #d6d6d6;
+    height: 1px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.mat-error {
+    min-height: 15px;
+}
+
+.disabled {
+    border-radius: 50px;
+}

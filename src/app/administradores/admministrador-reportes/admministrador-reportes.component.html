@@ -1,0 +1,565 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <!--HEADER NORMAL-->
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Reportes
+                </h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div class="p-24 card" fxLayout="column">
+            <mat-form-field appearance="outline">
+                <mat-label>Seleccione un grupo</mat-label>
+                <mat-select [(ngModel)]="grupoSeleccionado">
+                    <mat-option
+                        *ngFor="let g of grupos"
+                        [value]="g"
+                        (click)="this.getMaterias(g.id)"
+                        >{{ g.nombre }} -
+                        {{ g.cliente }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" *ngIf="grupoSeleccionado">
+                <mat-label>Seleccione una materia</mat-label>
+                <mat-select [(ngModel)]="materiaSeleccionada">
+                    <mat-option
+                        *ngFor="let m of materias"
+                        [value]="m"
+                        (click)="this.getDatos(m.ID)"
+                        >{{ m.NOMBRE }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- GRAFICO -->
+            <div style="width: 100%; height: 300px" *ngIf="materiaSeleccionada">
+                <ngx-charts-bar-vertical
+                    [view]="chart.view"
+                    [scheme]="chart.colorScheme"
+                    [results]="chart.single"
+                    [gradient]="true"
+                    [xAxis]="chart.showXAxis"
+                    [yAxis]="chart.showYAxis"
+                    [legend]="chart.showLegend"
+                    [showXAxisLabel]="chart.showXAxisLabel"
+                    [showYAxisLabel]="chart.showYAxisLabel"
+                    [xAxisLabel]="chart.xAxisLabel"
+                    [yAxisLabel]="chart.yAxisLabel"
+                    [responsive]="true"
+                    (select)="onBarClick($event)"
+                >
+                </ngx-charts-bar-vertical>
+            </div>
+            <!-- FIN GRAFICO -->
+
+            <!-- RECUADROS -->
+            <!-- <div
+                *ngIf="materiaSeleccionada != null"
+                fxLayout="row wrap"
+                style="border-radius: 5px; justify-content: space-around"
+            >
+                <div
+                    class="mat-card recuadro"
+                    (click)="getLista(); seleccionado = 'Inscriptos'"
+                >
+                    <h1 style="color: #305cac">{{ datos.INSCRIPTOS }}</h1>
+                    <span style="color: #305cac">Inscriptos</span>
+                </div>
+
+                <div
+                    class="mat-card recuadro"
+                    (click)="getLista(); seleccionado = 'Inicios de sesión'"
+                >
+                    <h1 style="color: #ffbd2e">{{ datos.SESIONES }}</h1>
+                    <span style="color: #ffbd2e">Inicios de sesión</span>
+                </div>
+
+                <div
+                    class="mat-card recuadro"
+                    (click)="getLista(); seleccionado = 'No iniciaron sesión'"
+                >
+                    <h1 style="color: #7827a7">
+                        {{ datos.INSCRIPTOS - datos.SESIONES }}
+                    </h1>
+                    <span style="color: #7827a7">No iniciaron sesión</span>
+                </div>
+
+                <div
+                    class="mat-card recuadro"
+                    (click)="getLista(); seleccionado = 'Aprobados'"
+                >
+                    <h1 style="color: #2aa559">{{ datos.APROBADOS }}</h1>
+                    <span style="color: #2aa559">Aprobados</span>
+                </div>
+
+                <div
+                    class="mat-card recuadro"
+                    (click)="getLista(); seleccionado = 'Reprobados'"
+                >
+                    <h1 style="color: #c41818">{{ datos.REPROBADOS }}</h1>
+                    <span style="color: #c41818">Reprobados</span>
+                </div>
+
+                <div
+                    class="mat-card recuadro"
+                    (click)="
+                        getLista(); seleccionado = 'Pendientes de capacitacion'
+                    "
+                >
+                    <h1 style="color: #c41899">{{ datos.PENDIENTES }}</h1>
+                    <span style="color: #c41899"
+                        >Pendientes de capacitacion</span
+                    >
+                </div>
+            </div> -->
+            <!-- FIN RECUADROS -->
+
+            <!-- LISTAS DEPENDIENDO QUE SELECCIONO -->
+            <div
+                *ngIf="seleccionado != ''"
+                class="mat-card card p-12 mt-24"
+                fxLayout="column"
+                fxFlex="100"
+                style="border-radius: 5px"
+            >
+                <div
+                    style="
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 40px;
+                    "
+                >
+                    <h1 style="font-weight: bold">
+                        Lista {{ seleccionado }} de
+                        {{ materiaSeleccionada["NOMBRE"] }}
+                    </h1>
+
+                    <div>
+                        <button
+                            (click)="descargarPDF()"
+                            mat-flat-button
+                            color="accent"
+                            style="border-radius: 50px; margin-right: 10px"
+                        >
+                            Descargar PDF
+                        </button>
+
+                        <button
+                            (click)="descargarInforme()"
+                            mat-flat-button
+                            color="primary"
+                            style="border-radius: 50px"
+                        >
+                            Descargar informe
+                        </button>
+                    </div>
+                </div>
+
+                <!-- <div class="matFormField">
+                    <input
+                        [(ngModel)]="termino"
+                        style="
+                            border-radius: 50px;
+                            height: 55px;
+                            background: rgb(240, 240, 240);
+                            width: 100%;
+                        "
+                        placeholder="Buscar..."
+                    />
+                </div> -->
+
+                <mat-table
+                    style="width: 100%"
+                    class="products-table"
+                    #table
+                    [dataSource]="
+                        lista
+                            | filter : termino
+                            | paginate
+                                : { itemsPerPage: itemsPerPage, currentPage: p }
+                    "
+                    [@animateStagger]="{ value: '50' }"
+                    fusePerfectScrollbar
+                    matSort
+                    (matSortChange)="sortData($event)"
+                >
+                    <!-- Columna INDEX-->
+                    <ng-container matColumnDef="index">
+                        <mat-header-cell
+                            fxLayoutAlign="start"
+                            *matHeaderCellDef
+                            mat-sort-header="INDEX"
+                        >
+                            #
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate">
+                                {{ list.INDEX }}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna FOTO-->
+                    <ng-container matColumnDef="foto">
+                        <mat-header-cell
+                            fxLayoutAlign="start"
+                            *matHeaderCellDef
+                            mat-sort-header="FOTO"
+                        >
+                            Foto
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <img
+                                style="width: 70px"
+                                *ngIf="list.FOTO"
+                                [src]="
+                                    'https://apilms.central.edu.py/media/files/' +
+                                    list.FOTO
+                                "
+                            />
+                            <img
+                                style="width: 70px"
+                                *ngIf="!list.FOTO"
+                                src="../../../assets/images/logos/logoUCP9.png"
+                            />
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna NOMBRE-->
+                    <ng-container matColumnDef="nombre">
+                        <mat-header-cell
+                            fxLayoutAlign="start"
+                            *matHeaderCellDef
+                            mat-sort-header="NOMBRE"
+                        >
+                            <mat-form-field
+                                appearance="outline"
+                                style="font-size: 12px; width: 60%"
+                            >
+                                <mat-label> {{ "Nombre" }}</mat-label>
+                                <input
+                                    (click)="$event.stopPropagation()"
+                                    (keydown.space)="$event.stopPropagation()"
+                                    (keyup)="filter('NOMBRE', false)"
+                                    [(ngModel)]="filters.NOMBRE"
+                                    matInput
+                                    type="text"
+                                    placeholder="Nombre"
+                                />
+                                <button
+                                    mat-icon-button
+                                    matSuffix
+                                    (click)="filters.NOMBRE = ''"
+                                    (click)="filter('NOMBRE', false)"
+                                >
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate">
+                                {{ list.NOMBRE }}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna APELLIDO -->
+                    <ng-container matColumnDef="apellido">
+                        <mat-header-cell
+                            fxLayoutAlign="start"
+                            *matHeaderCellDef
+                            mat-sort-header="APELLIDO"
+                        >
+                            <mat-form-field
+                                appearance="outline"
+                                style="font-size: 12px; width: 60%"
+                            >
+                                <mat-label> {{ "Apellido" }}</mat-label>
+                                <input
+                                    (click)="$event.stopPropagation()"
+                                    (keydown.space)="$event.stopPropagation()"
+                                    (keyup)="filter('APELLIDO', false)"
+                                    [(ngModel)]="filters.APELLIDO"
+                                    matInput
+                                    type="text"
+                                    placeholder="Apellido"
+                                />
+                                <button
+                                    mat-icon-button
+                                    matSuffix
+                                    (click)="filters.APELLIDO = ''"
+                                    (click)="filter('APELLIDO', false)"
+                                >
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="category text-truncate">
+                                {{ list.APELLIDO }}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna DOCUMENTO -->
+                    <ng-container matColumnDef="documento">
+                        <mat-header-cell
+                            fxLayoutAlign="start"
+                            *matHeaderCellDef
+                            mat-sort-header="DOCUMENTO"
+                        >
+                            <mat-form-field
+                                appearance="outline"
+                                style="font-size: 12px; width: 60%"
+                            >
+                                <mat-label> {{ "Documento" }}</mat-label>
+                                <input
+                                    (click)="$event.stopPropagation()"
+                                    (keydown.space)="$event.stopPropagation()"
+                                    (keyup)="filter('DOCUMENTO', false)"
+                                    [(ngModel)]="filters.DOCUMENTO"
+                                    matInput
+                                    type="text"
+                                    placeholder="Documento"
+                                />
+                                <button
+                                    mat-icon-button
+                                    matSuffix
+                                    (click)="filters.DOCUMENTO = ''"
+                                    (click)="filter('DOCUMENTO', false)"
+                                >
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate">
+                                {{ list.DOCUMENTO }}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna ULTIMO INGRESO -->
+                    <ng-container matColumnDef="ultimo_ingreso">
+                        <mat-header-cell
+                            fxLayoutAlign="start"
+                            *matHeaderCellDef
+                            mat-sort-header="LAST_LOGIN"
+                        >
+                            <mat-form-field
+                                appearance="outline"
+                                style="font-size: 12px; width: 60%"
+                            >
+                                <mat-label> {{ "Ultimo Ingreso" }}</mat-label>
+                                <input
+                                    readonly
+                                    matInput
+                                    [matDatepicker]="picker"
+                                    [(ngModel)]="filters.LAST_LOGIN"
+                                    (dateInput)="filter('LAST_LOGIN', true)"
+                                />
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+
+                                <mat-datepicker-toggle
+                                    matPrefix
+                                    [for]="picker"
+                                ></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+
+                                <button
+                                    mat-icon-button
+                                    matSuffix
+                                    (click)="filters.LAST_LOGIN = ''"
+                                    (click)="filter('LAST_LOGIN', false)"
+                                >
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="category text-truncate">
+                                {{ list.LAST_LOGIN | date : "dd/MM/YYYY" }}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna FILIAL -->
+                    <ng-container matColumnDef="filial">
+                        <mat-header-cell
+                            fxLayoutAlign="start"
+                            *matHeaderCellDef
+                            mat-sort-header="FILIAL"
+                        >
+                            <mat-form-field
+                                appearance="outline"
+                                style="font-size: 12px; width: 60%"
+                            >
+                                <mat-label> {{ "Filial" }}</mat-label>
+                                <input
+                                    (click)="$event.stopPropagation()"
+                                    (keydown.space)="$event.stopPropagation()"
+                                    (keyup)="filter('FILIAL', false)"
+                                    [(ngModel)]="filters.FILIAL"
+                                    matInput
+                                    type="text"
+                                    placeholder="Filial"
+                                />
+                                <button
+                                    mat-icon-button
+                                    matSuffix
+                                    (click)="filters.FILIAL = ''"
+                                    (click)="filter('FILIAL', false)"
+                                >
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate">
+                                {{ list.FILIAL }}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna ESTADO -->
+                    <ng-container matColumnDef="estado">
+                        <mat-header-cell
+                            fxLayoutAlign="start"
+                            *matHeaderCellDef
+                            mat-sort-header="PUNTAJE"
+                        >
+                            Estado
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p
+                                class="text-truncate"
+                                style="color: #ffbd2e"
+                                *ngIf="list.PUNTAJE < 0"
+                            >
+                                Pendiente
+                            </p>
+
+                            <p
+                                class="text-truncate"
+                                style="color: #c41818"
+                                *ngIf="list.PUNTAJE <= 60 && list.PUNTAJE > -1"
+                            >
+                                Reprobado
+                            </p>
+
+                            <p
+                                class="text-truncate"
+                                style="color: #2aa559"
+                                *ngIf="list.PUNTAJE > 60"
+                            >
+                                Aprobado
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna INTENTOS -->
+                    <ng-container matColumnDef="intentos">
+                        <mat-header-cell
+                            fxLayoutAlign="start"
+                            *matHeaderCellDef
+                            mat-sort-header="INTENTOS_EVALUACION"
+                        >
+                            <mat-form-field
+                                appearance="outline"
+                                style="font-size: 12px; width: 60%"
+                            >
+                                <mat-label>
+                                    {{ "Intentos Evaluacion" }}</mat-label
+                                >
+                                <input
+                                    (click)="$event.stopPropagation()"
+                                    (keydown.space)="$event.stopPropagation()"
+                                    (keyup)="
+                                        filter('INTENTOS_EVALUACION', false)
+                                    "
+                                    [(ngModel)]="filters.INTENTOS_EVALUACION"
+                                    matInput
+                                    type="text"
+                                    placeholder="Intentos Evaluacion"
+                                />
+                                <button
+                                    mat-icon-button
+                                    matSuffix
+                                    (click)="filters.INTENTOS_EVALUACION = ''"
+                                    (click)="
+                                        filter('INTENTOS_EVALUACION', false)
+                                    "
+                                >
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </mat-header-cell>
+                        <mat-cell fxLayoutAlign="start" *matCellDef="let list">
+                            <p class="text-truncate">
+                                {{ list.INTENTOS_EVALUACION }}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna ACCIONES -->
+                    <!-- <ng-container matColumnDef="acciones">
+                    <mat-header-cell fxLayoutAlign="start start" *matHeaderCellDef>Acciones
+                    </mat-header-cell>
+
+                    <mat-cell fxLayoutAlign="start"
+                        style="justify-content: space-evenly; padding: 5px 0;" *matCellDef="let usuario"
+                        fxLayout="row">
+                        <button mat-flat-button color="accent" class="mr-4"
+                            (click)="editarUsuario(usuario)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+
+                        <button mat-flat-button color="warn" (click)='eliminarUsuario(usuario)'>
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container> -->
+
+                    <mat-header-row
+                        *matHeaderRowDef="displayedColumns; sticky: true"
+                    ></mat-header-row>
+
+                    <mat-row
+                        *matRowDef="let list; columns: displayedColumns"
+                        class="product"
+                        matRipple
+                    >
+                    </mat-row>
+                </mat-table>
+
+                <mat-paginator
+                    [pageSize]="10"
+                    [pageSizeOptions]="[10, 20, 50, 100]"
+                ></mat-paginator>
+            </div>
+            <!-- LISTAS DEPENDIENDO QUE SELECCIONO -->
+        </div>
+    </div>
+</div>

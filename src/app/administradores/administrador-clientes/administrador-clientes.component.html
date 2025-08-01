@@ -1,0 +1,214 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+
+        <!--HEADER NORMAL-->
+        <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Clientes</h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto">
+            <mat-tab-group>
+
+                <!--EMPIEZA TAB CREAR CLIENTE-->
+                <mat-tab label="Crear cliente">
+                    <!--CONTENIDO-->
+                    <div class="p-24 card" fxLayout="column" [formGroup]="formulario" fxFlex="1 0 auto"
+                        style="width: 100% !important;">
+
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;">
+                            <div fxLayoutAlign="start center" class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <div fxLayoutAlign="start center">
+                                <label>Acá puedes <strong>crear usuarios.</strong></label>
+                            </div>
+                        </div>
+
+                        <div class="mat-card card p-12" fxLayout="column" fxFlex="100" style="border-radius: 5px;">
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                <!--INPUT NOMBRE-->
+                                <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput formControlName="NOMBRE" />
+
+                                    <mat-error>Por favor ingrese un nombre.</mat-error>
+                                </mat-form-field>
+
+                                <!--INPUT SUBDOMINIO-->
+                                <mat-form-field appearance="outline" fxFlex="50">
+                                    <mat-label>Subdominio</mat-label>
+                                    <input matInput formControlName="SUBDOMINIO" />
+
+                                    <mat-error>Por favor ingrese un subdominio.</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+                                <div fxLayout="column" fxLayoutAlign="center" fxFlex="100" class="mb-24">
+                                    <div class="mb-24">
+                                        <input style="display: none" type="file" (change)="onSelectFile($event,'fondo')"
+                                            #fileInput1 />
+                                        <button mat-flat-button color="accent" class="boton-con-fondo"
+                                            (click)="fileInput1.click()">
+                                            Subir fondo <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
+                                    <div class="mb-24" fxLayoutAlign="center"
+                                        *ngIf="this.formulario.get('FONDO_URL').value">
+                                        <img [src]="'https://apilms.central.edu.py/media/files/' + this.formulario.get('FONDO_URL').value"
+                                            style="max-width: 300px; height: auto" />
+                                    </div>
+                                </div>
+
+                                <div fxLayout="column" fxLayoutAlign="center" fxFlex="100" class="mb-24">
+                                    <div class="mb-24">
+                                        <input style="display: none" type="file" (change)="onSelectFile($event,'logo')"
+                                            #fileInput2 />
+                                        <button mat-flat-button color="accent" class="boton-con-fondo"
+                                            (click)="fileInput2.click()">
+                                            Subir logo <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
+                                    <div class="mb-24" fxLayoutAlign="center"
+                                        *ngIf="this.formulario.get('LOGO_URL').value">
+                                        <img [src]="'https://apilms.central.edu.py/media/files/' + this.formulario.get('LOGO_URL').value"
+                                            style="max-width: 300px; height: auto" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--BOTON AGREGAR-->
+
+                            <button mat-flat-button color="accent"
+                                [ngClass]="this.formulario.invalid ? 'disabled':'boton-con-fondo'"
+                                [disabled]="this.formulario.invalid" (click)="crearCliente()">
+                                Crear cliente
+                            </button>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB CREAR CLIENTE-->
+
+                <!--EMPIEZA TAB LISTA DE CLIENTES-->
+                <mat-tab label="Lista de clientes">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;" fxLayoutAlign="start center">
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                En esta vista <strong>podrás ver y modificar los datos de los usuarios.</strong>
+                            </label>
+                        </div>
+
+                        <div class="mat-card card p-12" fxFlex="1 0 auto" fxLayout="column" style="border-radius: 5px;"
+                            fxLayoutAlign="start center">
+
+                            <mat-table style="width: 100%" class="products-table" #table [dataSource]="
+                                listaClientes
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            " [@animateStagger]="{ value: '50' }" fusePerfectScrollbar matSort
+                                (matSortChange)="sortData($event)">
+                                <!-- Columna NOMBRE -->
+                                <ng-container matColumnDef="nombre">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="nombre">
+                                        Nombre
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let usuario">
+                                        <p class="text-truncate">
+                                            {{usuario.NOMBRE}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna FONDO -->
+                                <ng-container matColumnDef="fondo">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="fondo">
+                                        Fondo
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let usuario" class="p-12">
+                                        <img style="width: 100px;"
+                                            [src]="'https://apilms.central.edu.py/media/files/' + usuario.FONDO_URL">
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna LOGO -->
+                                <ng-container matColumnDef="logo">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="logo">
+                                        Logo
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let usuario" class="p-12">
+                                        <img style="width: 100px;"
+                                            [src]="'https://apilms.central.edu.py/media/files/' + usuario.LOGO_URL">
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna SUBDOMINIO -->
+                                <ng-container matColumnDef="subdominio">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef
+                                        mat-sort-header="subdominio">
+                                        Subdominio
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let usuario">
+                                        <p class="category text-truncate">
+                                            {{usuario.SUBDOMINIO}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell fxLayoutAlign="start start" *matHeaderCellDef>Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell fxLayoutAlign="start"
+                                        style="justify-content: space-evenly; padding: 5px 0;" *matCellDef="let usuario"
+                                        fxLayout="row">
+                                        <button mat-flat-button color="accent" class="mr-4"
+                                            (click)="editarCliente(usuario)">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+
+                                        <button mat-flat-button color="warn" (click)='eliminarCliente(usuario)'>
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+                                <mat-row *matRowDef="let product; columns: displayedColumns" class="product" matRipple>
+                                </mat-row>
+                            </mat-table>
+                            <div fxLayoutAlign="center center" class="mt-16">
+                                <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"
+                                    previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB LISTA DE CLIENTES-->
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

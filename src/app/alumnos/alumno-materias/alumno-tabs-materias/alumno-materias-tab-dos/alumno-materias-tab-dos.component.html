@@ -1,0 +1,62 @@
+<div class="p-24" fxFlex="100" fxLayout="column">
+
+    <div class="mat-card mb-24 p-12" fxFlex="100" fxLayout="row" style="border-radius: 5px;"
+        fxLayoutAlign="start center">
+        <div class="mr-16">
+            <mat-icon class="info">info</mat-icon>
+        </div>
+        <div>
+            <label>Aquí podrás <strong>rendir tus examenes de "Nombre materia"</strong></label>
+        </div>
+    </div>
+
+    <div>
+        <mat-accordion [multi]="true">
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header style="background: #014666 !important; height: 48px !important;">
+                    <mat-panel-title style="color: #fff;" fxLayout="row">
+                        <mat-icon class="mr-12">assignment</mat-icon> Tipo de examen
+                    </mat-panel-title>
+                    <!--<mat-panel-description>
+                        This is a summary of the content
+                    </mat-panel-description>-->
+
+                </mat-expansion-panel-header>
+                <!--<p>This is the primary content of the panel.</p>-->
+                <div fxFlex="100" fxLayout="row wrap" fxLayoutAlign="start" class="pt-16">
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Fecha de inicio</label>
+                        <label style="font-weight: bold; white-space: nowrap;">2020-12-17</label>
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Fecha de entrega</label>
+                        <label style="font-weight: bold; white-space: nowrap">2020-12-17</label>
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Tiempo estimado</label>
+                        <label style="font-weight: bold;white-space: nowrap">120 min</label>
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Puntaje</label>
+                        <label style="font-weight: bold;white-space: nowrap">-</label>
+                    </div>
+
+                    <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                        <label style="white-space: nowrap">Estado</label>
+                        <label style="font-weight: bold; color: brown;white-space: nowrap">Sin Rendir</label>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutAlign="center center" fxFlex>
+                        <button mat-raised-button color="accent" class="disabled mr-12"
+                            style="border-radius: 50px !important;" disabled>Plazo
+                            vencido</button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+
+</div>

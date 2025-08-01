@@ -1,0 +1,34 @@
+<div class="p-12" fxLayout="row wrap" fxLayoutAlign="center center" [@animateStagger]="{ value: '50' }">
+    <div class="p-12">
+        <div class="mat-card card" fxLayout="column" [@animate]="{ value: '*', params: { y: '100%' } }">
+
+            <div style="height: 50px; background: rgb(20, 150, 20); border-top-right-radius: 5px; border-top-left-radius: 5px;"
+                fxLayout="row" class="p-12" fxLayoutAlign="center center">
+
+                <div fxLayout="row" fxLayoutAlign="start center" class="mr-20">
+                    <mat-icon class="mr-12" style="color: #fff;">today</mat-icon>
+                    <label style="color: #fff;">29/06/2022</label>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon class="mr-12" style="color: #fff;">access_time</mat-icon>
+                    <label style="color: #fff;">18:00 hrs</label>
+                </div>
+
+            </div>
+
+            <div fxLayout="column" class="p-12">
+                <h2 style="font-weight: bold; text-align: center;">CAMINANDO CON DIOS LIBRO 1</h2>
+            </div>
+
+            <div class="p-12" fxLayoutAlign="center center" fxFlex="1 0 auto">
+                <button
+                    (click)="gotoLink()"
+                     mat-raised-button color="accent" class="boton-sin-fondo">Visualizar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

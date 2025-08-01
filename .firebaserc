@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "universidadcentral-7afca": {
+      "hosting": {
+        "fuse": [
+          "universidadcentral-7afca"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "universidadcentral-7afca"
+  }
+}

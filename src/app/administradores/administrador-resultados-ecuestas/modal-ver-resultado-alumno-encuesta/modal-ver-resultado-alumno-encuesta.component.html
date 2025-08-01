@@ -1,0 +1,25 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+    <h1 style="font-weight: bold">Resultados del alumno en la encuesta</h1>
+
+    <div
+        *ngFor="let item of resultado"
+        style="border-bottom: 1px solid #cbcbcb; width: 100%"
+    >
+        <p style="font-size: 20px; font-weight: 500">{{ item.pregunta }}</p>
+        <p>
+            Respuesta: <strong>{{ item.respuesta }}</strong>
+        </p>
+        <p *ngIf="item.texto">
+            Comentario: <strong>{{ item.texto }}</strong>
+        </p>
+    </div>
+
+    <button
+        mat-flat-button
+        color="primary"
+        style="margin-top: 15px"
+        mat-dialog-close
+    >
+        Cerrar
+    </button>
+</div>

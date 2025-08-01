@@ -1,0 +1,64 @@
+<div fxFlex="100" fxLayout="start column" fxLayoutAlign="center" class="fondo">
+
+    <div class="header" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <div>
+            <button mat-button (click)="volver()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>
+        <div>
+            <h1 [@animate]="{
+            value: '*',
+            params: { delay: '100ms', y: '25px' }
+        }">Volver</h1>
+        </div>
+    </div>
+
+    <div class="p-24" style="width: 80%; display: flex; flex-direction: column; align-items: center;">
+        <div style="height: auto" class="mb-12 ancho">
+            <div>
+                <div class="container">
+                    <iframe class="responsive-iframe" [src]="link" frameborder="0" allow=" autoplay;  encrypted-media;"
+                        allowfullscreen></iframe>
+
+                    <!-- <video>
+                    <source [src]="link">
+                </video> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="ancho" style="margin-bottom: 5px" fxLayoutAlign="end">
+            <button mat-button>
+                <mat-icon>thumb_up</mat-icon>
+            </button>
+            <button mat-button>
+                <mat-icon>thumb_down</mat-icon>
+            </button>
+            <button mat-button>
+                <mat-icon>outlined_flag</mat-icon>
+            </button>
+        </div>
+
+        <hr />
+
+        <h1>{{datos.TEXTO}}</h1>
+
+        <div fxLayout="column" class="mb-12 ancho">
+            <div class="mt-12 mb-12">
+                <label class="titulo-pregunta">{{ datos.PREGUNTA }}</label>
+            </div>
+
+            <div>
+                <mat-radio-group aria-label="Select an option" fxLayout="column">
+                    <mat-checkbox [(ngModel)]="respuesta1" disabled class="checkbox">
+                        {{datos.RESPUESTA1}} {{respuesta1 ? '(Respuesta correcta)':''}}
+                    </mat-checkbox>
+                    <mat-checkbox [(ngModel)]="respuesta2" disabled class="checkbox">
+                        {{datos.RESPUESTA2}} {{respuesta2 ? '(Respuesta correcta)':''}}
+                    </mat-checkbox>
+                </mat-radio-group>
+            </div>
+        </div>
+    </div>
+</div>

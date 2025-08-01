@@ -1,0 +1,43 @@
+<div fxFlex="100" fxLayoutAlign="start" fxLayout="column" style="width: 500px" [formGroup]="form">
+    <div class="mb-24" fxLayoutAlign="center center">
+        <label style="font-size: 20px; color: #656565; font-weight: bold">Creando Grupo</label>
+    </div>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="NOMBRE" />
+        <mat-error>El nombre es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Seleccione el cliente</mat-label>
+        <mat-select formControlName="ID_CLIENTE">
+            <mat-option *ngFor="let c of listaClientes" [value]="c.ID">{{c.NOMBRE}}</mat-option>
+        </mat-select>
+        <mat-error>El nombre es requerido</mat-error>
+    </mat-form-field>
+
+    <div fxFlex="100" class="mb-24">
+        <input style="display: none" type="file" (change)="onSelectFile($event)" #fileInput />
+        <button mat-flat-button color="accent" class="boton-con-fondo" (click)="fileInput.click()">
+            Subir imagen <mat-icon>add</mat-icon>
+        </button>
+    </div>
+
+    <div fxLayout="row" fxFlex="100" class="mb-24" fxLayoutAlign="center">
+        <img [src]="imagenParaMostrar" style="max-width: 300px; height: auto" />
+    </div>
+
+    <div fxLayout="row" style="width: 100%">
+        <div class="mr-24" style="width: 50%">
+            <button mat-flat-button color="accent" class="boton-sin-fondo" mat-dialog-close>
+                Cancelar
+            </button>
+        </div>
+        <div style="width: 50%">
+            <button fxFlex="100" mat-flat-button color="accent" class="boton-con-fondo" (click)="crear()">
+                Crear
+            </button>
+        </div>
+    </div>
+</div>

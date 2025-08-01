@@ -1,0 +1,62 @@
+<div [formGroup]="form">
+    <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Asunto</mat-label>
+        <input matInput formControlName="asunto" />
+        <mat-error>Este campo es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Archivo</mat-label>
+        <input matInput [value]="nombreArchivo" />
+        <input
+            type="file"
+            style="display: none"
+            #arhivo
+            (change)="subirArchivo($event)"
+        />
+        <div matSuffix style="display: flex; flex-direction: row">
+            <button mat-icon-button (click)="arhivo.click()">
+                <mat-icon> attach_file </mat-icon>
+            </button>
+            <button
+                *ngIf="nombreArchivo"
+                mat-icon-button
+                (click)="verArchivo()"
+            >
+                <mat-icon> visibility </mat-icon>
+            </button>
+            <button mat-icon-button (click)="limpiarArchivo()">
+                <mat-icon> close </mat-icon>
+            </button>
+        </div>
+    </mat-form-field>
+
+    <div style="margin-bottom: 15px">
+        <quill-editor
+            [styles]="editorStyle"
+            [modules]="configuracion"
+            placeholder="Escriba el email aqui..."
+            formControlName="texto"
+        ></quill-editor>
+    </div>
+</div>
+
+<div style="display: flex; flex-direction: row; justify-content: space-between">
+    <button
+        class="boton-sin-fondo"
+        mat-flat-button
+        color="warn"
+        mat-dialog-close
+    >
+        Cancelar
+    </button>
+
+    <button
+        class="boton-con-fondo"
+        mat-flat-button
+        color="accent"
+        (click)="enviar()"
+    >
+        Confirmar y Enviar
+    </button>
+</div>

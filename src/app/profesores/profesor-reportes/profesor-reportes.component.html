@@ -1,0 +1,43 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <!-- <div>
+                <button mat-button (click)="volver()">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div> -->
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Reportes</h1>
+            </div>
+        </div>
+
+
+        <div fxFlex="1 0 auto">
+            <div class="p-24" fxLayout="column" style="width: 100% !important;">
+
+                <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto" style="border-radius: 5px;"
+                    fxLayoutAlign="start center">
+
+                    <div class="mr-12">
+                        <mat-icon class="info">info</mat-icon>
+                    </div>
+                    <label>
+                        Acá podrás
+                        <strong>ver a todos los reportes.</strong>
+                    </label>
+                </div>
+
+                <div class="p-24" fxLayout="column" style="border-radius: 5px;">
+
+                    <div class="mat-card recuadro" (click)="goTo()">
+                        <h1>Reporte de Asistencias</h1>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

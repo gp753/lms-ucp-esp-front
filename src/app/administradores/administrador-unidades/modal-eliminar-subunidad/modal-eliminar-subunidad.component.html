@@ -1,0 +1,24 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+
+    <div fxFlex="100" fxLayout="column" class="mb-24">
+        <div style="text-align: center;">
+            <mat-icon class="info">error_outline</mat-icon>
+        </div>
+        <label style="font-size: 20px; color: #656565; font-weight: bold;">¡Precaución!</label>
+    </div>
+
+    <div style="max-width: 400px; text-align: center;" class="mb-24">
+        <label style="text-align: center;">¿Estás seguro que deseas eliminar esta sub-unidad?</label>
+    </div>
+
+    <div fxLayout="row" style="width: 100%;">
+        <div class="mr-24" style="width: 50%;">
+            <button mat-raised-button color="accent" class="boton-con-fondo" (click)="cerrarDialog()">Cancelar</button>
+        </div>
+        <div style="width: 50%;">
+            <button fxFlex="100" mat-raised-button color="accent" class="boton-sin-fondo"
+                (click)="eliminar()">Eliminar</button>
+        </div>
+    </div>
+
+</div>

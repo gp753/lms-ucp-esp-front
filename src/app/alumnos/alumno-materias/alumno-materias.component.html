@@ -1,0 +1,89 @@
+<div class="fondo" fxFlex=" 1 0 auto" fxLayout="column">
+    <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+        <!--<div>
+            <button mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>-->
+        <div>
+            <h1 [@animate]="{
+                value: '*',
+                params: { delay: '100ms', y: '25px' }
+            }">Capacitaciones</h1>
+        </div>
+    </div>
+
+    <div class="contenido">
+
+        <mat-slide-toggle [(ngModel)]="todasLasMaterias"
+            style="padding: 10px 0 0 10px; font-size: 25px; font-weight: bolder; color: rgb(150, 150, 150);">
+            {{todasLasMaterias === true ? 'Ocultar materias finalizadas':'Mostrar todas las materias'}}
+        </mat-slide-toggle>
+
+        <div *ngIf="todasLasMaterias === false" class="p-12" fxLayout="row wrap" fxLayoutAlign="center center"
+            [@animateStagger]="{ value: '50' }">
+            <div class="p-12" *ngFor="let m of materiasPendientes">
+                <div class="mat-card card" fxLayout="column" [@animate]="{ value: '*', params: { y: '100%' } }">
+                    <div>
+                        <img style="border-top-left-radius: 5px; border-top-right-radius: 5px;"
+                            [src]="'https://apilms.central.edu.py/media/files/' + m.linK_IMAGEN">
+                    </div>
+
+                    <div fxLayout="column" class="p-12" style="padding-bottom: 0%;">
+                        <h2 style="font-weight: bold; text-align: center;">{{m.nombre}}</h2>
+                        <!-- <label style="color: #656565;">Libro: <strong>{{libro.numero}}</strong></label> -->
+                    </div>
+
+                    <p *ngIf="m.finalizado == false"
+                        style="color: green; font-weight: bold; text-align: center; margin: 0;">*Activa</p>
+                    <p *ngIf="m.finalizado == true"
+                        style="color: red; font-weight: bold; text-align: center; margin: 0;">*Finalizada</p>
+
+                    <div class="p-12" fxLayoutAlign="center end" fxFlex="1 0 auto" fxLayout="column">
+
+                        <!-- <button mat-flat-button color="warn" class="boton-con-fondo" *ngIf="rol === 8"
+                            (click)="resetMateria()">Resetear
+                            materia</button> -->
+
+                        <button mat-raised-button color="accent" class="boton-sin-fondo"
+                            (click)="entrarMateria(m)">Iniciar Estudios</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div *ngIf="todasLasMaterias === true" class="p-12" fxLayout="row wrap" fxLayoutAlign="center center"
+            [@animateStagger]="{ value: '50' }">
+            <div class="p-12" *ngFor="let m of materias">
+                <div class="mat-card card" fxLayout="column" [@animate]="{ value: '*', params: { y: '100%' } }">
+                    <div>
+                        <img style="border-top-left-radius: 5px; border-top-right-radius: 5px;"
+                            [src]="'https://apilms.central.edu.py/media/files/' + m.linK_IMAGEN">
+                    </div>
+
+                    <div fxLayout="column" class="p-12" style="padding-bottom: 0%;">
+                        <h2 style="font-weight: bold; text-align: center;">{{m.nombre}}</h2>
+                        <!-- <label style="color: #656565;">Libro: <strong>{{libro.numero}}</strong></label> -->
+                    </div>
+
+                    <p *ngIf="m.finalizado == false"
+                        style="color: green; font-weight: bold; text-align: center; margin: 0;">*Activa</p>
+                    <p *ngIf="m.finalizado == true"
+                        style="color: red; font-weight: bold; text-align: center; margin: 0;">*Finalizada</p>
+
+                    <div class="p-12" fxLayoutAlign="center end" fxFlex="1 0 auto" fxLayout="column">
+
+                        <!-- <button mat-flat-button color="warn" class="boton-con-fondo" *ngIf="rol === 8"
+                            (click)="resetMateria()">Resetear
+                            materia</button> -->
+
+                        <button mat-raised-button color="accent" class="boton-sin-fondo"
+                            (click)="entrarMateria(m)">Iniciar Estudios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

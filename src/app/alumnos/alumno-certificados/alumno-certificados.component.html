@@ -1,0 +1,111 @@
+<div class="fondo" fxFlex="100" fxLayout="column">
+
+    <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+        <!--<div>
+            <button mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>-->
+        <div>
+            <h1 [@animate]="{
+                value: '*',
+                params: { delay: '100ms', y: '25px' }
+            }">Certificados</h1>
+        </div>
+    </div>
+
+    <div class="p-24" fxLayout="column">
+
+        <div class="mat-card mb-24 p-12" fxLayout="row" style="border-radius: 5px;" fxLayoutAlign="start center">
+            <div class="mr-16">
+                <mat-icon class="info">info</mat-icon>
+            </div>
+            <div>
+                <label>Aquí podrás <strong>ver todos tus certificados.</strong></label>
+            </div>
+        </div>
+
+        <div class="mat-card p-12" style="border-radius: 5px;">
+            <div fxLayoutAlign="start" style="width: 50%;">
+                <input (keyup)="filtrar(busqueda)"
+                    style="border-radius:20px; border-width:2px; background-image: home;  height: 50px; width: 100%; background: #f7f7f7;"
+                    placeholder="Busqueda de certificados" [(ngModel)]="busqueda"
+                    [ngModelOptions]="{ standalone: true }" />
+            </div>
+
+            <!-- ACA EMPIEZA LA TABLA -->
+            <div class="center">
+                <mat-table class="products-table" #table [dataSource]="listaMaterias" matSort
+                    [@animateStagger]="{ value: '50' }" fusePerfectScrollbar>
+
+                    <!-- Columna Nombre -->
+                    <ng-container matColumnDef="nombre">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+                        <mat-cell *matCellDef="let tabla">
+                            <p class="text-truncate">{{ tabla.nombre }}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="aprovado">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Aprobado</mat-header-cell>
+                        <mat-cell *matCellDef="let tabla">
+                            <mat-icon *ngIf="tabla.aprovado">check</mat-icon>
+                            <mat-icon *ngIf="!tabla.aprovado">close</mat-icon>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="encuestado">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Encuestado</mat-header-cell>
+                        <mat-cell *matCellDef="let tabla">
+                            <mat-icon *ngIf="tabla.encuestado">check</mat-icon>
+                            <mat-icon *ngIf="!tabla.encuestado">close</mat-icon>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna Fecha 
+                    <ng-container matColumnDef="fecha">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de subida</mat-header-cell>
+                        <mat-cell *matCellDef="let tabla">
+                            <p class="text-truncate">
+                                no hay
+                            </p>
+                        </mat-cell>
+
+                    </ng-container>
+                    -->
+                    <!-- Columna Acciones -->
+                    <ng-container matColumnDef="acciones">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Acciones</mat-header-cell>
+                        <mat-cell *matCellDef="let tabla">
+
+                            <div fxLayout="row wrap" class="mb-8">
+                                <button (click)="descargarCertificado(tabla)"
+                                    title="Debes aprobar la materia y completar la encuesta para acceder al certificado"
+                                    [disabled]="tabla.aprovado === false || tabla.encuestado === false"
+                                    class="boton-con-fondo mt-8 mr-8" mat-flat-button color="accent">Descargar</button>
+                            </div>
+
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <mat-header-row *matHeaderRowDef="displayedColumnsUnidades; sticky: true"></mat-header-row>
+
+                    <mat-row *matRowDef="let product; columns: displayedColumnsUnidades" class="product" matRipple>
+                    </mat-row>
+                </mat-table>
+
+                <div fxLayoutAlign="center center" class="mt-16">
+
+                    <!-- <mat-paginator #paginator [length]="documentos" [pageIndex]="0" [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]">
+                    </mat-paginator> -->
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,318 @@
+<div fxFlex="100" fxLayout="row" id="academy-course" #target>
+
+    <!-- SIDEBAR -->
+    <fuse-sidebar fxFlex="25" class="sidebar" name="academy-course-left-sidebar-1" position="left" lockedOpen="gt-sm">
+        <!-- SIDEBAR CONTENT -->
+        <div class="content" fusePerfectScrollbar>
+            <div class="steps">
+                <div class="step" *ngFor="
+                        let step of unidades;
+                        let i = index;
+                        let last = last;
+                        let first = first
+                    " (click)="gotoStep(i, target)" [ngClass]="{
+                        current: pos === i,
+                        completed: pos > i,
+                        last: last,
+                        first: first
+                    }">
+                    <div class="index">
+                        <span>{{ i + 1 }}</span>
+                    </div>
+                    <div class="title">{{ step.nombre }}</div>
+                </div>
+            </div>
+        </div>
+        <!-- / SIDEBAR CONTENT -->
+    </fuse-sidebar>
+    <!-- / SIDEBAR -->
+
+    <div fxFlex="75" fxLayout="column" style="display: block !important;">
+        <!--HEADER-->
+        <div class="header" fxLayout="row" fxLayoutAlign="start center">
+            <div>
+                <button [fxHide]="editarContenido === true" mat-button (click)="volver()">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <!--BOTON CUANDO SE ESTA EDITANDO-->
+                <button [fxShow]="editarContenido === true" mat-button (click)="editar('editar')">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>
+            <div>
+                <h1 *ngIf="unidades.length > 0">{{unidades[pos].nombre}}</h1>
+            </div>
+        </div>
+        <!--HEADER-->
+        <div></div>
+
+        <!--CONTENIDO-->
+        <div [fxHide]="editarContenido === true" class="p-24" fxLayoutAlign="center center" fxLayout="column">
+
+            <div style="width: 70%; height: auto;" class="mb-12" fxLayout="column">
+
+                <div *ngIf="unidades[pos]?.safevideoUrl === null" class="p-12 mb-12"
+                    style="background: #FDEAED; width: fit-content; border-radius: 5px;" fxLayout="row"
+                    fxLayoutAlign="start center">
+                    <div class="mr-12">
+                        <mat-icon class="info">info</mat-icon>
+                    </div>
+                    <label style="color: #F9453F; font-size: 16px; font-weight: bold;">Debes ingresar un video</label>
+                </div>
+                <img *ngIf="unidades.length < 1  || unidades[pos].videoUrl.length == 0"
+                    src='https://s3-us-west-2.amazonaws.com/lasaga-blog/media/images/grupo_imagen.original.jpg'>
+            <label>Testing pos {{pos}}</label>
+
+                 <!--SI HAY VIDEO MUESTRA ESTO, SINO LO DE ARRIBA !-->
+                <div *ngIf="unidades[pos]?.safevideoUrl !== null && unidades[pos]?.videoUrl.length > 0">
+                    <div class="container">
+                        <iframe class="responsive-iframe" [src]="unidades[pos].safevideoUrl" frameborder="0"
+                            allow=" autoplay;  encrypted-media;" allowfullscreen></iframe>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div style="width: 70%; margin-bottom: 5px;" fxLayoutAlign="end">
+                <button mat-button>
+                    <mat-icon>thumb_up</mat-icon>
+                </button>
+                <button mat-button>
+                    <mat-icon>thumb_down</mat-icon>
+                </button>
+                <button mat-button>
+                    <mat-icon>outlined_flag</mat-icon>
+                </button>
+            </div>
+
+            <hr>
+
+            <!-- SI HAY CONTENIDO -->
+
+            <div *ngIf=" unidades.length > 0 && unidades[pos]?.contenido !== ''" style="margin-top: 5px; width: 70%;"
+                class="mb-12">
+                <quill-view [content]="unidades[pos].contenido" format="html" theme="snow"></quill-view>
+
+                <!-- <label class="mb-12" style="color: #707070; font-size: 16px;">{{unidades[pos].contenido}}</label> -->
+
+                <!-- <img class="mb-12" src="https://i2.wp.com/ulum.es/wp-content/uploads/2016/01/atp.1.png"> -->
+            </div>
+
+            <!-- / SI HAY CONTENIDO -->
+
+            <!-- SI NO HAY CONTENIDO MUESTRA ESTO -->
+            <div *ngIf="unidades.length < 1 || unidades[pos]?.contenido === ''" style="margin-top: 5px; width: 70%;"
+                fxLayout="column">
+                <div class="p-12 mb-12" style="background: #FDEAED; width: fit-content; border-radius: 5px;"
+                    fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mr-12">
+                        <mat-icon class="info">info</mat-icon>
+                    </div>
+                    <label style="color: #F9453F; font-size: 16px; font-weight: bold;">Debes ingresar el
+                        contenido</label>
+                </div>
+            </div>
+            <!-- / SI NO HAY CONTENIDO MUESTRA ESTO -->
+
+            <div style="width: 70%;" fxLayout="column" class="mb-12">
+                <!-- SI HAY PREGUNTA -->
+                <div *ngIf="unidades[pos]?.pregunta" class="p-12 mb-12" fxLayoutAlign="start center">
+                    <label style="font-size: 16px; font-weight: bold;">{{unidades[pos].pregunta.titulo}}</label>
+                </div>
+                <!-- / SI HAY PREGUNTA -->
+
+                <!-- SI NO HAY PREGUNTA MUESTRA ESTO -->
+                <div *ngIf="!unidades[pos]?.pregunta" class="p-12 mb-12"
+                    style="background: #FDEAED; width: fit-content; border-radius: 5px;" fxLayout="row"
+                    fxLayoutAlign="start center">
+                    <div class="mr-12">
+                        <mat-icon class="info">info</mat-icon>
+                    </div>
+                    <label style="color: #F9453F; font-size: 16px; font-weight: bold;">Debes ingresar una
+                        pregunta</label>
+                </div>
+                <!-- / SI NO HAY PREGUNTA MUESTRA ESTO -->
+
+                <!-- SI HAY RESPUESTAS -->
+                <div *ngIf="unidades[pos]?.pregunta">
+                    <div
+                        *ngIf="unidades[pos].pregunta.respuestas[0].texto !== '' || unidades[pos].pregunta.respuestas[1].texto !== '' ">
+                        <mat-radio-group aria-label="Select an option" fxLayout="column" class="mb-12">
+                            <mat-radio-button *ngFor="let respuesta of unidades[pos].pregunta.respuestas"
+                                [value]="respuesta.texto">
+
+                                <label *ngIf="respuesta.texto !== ''">
+                                    {{respuesta.texto}}
+                                </label>
+
+                                <label *ngIf="respuesta.texto === ''"
+                                    style="color: #F9453F; font-size: 16px; font-weight: bold;">
+                                    Debes ingresar la
+                                    respuesta
+                                </label>
+
+
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="p-12 mb-12" style="background: #FDEAED; width: fit-content; border-radius: 5px;"
+                        fxLayout="row" fxLayoutAlign="start center"
+                        *ngIf="unidades[pos].pregunta.respuestas[0].texto.length < 1 && unidades[pos].pregunta.respuestas[1].texto.length < 1">
+                        <div class="mr-12">
+                            <mat-icon class="info">info</mat-icon>
+                        </div>
+                        <label style="color: #F9453F; font-size: 16px; font-weight: bold;">Debes ingresar las
+                            respuestas</label>
+                    </div>
+                    <div class="p-12 mb-12" style="background: #FDEAED; width: fit-content; border-radius: 5px;"
+                        fxLayout="row" fxLayoutAlign="start center"
+                        *ngIf="!unidades[pos].pregunta.respuestas[0].correcta && !unidades[pos].pregunta.respuestas[1].correcta">
+                        <div class="mr-12">
+                            <mat-icon class="info">info</mat-icon>
+                        </div>
+                        <label style="color: #F9453F; font-size: 16px; font-weight: bold;">Debe Marcar la Respuesta
+                            Correcta</label>
+                    </div>
+
+                </div>
+                <!-- / SI HAY RESPUESTAS -->
+
+                <!-- SI NO HAY RESPUESTAS MUESTRA ESTO -->
+                <div *ngIf="!unidades[pos]?.pregunta">
+                    <div class="p-12 mb-12" style="background: #FDEAED; width: fit-content; border-radius: 5px;"
+                        fxLayout="row" fxLayoutAlign="start center">
+                        <div class="mr-12">
+                            <mat-icon class="info">info</mat-icon>
+                        </div>
+                        <label style="color: #F9453F; font-size: 16px; font-weight: bold;">Debes ingresar las
+                            respuestas</label>
+                    </div>
+                </div>
+                <!-- / SI NO HAY RESPUESTAS MUESTRA ESTO -->
+            </div>
+
+            <div style="width: 70%;" fxLayoutAlign="end">
+                <button style="width: 30%;" mat-raised-button color="accent" class="boton-sin-fondo mr-24"
+                    (click)="editar('editar')">Editar</button>
+                <button *ngIf="checkSiPuedePublicar()" style="width: 30%;" mat-raised-button color="accent"
+                    class="boton-con-fondo" (click)="guardarBorrador('Publicado', target)">Publicar</button>
+                <button *ngIf="!checkSiPuedePublicar()" (click)="guardarBorrador('Borrador', target)"
+                    style="width: 30%;" mat-raised-button color="accent" class="boton-con-fondo">Guardar
+                    Borrador</button>
+
+            </div>
+
+        </div>
+        <!-- / CONTENIDO-->
+
+        <!--EDITAR CONTENIDO-->
+        <div [fxShow]="editarContenido === true" class="p-24" fxLayoutAlign="start" fxLayout="column"
+            [formGroup]="formEditar" fxFlex="100">
+
+            <div class="mat-card p-24 mb-24" fxLayout="column" style="border-radius: 5px; width: 100%;">
+                <!-- <div fxLayout="row">
+                    <mat-form-field appearance="outline" fxFlex="34" class="pr-4">
+                        <mat-label>Seleccionar Semestre</mat-label>
+                        <mat-select required formControlName="semestre">
+                            <mat-option>
+                                semestre 1
+                            </mat-option>
+                            <mat-option>
+                                semestre 2
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Por favor seleccione un semestre.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" fxFlex="33" class="pr-4">
+                        <mat-label>Seleccionar Materia</mat-label>
+                        <mat-select required formControlName="materia">
+                            <mat-option>
+                                materia 1
+                            </mat-option>
+                            <mat-option>
+                                materia 2
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Por favor seleccione una materia.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" fxFlex="33">
+                        <mat-label>Seleccionar Unidad</mat-label>
+                        <mat-select required formControlName="unidad">
+                            <mat-option>
+                                unidad 1
+                            </mat-option>
+                            <mat-option>
+                                unidad 2
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Por favor seleccione una unidad.</mat-error>
+                    </mat-form-field>
+                </div> -->
+
+                <div fxLayout="column">
+                    <mat-form-field appearance="outline" fxFlex="100">
+                        <mat-label>Titulo de la subunidad</mat-label>
+                        <input matInput formControlName="titulo" />
+                        <mat-error>Por favor ingrese el titulo.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" fxFlex="100">
+                        <mat-label>Link del video</mat-label>
+                        <input matInput formControlName="video" />
+                        <mat-error>Por favor ingrese el video.</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+            <div class="mat-card p-24 mb-24" fxLayout="column" style="border-radius: 5px; height: fit-content;">
+
+                <quill-editor [(ngModel)]="testSubunidad.contenido" (onContentChanged)="contenidoQuill($event)" required
+                    [styles]="editorStyle" [ngModelOptions]="{standalone: true}" [modules]="configuracion"
+                    placeholder="Agregar un comentario...">
+                </quill-editor>
+
+            </div>
+
+            <div class="mat-card p-24 mb-24" fxLayout="column" style="border-radius: 5px;">
+
+                <mat-form-field class="mb-8" appearance="outline" fxFlex="100">
+                    <mat-label>Pregunta</mat-label>
+                    <input matInput formControlName="pregunta" />
+                    <mat-error>Por favor ingrese una pregunta.</mat-error>
+                </mat-form-field>
+
+                <mat-radio-group aria-label="Select an option" fxLayout="column" (change)="seleccionoRespuesta($event)">
+                    <mat-radio-button class="mb-8" value="1" [checked]="testRespuestasSubUnidad[0].correcta">
+                        <input [(ngModel)]="testRespuestasSubUnidad[0].texto" [ngModelOptions]="{standalone: true}"
+                            style="border: solid; border-color: rgb(194, 194, 194); border-width: 1.5px; border-radius: 5px; padding: 5px;"
+                            placeholder="Respuesta 1" />
+                    </mat-radio-button>
+                    <mat-radio-button value="2" [checked]="testRespuestasSubUnidad[1].correcta">
+                        <input [(ngModel)]="testRespuestasSubUnidad[1].texto" [ngModelOptions]="{standalone: true}"
+                            style="border: solid; border-color: rgb(194, 194, 194); border-width: 1.5px; border-radius: 5px; padding: 5px;"
+                            placeholder="Respuesta 2">
+                    </mat-radio-button>
+                </mat-radio-group>
+
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="end">
+                <div class="mr-24" fxFlex="30">
+                    <button style="width: 100%;" mat-raised-button color="accent"
+                        (click)="guardarBorrador('Borrador', target)" class="boton-con-fondo">Guardar
+                        borrador</button>
+                </div>
+                <div fxFlex="30">
+                    <button style="width: 100%;" mat-raised-button color="accent" class="boton-sin-fondo"
+                        (click)="guardarBorrador('Borrador', target)">Previsualizar</button>
+                </div>
+            </div>
+
+        </div>
+        <!-- / EDITAR CONTENIDO-->
+    </div>
+</div>

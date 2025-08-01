@@ -1,0 +1,312 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <!--<div>
+    <button mat-button>
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+</div>-->
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Cargar Contenido</h1>
+            </div>
+        </div>
+
+
+        <div fxFlex="1 0 auto">
+            <mat-tab-group>
+
+                <!--EMPIEZA TAB CARGA DE MATERIAL-->
+                <mat-tab label="Cargar">
+                    <div class="p-24" fxLayout="column" [formGroup]="form" fxFlex="1 0 auto"
+                        style="width: 100% !important;">
+
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;">
+                            <div fxLayoutAlign="start center" class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <div fxLayoutAlign="start center">
+                                <label>
+                                    Aca podras
+                                    <strong>subir archivos multimedia para los alumnos (PDF,
+                                        PPT, videos e imagenes) seleccionando la materia,
+                                        turno y unidad asociadas al archivo.</strong>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mat-card card p-12" fxLayout="column" fxFlex="1 0 auto" [formGroup]="form"
+                            style="border-radius: 5px;">
+                            <!--<mat-icon
+                                    style="
+                                        font-weight: lighter;
+                                        font-size: 50px;
+                                        width: fit-content;
+                                        height: auto;
+                                        color: #285ba7;
+                                    "
+                                    >cloud_upload</mat-icon
+                                >
+                                <label>Arrastra y Suelta</label>
+                                <a style="cursor: pointer">o seleccione un archivo</a>-->
+
+                            <ngx-file-drag-drop title="Click para seleccionar archivos"
+                                emptyPlaceholder="Arrastra y suelta varios archivos o click para seleccionar"
+                                style="height: 200px; width: 100%; max-width: none" [formControl]="fileControl"
+                                activeBorderColor="#3F51B5" multiple (valueChanged)="onValueChange($event)"
+                                uniqueFileNames>
+
+                            </ngx-file-drag-drop>
+
+                            <div style="margin-top: 15px">
+                                <mat-form-field appearance="outline" fxFlex="100">
+                                    <mat-label>Enlace externo</mat-label>
+                                    <input matInput formControlName="enlace" />
+                                    <mat-icon matSuffix class="secondary-text">outlined_flag</mat-icon>
+                                    <mat-error>Por favor incerte un enlace.</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div>
+                                <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
+                                    <mat-label>Seleccionar Materia</mat-label>
+                                    <mat-select required formControlName="materia">
+                                        <mat-option>
+                                            materia 1
+                                        </mat-option>
+                                        <mat-option>
+                                            materia 2
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-icon matSuffix class="secondary-text">outlined_flag</mat-icon>
+                                    <mat-error>Por favor seleccione una materia.</mat-error>
+                                </mat-form-field>
+                                <!--Oculte Turmas porque no tengo forma de obtener las turmas   
+                                    <mat-form-field appearance="outline" fxHide fxFlex="100">
+                                        <mat-label>Seleccione una o mas turmas</mat-label>
+                                        <mat-select required formControlName="turno">
+                                            <mat-option [value]="materia.oferta_disciplina_id"
+                                                *ngFor="let materia of materiasOrderby"
+                                                (click)="getUnidadesPorDisciplina(materia.id_disciplina)">
+                                                {{ materia.nome_turma }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-icon matSuffix class="secondary-text">outlined_flag</mat-icon>
+                                        <mat-error>Por favor seleccione al menos un
+                                            turno.</mat-error>
+                                    </mat-form-field>
+                                -->
+                            </div>
+                            <div>
+                                <mat-form-field appearance="outline" fxFlex="100">
+                                    <mat-label>Seleccionar Unidad</mat-label>
+                                    <mat-select required formControlName="unidad">
+                                        <mat-option>
+                                            Unidad 1
+                                        </mat-option>
+                                        <mat-option>
+                                            Unidad 2
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-icon matSuffix class="secondary-text">outlined_flag</mat-icon>
+                                    <mat-error>Por favor seleccione una unidad.</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="end">
+                                <button mat-raised-button color="accent" class="boton-con-fondo">
+                                    Cargar material
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB CARGA DE MATERIAL-->
+
+                <!--EMPIEZA TABLA HISTORIAL-->
+                <mat-tab label="Historial">
+                    <div class="p-24" fxLayout="column" [formGroup]="form" fxFlex="1 0 auto"
+                        style="width: 100% !important;">
+
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;" fxLayoutAlign="start center">
+
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                Acá podrás
+                                <strong>ver todos los archivos que haz subido por materia,
+                                    turno y fecha</strong>
+                            </label>
+                        </div>
+                        <div class="mat-card card p-24" fxLayout="column" style="border-radius: 5px;">
+                            <!-- <div class="h2 mb-24">Preguntas</div>-->
+                            <!--ACA EMPIEZA LA TABLA-->
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-24">
+                                <mat-form-field appearance="outline" fxFlex="60" class="pr-4">
+                                    <mat-label>Buscar</mat-label>
+                                    <input [(ngModel)]="term" matInput [ngModelOptions]="{ standalone: true }" />
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" fxFlex="30" class="pr-4">
+                                    <mat-label>Seleccionar materia</mat-label>
+                                    <mat-select>
+                                        <mat-option>
+                                            materia 1
+                                        </mat-option>
+                                        <mat-option>
+                                            materia 2
+                                        </mat-option>
+                                        <mat-option value="Todas">Todas</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" fxFlex="10">
+                                    <mat-label>Mostrar</mat-label>
+                                    <mat-select [(value)]="itemsPerPage" (selectionChange)="p = 1">
+                                        <mat-option value="5"> 5 </mat-option>
+                                        <mat-option value="10"> 10 </mat-option>
+                                        <mat-option value="15"> 15 </mat-option>
+                                        <mat-option value="20"> 20 </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <!--ACA TERMINA SELECCIONAR MOSTRAR-->
+
+                            <mat-table fxFlex="1 0 auto" class="products-table" #table [dataSource]="
+                                listatoArchivos
+                                    | filter: term
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            " [@animateStagger]="{ value: '50' }" fusePerfectScrollbar matSort
+                                (matSortChange)="sortData($event)">
+                                <!-- Columna ELEMENTO -->
+                                <ng-container matColumnDef="elemento">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="elemento">
+                                        Elemento
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                                        <p *ngIf="lista.link !== null" class="text-truncate">
+                                            {{ lista.link }}
+                                        </p>
+                                        <a [href]="'https://api.ucpvirtual.com.br/storage/medicina/trabalhos/' + lista.caminho"
+                                            target="_blank">
+
+                                            Archivo
+
+                                        </a>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna MATERIA -->
+                                <ng-container matColumnDef="materia">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="materia">
+                                        Materia
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                                        <p class="text-truncate">
+                                            {{ lista.nome_materia }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna TURNO -->
+                                <ng-container matColumnDef="turno">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="turno">
+                                        Turno
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                                        <p class="category text-truncate">
+                                            {{ lista.nome_turma }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna FECHA -->
+                                <ng-container matColumnDef="fecha">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef
+                                        mat-sort-header="FECHA_FIN">
+                                        Fecha
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let examen">
+                                        <p class="category text-truncate">
+                                            {{ examen.FECHA_FIN | date: "dd/MM/yyyy" }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell fxLayoutAlign="start start" *matHeaderCellDef>Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let product" fxLayout="column">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Acciones</mat-label>
+                                            <mat-select>
+                                                <mat-option style="padding: 0%">
+                                                    <button style="
+                                                        padding: 0;
+                                                        width: 100%;
+                                                        height: inherit;
+                                                    " mat-button color="accent">
+                                                        Ver unidad
+                                                    </button>
+                                                </mat-option>
+                                                <mat-option style="padding: 0%">
+                                                    <button style="
+                                                        padding: 0;
+                                                        width: 100%;
+                                                        height: inherit;
+                                                        
+                                                    " mat-button color="accent">
+                                                        Descargar
+                                                    </button>
+                                                </mat-option>
+                                                <mat-option style="padding: 0%">
+                                                    <button style="
+                                                        padding: 0;
+                                                        width: 100%;
+                                                        height: inherit;
+                                                    " mat-button color="accent">
+                                                        Editar
+                                                    </button>
+                                                </mat-option>
+                                                <mat-option style="padding: 0%">
+                                                    <button style="
+                                                        padding: 0;
+                                                        width: 100%;
+                                                        height: inherit;
+                                                    " mat-button color="warn">
+                                                        Eliminar
+                                                    </button>
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+                                <mat-row *matRowDef="let product; columns: displayedColumns" class="product" matRipple>
+                                </mat-row>
+                            </mat-table>
+                            <div fxLayoutAlign="center center" class="mt-16">
+                                <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"
+                                    previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TABLA HISTORIAL-->
+            </mat-tab-group>
+        </div>
+
+    </div>

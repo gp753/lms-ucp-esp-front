@@ -1,0 +1,72 @@
+<div fxFlex="100" fxLayout="column">
+
+    <div [formGroup]="form">
+        <div fxLayout="row">
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>Seleccione un profesor</mat-label>
+                <mat-select formControlName="id_profesor">
+                    <mat-option *ngFor="let p of listaProfesores" [value]="p.ID">{{p.NOMBRE}}</mat-option>
+                </mat-select>
+                <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Nombre de la seccion</mat-label>
+                <input matInput formControlName="nombre">
+                <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row">
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>Fecha inicio</mat-label>
+                <input readonly matInput [matDatepicker]="inicio" formControlName="inicio">
+                <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
+                <mat-datepicker #inicio></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Fecha fin</mat-label>
+                <input readonly matInput [matDatepicker]="fin" formControlName="fin">
+                <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
+                <mat-datepicker #fin></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+        <button mat-flat-button color="primery"
+            style="background-color: green; border-radius: 50px; color: #fff; margin-bottom: 10px;"
+            (click)="agregarHorario()">Agregar horario
+            <mat-icon matSuffix>add</mat-icon>
+        </button>
+
+        <div *ngFor="let d of this.dias; let i = index">
+            <mat-form-field appearance="outline" fxFlex="50">
+                <mat-label>Seleccione un dia</mat-label>
+                <mat-select [(ngModel)]="d.dia" [ngModelOptions]="{standalone: true}">
+                    <mat-option value="Lunes">Lunes</mat-option>
+                    <mat-option value="Martes">Martes</mat-option>
+                    <mat-option value="Miercoles">Miercoles</mat-option>
+                    <mat-option value="Jueves">Jueves</mat-option>
+                    <mat-option value="Viernes">Viernes</mat-option>
+                    <mat-option value="Sabado">Sabado</mat-option>
+                    <mat-option value="Domingo">Domingo</mat-option>
+                </mat-select>
+                <mat-error>Este campo es obligatorio</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="20" class="pr-4 pl-4">
+                <mat-label>Hora de inicio</mat-label>
+                <input matInput type="time" [(ngModel)]="d.hora_inicio" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="20">
+                <mat-label>Hora fin</mat-label>
+                <input matInput type="time" [(ngModel)]="d.hora_fin" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+
+            <mat-icon class="eliminar" fxFlex="10" (click)="quitarHorario(i)">delete</mat-icon>
+        </div>
+    </div>
+
+    <button mat-flat-button color="accent" class="boton-con-fondo" (click)="guardar()">Guardar cambios</button>
+</div>

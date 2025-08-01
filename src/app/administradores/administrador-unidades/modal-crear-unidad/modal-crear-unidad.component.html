@@ -1,0 +1,62 @@
+<div fxFlex="100" fxLayoutAlign="start" fxLayout="column" style="width: 500px" [formGroup]="form">
+    <div class="mb-24" fxLayoutAlign="center center">
+        <label style="font-size: 20px; color: #656565; font-weight: bold">Creando Unidad</label>
+    </div>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="NOMBRE">
+        <mat-error>El nombre es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Descripcion</mat-label>
+        <input matInput formControlName="TEXTO">
+        <mat-error>La descripcion es requerida</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Link educaplay (opcional)</mat-label>
+        <input matInput formControlName="LINK_EDUCAPLAY">
+    </mat-form-field>
+
+    <div style="width: 100%; display: flex; justify-content: space-between;">
+
+        <h1>Ingrese el orden de la unidad:</h1>
+
+        <mat-form-field appearance="outline" style="width: 30%;">
+            <mat-label>Orden</mat-label>
+            <input matInput formControlName="ORDEN" type="number">
+            <mat-error>El orden es requerido</mat-error>
+        </mat-form-field>
+    </div>
+
+
+    <div fxLayout="row" fxLayoutAlign="center" fxFlex="100" class="mb-24">
+        <div fxFlex="35">
+            <input style="display: none;" type="file" (change)="onSelectFile($event)" #fileInput>
+            <button mat-raised-button color="accent" class="boton-con-fondo" (click)="fileInput.click()">
+                Subir manual <mat-icon>add</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div fxLayout="row" fxFlex="100" class="mb-24" fxLayoutAlign="center center" *ngIf="imagenParaMostrar">
+        <mat-icon style="margin-right: 10px;">description</mat-icon>
+        <h1>{{imagenParaMostrar}}</h1>
+    </div>
+
+    <div fxLayout="row" style="width: 100%">
+        <div class="mr-24" style="width: 50%">
+            <button mat-raised-button color="accent" class="boton-sin-fondo" (click)="cerrar()">
+                Cancelar
+            </button>
+        </div>
+        <div style="width: 50%">
+            <button fxFlex="100" mat-raised-button [disabled]="this.form.invalid" color="accent" class="boton-con-fondo"
+                (click)="crear()">
+                Crear
+            </button>
+        </div>
+    </div>
+</div>

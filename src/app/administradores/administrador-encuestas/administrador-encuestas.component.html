@@ -1,0 +1,494 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <!--HEADER NORMAL-->
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Encuestas
+                </h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto">
+            <mat-tab-group (selectedTabChange)="tabChange($event)">
+                <!-- TAB DASH -->
+                <mat-tab label="Dashboard">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div
+                            class="mat-card card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                            fxLayoutAlign="start center"
+                        >
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                En esta vista
+                                <strong
+                                    >podrás ver, utilizar el elemento
+                                    dashboard.</strong
+                                >
+                            </label>
+                        </div>
+
+                        <div
+                            class="mat-card card p-12"
+                            fxFlex="1 0 auto"
+                            fxLayout="column"
+                            style="border-radius: 5px"
+                            fxLayoutAlign="start center"
+                        >
+                            <iframe
+                                width="600"
+                                height="500"
+                                src="https://lookerstudio.google.com/embed/reporting/0a5a869f-ccdf-4079-bf34-5215fd341a90/page/AMRtD"
+                                frameborder="0"
+                                style="border: 0; width: inherit"
+                                allowfullscreen
+                                sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                            ></iframe>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!-- FIN TAB DASH -->
+
+                <!--EMPIEZA TAB LISTA DE ENCUESTAS-->
+                <mat-tab label="Lista de encuestas">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div
+                            class="mat-card card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                            fxLayoutAlign="start center"
+                        >
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                En esta vista
+                                <strong
+                                    >podrás ver, modificar y eliminar las
+                                    encuestas.</strong
+                                >
+                            </label>
+                        </div>
+
+                        <div
+                            class="mat-card card p-12"
+                            fxFlex="1 0 auto"
+                            fxLayout="column"
+                            style="border-radius: 5px"
+                            fxLayoutAlign="start center"
+                        >
+                            <mat-table
+                                style="width: 100%"
+                                class="products-table"
+                                #table
+                                [dataSource]="
+                                    listaEncuestas
+                                        | paginate
+                                            : {
+                                                  itemsPerPage: itemsPerPage,
+                                                  currentPage: p
+                                              }
+                                "
+                                [@animateStagger]="{ value: '50' }"
+                                fusePerfectScrollbar
+                                matSort
+                                (matSortChange)="sortData($event)"
+                            >
+                                <!-- Columna TITULO -->
+                                <ng-container matColumnDef="titulo">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="titulo"
+                                    >
+                                        Titulo
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let encuesta"
+                                    >
+                                        <p
+                                            class="text-truncate"
+                                            style="white-space: normal"
+                                        >
+                                            {{ encuesta.titulo }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna MATERIA -->
+                                <ng-container matColumnDef="materia">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="materia"
+                                    >
+                                        Materia
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let encuesta"
+                                    >
+                                        <p
+                                            class="category text-truncate"
+                                            style="white-space: normal"
+                                        >
+                                            {{ encuesta.materia }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna PUBLICADO -->
+                                <ng-container matColumnDef="publicado">
+                                    <mat-header-cell
+                                        fxLayoutAlign="center"
+                                        *matHeaderCellDef
+                                        mat-sort-header="publicado"
+                                    >
+                                        Publicado
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="center center"
+                                        style="margin-left: -6%"
+                                        *matCellDef="let encuesta"
+                                    >
+                                        <mat-icon
+                                            *ngIf="encuesta.PUBLICADO == true"
+                                            >check</mat-icon
+                                        >
+                                        <mat-icon
+                                            *ngIf="encuesta.PUBLICADO == false"
+                                            >close</mat-icon
+                                        >
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell
+                                        fxLayoutAlign="center center"
+                                        *matHeaderCellDef
+                                        >Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        style="
+                                            justify-content: space-evenly;
+                                            padding: 5px 0;
+                                        "
+                                        *matCellDef="let encuesta"
+                                        fxLayout="row"
+                                    >
+                                        <button
+                                            mat-flat-button
+                                            color="primary"
+                                            title="Ver resultado"
+                                            class="mr-4"
+                                            (click)="verResultado(encuesta)"
+                                        >
+                                            <mat-icon>visibility</mat-icon>
+                                        </button>
+
+                                        <button
+                                            mat-flat-button
+                                            color="accent"
+                                            title="Editar"
+                                            class="mr-4"
+                                            (click)="editarEncuesta(encuesta)"
+                                        >
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+
+                                        <button
+                                            mat-flat-button
+                                            color="warn"
+                                            title="Eliminar"
+                                            (click)="eliminarEncuesta(encuesta)"
+                                        >
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row
+                                    *matHeaderRowDef="
+                                        displayedColumns;
+                                        sticky: true
+                                    "
+                                ></mat-header-row>
+
+                                <mat-row
+                                    *matRowDef="
+                                        let product;
+                                        columns: displayedColumns
+                                    "
+                                    class="product"
+                                    matRipple
+                                >
+                                </mat-row>
+                            </mat-table>
+                            <div fxLayoutAlign="center center" class="mt-16">
+                                <pagination-controls
+                                    (pageChange)="p = $event"
+                                    autoHide="true"
+                                    responsive="true"
+                                    previousLabel="Anterior"
+                                    nextLabel="Siguiente"
+                                ></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB LISTA DE AENCUESTAS-->
+
+                <!--EMPIEZA TAB CREAR ENCUESTA-->
+                <mat-tab label="Crear encuesta">
+                    <!--CONTENIDO-->
+                    <div
+                        class="p-24 card"
+                        fxLayout="column"
+                        fxFlex="1 0 auto"
+                        style="width: 100% !important"
+                    >
+                        <div
+                            class="mat-card card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                        >
+                            <div fxLayoutAlign="start center" class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <div fxLayoutAlign="start center">
+                                <label
+                                    >Acá puedes
+                                    <strong>crear encuestas.</strong></label
+                                >
+                            </div>
+                        </div>
+
+                        <div
+                            class="mat-card card p-12"
+                            fxLayout="column"
+                            fxFlex="100"
+                            style="border-radius: 5px"
+                        >
+                            <!--INPUT TITULO-->
+                            <div
+                                [formGroup]="formulario"
+                                fxLayout="column"
+                                fxFlex="100"
+                            >
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="100"
+                                >
+                                    <mat-label>Titulo</mat-label>
+                                    <input matInput formControlName="TITULO" />
+                                    <mat-error
+                                        >Por favor ingrese un titulo para la
+                                        encuesta.</mat-error
+                                    >
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="100"
+                                >
+                                    <mat-label>Seleccione la materia</mat-label>
+                                    <mat-select formControlName="ID_MATERIA">
+                                        <mat-option
+                                            *ngFor="let m of materias"
+                                            [value]="m.ID"
+                                            >{{ m.NOMBRE }}</mat-option
+                                        >
+                                    </mat-select>
+                                    <mat-error
+                                        >Por favor seleccione una materia para
+                                        la encuesta.</mat-error
+                                    >
+                                </mat-form-field>
+
+                                <mat-checkbox
+                                    fxFlex="30"
+                                    formControlName="PUBLICADO"
+                                    style="text-align: center"
+                                    >{{
+                                        this.formulario.get("PUBLICADO").value
+                                            ? "Publicado"
+                                            : "No publicado"
+                                    }}</mat-checkbox
+                                >
+                            </div>
+
+                            <div
+                                fxFlex="100"
+                                fxLayout="column"
+                                *ngFor="
+                                    let p of preguntasCreadas;
+                                    let i = index
+                                "
+                            >
+                                <div
+                                    style="
+                                        display: flex;
+                                        flex-direction: row;
+                                        justify-content: space-between;
+                                    "
+                                >
+                                    <mat-form-field
+                                        appearance="outline"
+                                        style="width: 90%"
+                                    >
+                                        <mat-label
+                                            >Pregunta {{ i + 1 }}</mat-label
+                                        >
+                                        <textarea
+                                            matInput
+                                            style="min-height: 50px"
+                                            [(ngModel)]="p['PREGUNTA']"
+                                        ></textarea>
+                                        <mat-error
+                                            >La pregunta {{ i + 1 }} es
+                                            requerida</mat-error
+                                        >
+                                    </mat-form-field>
+
+                                    <button
+                                        mat-flat-button
+                                        color="warn"
+                                        style="
+                                            max-height: 50px;
+                                            margin-top: 4px;
+                                        "
+                                        (click)="
+                                            eliminarPregunta(i, p['PREGUNTA'])
+                                        "
+                                    >
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+
+                                <div
+                                    style="
+                                        display: flex;
+                                        flex-wrap: wrap;
+                                        justify-content: space-between;
+                                    "
+                                >
+                                    <mat-form-field
+                                        appearance="outline"
+                                        *ngFor="
+                                            let res of p.RESPUESTAS;
+                                            let ind = index
+                                        "
+                                        style="width: 49%"
+                                        [fxHide]="p.id_tipo == 2"
+                                    >
+                                        <mat-label
+                                            >Respuesta {{ ind + 1 }}</mat-label
+                                        >
+                                        <input
+                                            matInput
+                                            [(ngModel)]="res.RESPUESTA"
+                                        />
+                                        <mat-error
+                                            >La respuesta {{ ind + 1 }} es
+                                            requerida</mat-error
+                                        >
+                                    </mat-form-field>
+
+                                    <mat-form-field
+                                        appearance="outline"
+                                        *ngFor="let res of p.RESPUESTAS"
+                                        [fxShow]="p.id_tipo == 2"
+                                        style="width: 100%"
+                                    >
+                                        <mat-label>Respuesta</mat-label>
+                                        <textarea
+                                            matInput
+                                            [(ngModel)]="res.RESPUESTA"
+                                        ></textarea>
+                                        <mat-error
+                                            >La respuesta es
+                                            requerida</mat-error
+                                        >
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div
+                                style="
+                                    margin-top: 20px;
+                                    justify-content: space-between;
+                                "
+                                fxLayout="row"
+                                fxFlex="1 0 auto"
+                            >
+                                <button
+                                    mat-flat-button
+                                    color="primary"
+                                    (click)="agregarPregunta('select multiple')"
+                                >
+                                    Agregar pregunta, seleccion multiple
+                                </button>
+
+                                <button
+                                    mat-flat-button
+                                    color="primary"
+                                    (click)="
+                                        agregarPregunta('escribe la respuesta')
+                                    "
+                                >
+                                    Agregar pregunta, escribe la respuesta
+                                </button>
+
+                                <button
+                                    mat-flat-button
+                                    color="accent"
+                                    [ngClass]="
+                                        this.formulario.invalid ||
+                                        this.preguntasCreadas.length == 0
+                                            ? 'disabled'
+                                            : 'boton-con-fondo'
+                                    "
+                                    [disabled]="
+                                        this.formulario.invalid ||
+                                        this.preguntasCreadas.length == 0
+                                    "
+                                    (click)="crearEncuesta()"
+                                >
+                                    Crear encuesta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB CREAR ENCUESTA-->
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+
+        <!--HEADER NORMAL-->
+        <div class="header" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <div>
+                <button mat-button routerLink="/administrador-unidades">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Carga de información general</h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto" class="p-24">
+            <div class="mat-card p-12" style="border-radius: 5px;" fxLayout="column" [formGroup]="form">
+
+                <quill-editor class="mb-24" required [styles]="editorStyle" [modules]="configuracion"
+                    placeholder="Escriba el texto aquí..."></quill-editor>
+
+                <div fxLayout="row" fxFlex="100">
+
+                    <mat-form-field appearance="outline" required fxFlex="50" class="mr-4">
+                        <mat-label>Cargar Archivo 1</mat-label>
+                        <ngx-mat-file-input formControlName="file1" [multiple]="false"></ngx-mat-file-input>
+                        <mat-error>Por favor verifique que el archivo no supere los 100mb y que sea del formato
+                            correcto</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" required fxFlex="50">
+                        <mat-label>Cargar Archivo 2</mat-label>
+                        <ngx-mat-file-input formControlName="file2" [multiple]="false"></ngx-mat-file-input>
+                        <mat-error>Por favor verifique que el archivo no supere los 100mb y que sea del formato
+                            correcto</mat-error>
+                    </mat-form-field>
+
+                </div>
+
+                <div fxLayout="row" fxFlex="100">
+
+                    <mat-form-field appearance="outline" required fxFlex="50" class="mr-4">
+                        <mat-label>Cargar Archivo 3</mat-label>
+                        <ngx-mat-file-input formControlName="file3" [multiple]="false"></ngx-mat-file-input>
+                        <mat-error>Por favor verifique que el archivo no supere los 100mb y que sea del formato
+                            correcto</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" required fxFlex="50">
+                        <mat-label>Cargar Archivo 4</mat-label>
+                        <ngx-mat-file-input formControlName="file4" [multiple]="false"></ngx-mat-file-input>
+                        <mat-error>Por favor verifique que el archivo no supere los 100mb y que sea del formato
+                            correcto</mat-error>
+                    </mat-form-field>
+
+                </div>
+
+                <div fxFlex fxLayoutAlign="end center">
+                    <button [fxHide]="this.form.invalid" mat-raised-button color="accent" class="boton-con-fondo">Cargar
+                        información general</button>
+
+                    <button title="Debe completar los campos para cargar la informacion general"
+                        [fxShow]="this.form.invalid" mat-raised-button color="accent" class="des">Cargar información
+                        general</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

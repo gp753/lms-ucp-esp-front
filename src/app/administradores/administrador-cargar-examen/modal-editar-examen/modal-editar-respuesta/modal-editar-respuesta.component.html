@@ -1,0 +1,18 @@
+<div fxFlex="100" fxLayout="column" [formGroup]="form">
+
+    <mat-form-field appearance="outline">
+        <mat-label>Respuesta</mat-label>
+        <textarea matInput style="min-height: 50px;" formControlName="respuesta"></textarea>
+        <mat-error>La respuesta es requerida</mat-error>
+    </mat-form-field>
+
+    <mat-checkbox class="mb-8" formControlName="correcta">Correcta</mat-checkbox>
+
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <button mat-flat-button color="accent" class="boton-sin-fondo"
+            (click)="cerrarDialog('cancelar')">Cancelar</button>
+
+        <button mat-flat-button color="accent" class="boton-con-fondo"
+            (click)="cerrarDialog('guardar')">Guardar</button>
+    </div>
+</div>

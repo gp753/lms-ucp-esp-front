@@ -1,0 +1,141 @@
+<div class="fondo" fxFlex="100" fxLayout="column">
+    <div
+        class="header"
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        fxFlex="1 0 auto"
+    >
+        <!--<div>
+            <button mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>-->
+        <div>
+            <h1
+                [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }"
+            >
+                Comunicados
+            </h1>
+        </div>
+    </div>
+
+    <div class="p-24" fxLayout="column">
+        <div
+            class="mat-card mb-24 p-12"
+            fxLayout="row"
+            style="border-radius: 5px"
+            fxLayoutAlign="start center"
+        >
+            <div class="mr-16">
+                <mat-icon class="info">info</mat-icon>
+            </div>
+            <div>
+                <label
+                    >Aquí podrás
+                    <strong
+                        >ver todos los comunicados emitidos por la
+                        universidad.</strong
+                    ></label
+                >
+            </div>
+        </div>
+
+        <div class="mat-card p-12" style="border-radius: 5px">
+            <!-- <div fxLayoutAlign="start" style="width: 50%">
+                <input
+                    (keyup)="filtrar(busqueda)"
+                    style="
+                        border-radius: 20px;
+                        border-width: 2px;
+                        background-image: home;
+                        height: 50px;
+                        width: 100%;
+                        background: #f7f7f7;
+                    "
+                    placeholder="Busqueda de comunicados"
+                    [(ngModel)]="busqueda"
+                    [ngModelOptions]="{ standalone: true }"
+                />
+            </div> -->
+
+            <!-- ACA EMPIEZA LA TABLA -->
+            <div class="center">
+                <mat-table
+                    class="products-table"
+                    #table
+                    [dataSource]="lista"
+                    matSort
+                    [@animateStagger]="{ value: '50' }"
+                    fusePerfectScrollbar
+                >
+                    <!-- Columna DESCRIPCION -->
+                    <ng-container matColumnDef="descripcion">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            >Descripcion</mat-header-cell
+                        >
+                        <mat-cell *matCellDef="let tabla">
+                            <p class="text-truncate">{{ tabla.descripcion }}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna Fecha  -->
+                    <ng-container matColumnDef="fecha">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            >Fecha de subida</mat-header-cell
+                        >
+                        <mat-cell *matCellDef="let tabla">
+                            <p class="text-truncate">
+                                {{
+                                    tabla.createdAt + "Z" | date : "dd/MM/yyyy"
+                                }}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Columna Acciones -->
+                    <ng-container matColumnDef="acciones">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            >Acciones</mat-header-cell
+                        >
+                        <mat-cell *matCellDef="let tabla">
+                            <button
+                                class="boton-con-fondo"
+                                mat-raised-button
+                                color="accent"
+                                (click)="descargar(tabla.archivo)"
+                            >
+                                Descargar
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row
+                        *matHeaderRowDef="
+                            displayedColumnsUnidades;
+                            sticky: true
+                        "
+                    ></mat-header-row>
+
+                    <mat-row
+                        *matRowDef="
+                            let product;
+                            columns: displayedColumnsUnidades
+                        "
+                        class="product"
+                        matRipple
+                    >
+                    </mat-row>
+                </mat-table>
+
+                <mat-paginator
+                    [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]"
+                >
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<h1 style="font-size: 30px; font-weight: bold; margin: 0">Comunicados</h1>
+
+<hr />
+
+<div style="display: flex; flex-direction: column">
+    <h1 style="margin: 0">
+        {{ data.descripcion }}
+    </h1>
+    <span>{{ data.createdAt | date : "dd/MM/yyyy" }}</span>
+
+    <div
+        style="display: flex; justify-content: center; margin: 30px 0"
+        *ngIf="esImagen"
+    >
+        <img [src]="this.apiUrl + '/media/files/' + data.archivo" />
+    </div>
+</div>
+
+<div
+    style="display: flex; justify-content: space-between"
+    [ngStyle]="{ 'margin-top': esImagen ? '' : '30px' }"
+>
+    <button mat-dialog-close color="warn" mat-flat-button>Cerrar</button>
+    <button color="primary" mat-flat-button (click)="descargar()">
+        Descargar
+    </button>
+</div>

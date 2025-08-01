@@ -1,0 +1,297 @@
+<div fxLayout="column" fxFlex="100" [formGroup]="formulario">
+
+    <!-- DATOS PERSONALES -->
+    <div>
+        <label style="font-size: 20px; font-weight: bold; color: #2d323e;">Datos
+            personales</label>
+    </div>
+
+    <hr>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <!--INPUT NOMBRE-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" required />
+
+            <mat-error>Por favor ingrese un nombre.</mat-error>
+        </mat-form-field>
+
+        <!--INPUT APELLIDO-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="apellido" required />
+
+            <mat-error>Por favor ingrese un apellido.</mat-error>
+        </mat-form-field>
+
+        <!--SELECCIONAR TIPO DOCUMENTO-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Tipo documento</mat-label>
+            <mat-select required formControlName="tipo_documento">
+                <mat-option *ngFor="let doc of tipoDocumento" [value]="doc.id" (click)="getTipoDocumento()">
+                    {{ doc.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un tipo de documento.</mat-error>
+        </mat-form-field>
+
+        <!--INPUT DOCUMENTO-->
+        <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Documento</mat-label>
+            <input matInput formControlName="documento" required />
+
+            <mat-error>Por favor ingrese el documento.</mat-error>
+        </mat-form-field>
+    </div>
+    <!-- / DATOS PERSONALES -->
+
+
+    <!-- DATOS DE DOMICILIO -->
+    <div class="mt-16">
+        <label style="font-size: 20px; font-weight: bold; color: #2d323e;">Datos
+            de domicilio</label>
+    </div>
+
+    <hr>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <!--INPUT CALLE-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Calle</mat-label>
+            <input matInput formControlName="calle" required />
+
+            <mat-error>Por favor ingrese una calle.</mat-error>
+        </mat-form-field>
+
+        <!--INPUT NUMERO-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Numero</mat-label>
+            <input matInput formControlName="numero" required />
+
+            <mat-error>Por favor ingrese un numero.</mat-error>
+        </mat-form-field>
+
+        <!--INPUT BARRIO-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Barrio</mat-label>
+            <input matInput formControlName="barrio" required />
+
+            <mat-error>Por favor ingrese un barrio.</mat-error>
+        </mat-form-field>
+
+        <!--INPUT CODIGO POSTAL-->
+        <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Código postal</mat-label>
+            <input matInput formControlName="codigo_postal" required />
+
+            <mat-error>Por favor ingrese el código postal.</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <!--SELECCIONAR PAIS-->
+        <mat-form-field appearance="outline" fxFlex="20" class="pr-4">
+            <mat-label>País</mat-label>
+            <mat-select required formControlName="pais">
+                <mat-option *ngFor="let pais of paises" [value]="pais.id" (click)="getPais()">
+                    {{ pais.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un país.</mat-error>
+        </mat-form-field>
+
+        <!--SELECCIONAR ESTADO-->
+        <mat-form-field appearance="outline" fxFlex="20" class="pr-4">
+            <mat-label>Estado</mat-label>
+            <mat-select required formControlName="estado">
+                <mat-option *ngFor="let estado of estados" [value]="estado.id" (click)="getEstados()">
+                    {{ estado.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un estado.</mat-error>
+        </mat-form-field>
+
+        <!--SELECCIONAR CIUDAD-->
+        <mat-form-field appearance="outline" fxFlex="20" class="pr-4">
+            <mat-label>Ciudad</mat-label>
+            <mat-select required formControlName="ciudad">
+                <mat-option *ngFor="let ciudad of ciudades" [value]="ciudad.id" (click)="getCiudades()">
+                    {{ ciudad.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un tipo de documento.</mat-error>
+        </mat-form-field>
+
+        <!--SELECCIONAR CONTACTO DE REFERENCIA-->
+        <mat-form-field appearance="outline" fxFlex="20" class="pr-4">
+            <mat-label>Contácto de referencia</mat-label>
+            <mat-select required formControlName="referencia">
+                <mat-option *ngFor="let ref of contactoDeReferencia" [value]="ref.id" (click)="getReferencias()">
+                    {{ ref.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un contacto de referencia.</mat-error>
+        </mat-form-field>
+
+        <!--SELECCIONAR CURSO-->
+        <mat-form-field appearance="outline" fxFlex="20" class="pr-4">
+            <mat-label>Curso</mat-label>
+            <mat-select required formControlName="curso">
+                <mat-option *ngFor="let curso of cursos" [value]="curso.id" (click)="getCursos()">
+                    {{ curso.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un curso.</mat-error>
+        </mat-form-field>
+    </div>
+    <!-- / DATOS DE DOMICILIO -->
+
+    <!-- OTROS -->
+    <div class="mt-16">
+        <label style="font-size: 20px; font-weight: bold; color: #2d323e;">Otros</label>
+    </div>
+
+    <hr>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <!--INPUT TELEFONO-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="telefono" required />
+
+            <mat-error>Por favor ingrese un teléfono.</mat-error>
+        </mat-form-field>
+
+        <!--INPUT CELULAR-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Celular</mat-label>
+            <input matInput formControlName="celular" required />
+
+            <mat-error>Por favor ingrese un celular.</mat-error>
+        </mat-form-field>
+
+        <!--INPUT EMAIL-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" required />
+
+            <mat-error>Por favor ingrese un email.</mat-error>
+        </mat-form-field>
+
+        <!--INPUT FECHA DE NACIMIENTO-->
+        <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Fecha de nacimiento</mat-label>
+            <input matInput formControlName="fecha_de_nacimiento" required placeholder="DD / MM / AAAA" />
+
+            <mat-error>Por favor ingrese la fecha de nacimiento.</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <!--INPUT PROFESION-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Profesión</mat-label>
+            <input matInput formControlName="profesion" required />
+
+            <mat-error>Por favor ingrese unau profesión.</mat-error>
+        </mat-form-field>
+
+        <!--INPUT NIVEL EDUCATIVO-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Nivel educativo</mat-label>
+            <input matInput formControlName="nivel_educativo" required />
+
+            <mat-error>Por favor ingrese el nivel educativo.</mat-error>
+        </mat-form-field>
+
+        <!--SELECCIONAR SEXO-->
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Sexo</mat-label>
+            <mat-select required formControlName="sexo">
+                <mat-option *ngFor="let sexo of sexos" [value]="sexo.id" (click)="getSexos()">
+                    {{ sexo.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un tipo de sexo.</mat-error>
+        </mat-form-field>
+
+        <!--SELECCIONAR ESTADO CIVIL-->
+        <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Estado civil</mat-label>
+            <mat-select required formControlName="estado_civil">
+                <mat-option *ngFor="let estado of estadosCiviles" [value]="estado.id" (click)="getEstadosCiviles()">
+                    {{ estado.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un estado civil.</mat-error>
+        </mat-form-field>
+    </div>
+    <!-- / OTROS -->
+
+    <!-- DATOS DE NACIMIENTO -->
+    <div class="mt-16">
+        <label style="font-size: 20px; font-weight: bold; color: #2d323e;">Datos
+            de nacimiento</label>
+    </div>
+
+    <hr>
+
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <!--SELECCIONAR PAIS NACIMIENTO-->
+        <mat-form-field appearance="outline" fxFlex="33" class="pr-4">
+            <mat-label>País</mat-label>
+            <mat-select required formControlName="pais_nacimiento">
+                <mat-option *ngFor="let pais of paises" [value]="pais.id" (click)="getPais()">
+                    {{ pais.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un país.</mat-error>
+        </mat-form-field>
+
+        <!--SELECCIONAR ESTADO-->
+        <mat-form-field appearance="outline" fxFlex="34" class="pr-4">
+            <mat-label>Estado</mat-label>
+            <mat-select required formControlName="estado_nacimiento">
+                <mat-option *ngFor="let estado of estadosCiviles" [value]="estado.id" (click)="getEstados()">
+                    {{ estado.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un estado.</mat-error>
+        </mat-form-field>
+
+        <!--SELECCIONAR CIUDAD-->
+        <mat-form-field appearance="outline" fxFlex="33">
+            <mat-label>Ciudad</mat-label>
+            <mat-select required formControlName="ciudad_nacimiento">
+                <mat-option *ngFor="let ciudad of ciudades" [value]="ciudad.id" (click)="getCiudades()">
+                    {{ ciudad.nome }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija una ciudad.</mat-error>
+        </mat-form-field>
+    </div>
+    <!-- / DATOS PERSONALES -->
+
+    <!--BOTONES-->
+    <div style="margin-top: 20px" fxLayout="row" fxFlex="1 0 auto">
+        <div fxLayoutAlign="start" fxFlex="1 0 auto">
+            <button mat-raised-button class="boton-sin-fondo" color="accent" (click)="cerrarDialog()">
+                Cancelar
+            </button>
+        </div>
+
+        <div fxLayoutAlign="end" fxFlex="1 0 auto">
+            <button [fxShow]="this.formulario.invalid" mat-raised-button color="accent" class="disableado" disabled>
+                Guardar cambios
+            </button>
+
+            <button [fxShow]="this.formulario.valid" mat-raised-button class="boton-con-fondo" color="accent"
+                (click)="cerrarDialog()">
+                Guardar cambios
+            </button>
+        </div>
+    </div>
+    <!--BOTONES-->
+
+</div>

@@ -1,0 +1,361 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <!--HEADER NORMAL-->
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Configuracion de Certificados
+                </h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div class="p-24 card" fxLayout="column">
+            <div fxLayout="column">
+                <h1>Configuracion</h1>
+                <hr style="width: 100%" />
+
+                <div fxLayout="row wrap">
+                    <input
+                        style="display: none"
+                        type="file"
+                        (change)="onSelectFile($event, null)"
+                        #fondoInput
+                    />
+                    <mat-form-field
+                        appearance="outline"
+                        (click)="fondoInput.click()"
+                    >
+                        <mat-label>Fondo</mat-label>
+                        <input matInput [(ngModel)]="fondo" [readonly]="true" />
+                    </mat-form-field>
+
+                    <div
+                        fxLayout="row"
+                        class="pl-4"
+                        *ngFor="let item of listaLogos; let i = index"
+                    >
+                        <input
+                            type="file"
+                            (change)="onSelectFile($event, i)"
+                            [id]="'logoInput' + i"
+                            #logoInput
+                            [hidden]="true"
+                        />
+                        <mat-form-field
+                            appearance="outline"
+                            (click)="logoInput.click()"
+                        >
+                            <mat-label>Logo {{ i + 1 }}</mat-label>
+                            <input
+                                matInput
+                                [(ngModel)]="listaLogos[i].imagen"
+                                [readonly]="true"
+                                [attr.aria-labelledby]="'logoInput' + i"
+                            />
+                        </mat-form-field>
+
+                        <button
+                            *ngIf="this.listaLogos.length === i + 1"
+                            mat-icon-button
+                            class="mt-16 ml-8"
+                            (click)="agregarLogo()"
+                        >
+                            <mat-icon>add</mat-icon>
+                        </button>
+
+                        <button
+                            *ngIf="this.listaLogos.length > 1"
+                            mat-icon-button
+                            class="mt-16 ml-8"
+                            (click)="eliminarLogo(i)"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <div fxLayout="row">
+                    <div fxLayout="column" class="pr-4" style="width: 75%">
+                        <div style="margin-bottom: 150px">
+                            <h2>Titulo</h2>
+                            <quill-editor
+                                [(ngModel)]="quillTitulo['titulo']"
+                            ></quill-editor>
+                        </div>
+                        <div style="margin-bottom: 150px">
+                            <h2>Texto</h2>
+                            <quill-editor
+                                [(ngModel)]="quillTexto['texto']"
+                                (keyup)="verificarCampos()"
+                            ></quill-editor>
+                        </div>
+                    </div>
+
+                    <div fxLayout="column" class="pl-4" style="width: 25%">
+                        <mat-form-field
+                            appearance="outline"
+                            style="width: 100%; margin-top: 57px"
+                        >
+                            <mat-label>Seleccione los campos</mat-label>
+                            <mat-select
+                                [(ngModel)]="camposSeleccionados"
+                                multiple
+                            >
+                                <mat-option
+                                    *ngFor="let item of listaCampos"
+                                    [value]="item.nombre"
+                                    >{{ item.nombre }}</mat-option
+                                >
+                            </mat-select>
+                        </mat-form-field>
+
+                        <div
+                            style="
+                                border-radius: 10px;
+                                background-color: rgb(226, 213, 98);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                padding: 10px;
+                                flex-direction: column;
+                            "
+                        >
+                            <mat-icon
+                                style="
+                                    font-size: 45px;
+                                    width: 45px;
+                                    height: 45px;
+                                "
+                                >info</mat-icon
+                            >
+
+                            <p style="font-weight: 500">
+                                Los campos que seleccione seran los datos que se
+                                cargaran en los certificados generados.
+                            </p>
+
+                            <p style="font-weight: 500">
+                                Deberá seleccionar estos campos e ingresarlos
+                                dentro del TEXTO de la siguiente manera
+                                incluyendo los dobles paréntesis: ((NOMBRE)) o
+                                ((APELLIDO)) o ((CARRERA)).
+                            </p>
+
+                            <p style="font-weight: 500">
+                                Ejemplo: El siguiente certificado sera entregado
+                                a ((NOMBRE)) ((APELLIDO)) por culminar la
+                                carrera de ((CARRERA))
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div fxLayout="column">
+                <h1>Vista Previa</h1>
+                <hr style="width: 100%" />
+
+                <div fxLayout="row">
+                    <div fxLayout="column" class="pr-4">
+                        <div
+                            class="vista-previa-background"
+                            [style.background-image]="'url(' + fondo + ')'"
+                        >
+                            <div class="contenedor">
+                                <div
+                                    *ngFor="
+                                        let logo of listaLogos;
+                                        let i = index
+                                    "
+                                >
+                                    <img
+                                        style="width: 200px; height: auto"
+                                        [style.top.px]="logo.top"
+                                        [style.left.px]="logo.left"
+                                        *ngIf="logo.imagen"
+                                        [src]="logo.imagen"
+                                        [ngStyle]="{
+                                            border:
+                                                i === logoSeleccionado
+                                                    ? 'solid 1px green'
+                                                    : 'none'
+                                        }"
+                                    />
+                                </div>
+                                <div
+                                    [style.top.px]="quillTitulo.top"
+                                    [style.left.px]="quillTitulo.left"
+                                    class="texto"
+                                >
+                                    <quill-view
+                                        [content]="quillTitulo['titulo']"
+                                    ></quill-view>
+                                </div>
+
+                                <div
+                                    [style.top.px]="quillTexto.top"
+                                    [style.left.px]="quillTexto.left"
+                                    class="texto"
+                                >
+                                    <quill-view
+                                        [content]="quillTexto['texto']"
+                                    ></quill-view>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        fxLayout="column"
+                        class="pl-4"
+                        fxFlex="auto"
+                        *ngIf="listaLogos[0].imagen"
+                    >
+                        <!-- CONTROLES PARA LOS LOGOS -->
+                        <mat-form-field appearance="outline">
+                            <mat-label>Seleccionar Logo</mat-label>
+                            <mat-select [(ngModel)]="logoSeleccionado">
+                                <mat-option
+                                    *ngFor="
+                                        let item of listaLogos;
+                                        let i = index
+                                    "
+                                    [value]="i"
+                                    >Logo {{ i + 1 }}</mat-option
+                                >
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Seleccionar Medida</mat-label>
+                            <mat-select [(ngModel)]="medidaSeleccionada">
+                                <mat-option [value]="1">1</mat-option>
+                                <mat-option [value]="5">5</mat-option>
+                                <mat-option [value]="10">10</mat-option>
+                                <mat-option [value]="25">25</mat-option>
+                                <mat-option [value]="50">50</mat-option>
+                                <mat-option [value]="100">100</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <div
+                            fxLayout="column"
+                            style="
+                                align-items: center;
+                                justify-content: center;
+                                margin-bottom: 50px;
+                            "
+                        >
+                            <mat-icon
+                                style="cursor: pointer"
+                                (click)="moveLogo('up')"
+                                >arrow_upward</mat-icon
+                            >
+                            <div fxLayout="row">
+                                <mat-icon
+                                    class="mr-12"
+                                    style="cursor: pointer"
+                                    (click)="moveLogo('left')"
+                                    >arrow_back</mat-icon
+                                >
+                                <mat-icon
+                                    class="ml-12"
+                                    style="cursor: pointer"
+                                    (click)="moveLogo('right')"
+                                    >arrow_forward</mat-icon
+                                >
+                            </div>
+                            <mat-icon
+                                style="cursor: pointer"
+                                (click)="moveLogo('down')"
+                                >arrow_downward</mat-icon
+                            >
+                        </div>
+                        <!-- ///////////////////// -->
+
+                        <!-- CONTROLES PARA LOS TEXTOS -->
+                        <mat-form-field appearance="outline">
+                            <mat-label>Seleccionar Texto</mat-label>
+                            <mat-select [(ngModel)]="textoSeleccionado">
+                                <mat-option [value]="'Titulo'"
+                                    >Titulo</mat-option
+                                >
+                                <mat-option [value]="'Texto'">Texto</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Seleccionar Medida</mat-label>
+                            <mat-select [(ngModel)]="medidaSeleccionadaTexto">
+                                <mat-option [value]="1">1</mat-option>
+                                <mat-option [value]="5">5</mat-option>
+                                <mat-option [value]="10">10</mat-option>
+                                <mat-option [value]="25">25</mat-option>
+                                <mat-option [value]="50">50</mat-option>
+                                <mat-option [value]="100">100</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <div
+                            fxLayout="column"
+                            style="align-items: center; justify-content: center"
+                        >
+                            <mat-icon
+                                style="cursor: pointer"
+                                (click)="moveTexto('up')"
+                                >arrow_upward</mat-icon
+                            >
+                            <div fxLayout="row">
+                                <mat-icon
+                                    class="mr-12"
+                                    style="cursor: pointer"
+                                    (click)="moveTexto('left')"
+                                    >arrow_back</mat-icon
+                                >
+                                <mat-icon
+                                    class="ml-12"
+                                    style="cursor: pointer"
+                                    (click)="moveTexto('right')"
+                                    >arrow_forward</mat-icon
+                                >
+                            </div>
+                            <mat-icon
+                                style="cursor: pointer"
+                                (click)="moveTexto('down')"
+                                >arrow_downward</mat-icon
+                            >
+                        </div>
+                        <!-- ////////////////////// -->
+                    </div>
+                </div>
+            </div>
+
+            <button
+                class="mt-16"
+                mat-flat-button
+                [ngClass]="
+                    verificarCampos() ? 'boton-disabled' : 'boton-con-fondo'
+                "
+                [disabled]="verificarCampos()"
+            >
+                Crear certificado
+            </button>
+        </div>
+    </div>
+</div>

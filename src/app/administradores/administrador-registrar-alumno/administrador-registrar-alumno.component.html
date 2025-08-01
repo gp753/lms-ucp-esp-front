@@ -1,0 +1,922 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <!--HEADER NORMAL-->
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Registro de alumnos
+                </h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto">
+            <mat-tab-group (selectedTabChange)="tabChange($event)">
+                <!--EMPIEZA TAB REINSCRIPCION-->
+                <mat-tab label="Reinscripcion">
+                    <div class="p-24 card" fxLayout="column">
+                        <!-- LISTAS DEPENDIENDO QUE SELECCIONO -->
+                        <div
+                            class="mat-card card p-12"
+                            fxFlex="100"
+                            fxLayout="column"
+                            style="border-radius: 5px"
+                        >
+                            <div
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                                [formGroup]="form"
+                            >
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="25"
+                                    class="pr-4"
+                                >
+                                    <mat-label>Grupo</mat-label>
+                                    <mat-select formControlName="grupo_origen">
+                                        <mat-option
+                                            *ngFor="let g of grupos"
+                                            [value]="g.id"
+                                            (click)="
+                                                getMateriasDelGrupo(
+                                                    g.id,
+                                                    'origen'
+                                                )
+                                            "
+                                        >
+                                            {{ g.nombre }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="25"
+                                    class="pl-4 pr-4"
+                                >
+                                    <mat-label>Materia</mat-label>
+                                    <mat-select
+                                        formControlName="materia_origen"
+                                        [disabled]="
+                                            this.form.get('grupo_origen')
+                                                .value === null
+                                        "
+                                    >
+                                        <mat-option
+                                            [value]="-1"
+                                            (click)="getAlumnosDeMateria(-1)"
+                                            >Sin materias
+                                        </mat-option>
+                                        <mat-option
+                                            [value]="-2"
+                                            (click)="getAlumnosDeMateria(-2)"
+                                            >Todas las materias
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let m of materias_origen"
+                                            [value]="m.ID"
+                                            (click)="getAlumnosDeMateria(m.ID)"
+                                        >
+                                            {{ m.NOMBRE }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="25"
+                                    class="pl-4 pr-4"
+                                >
+                                    <mat-label>Grupo</mat-label>
+                                    <mat-select formControlName="grupo_destino">
+                                        <mat-option
+                                            *ngFor="let g of grupos"
+                                            [value]="g.id"
+                                            (click)="
+                                                getMateriasDelGrupo(
+                                                    g.id,
+                                                    'destino'
+                                                )
+                                            "
+                                        >
+                                            {{ g.nombre }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="25"
+                                    class="pr-4 pl-4"
+                                >
+                                    <mat-label>Materia destino</mat-label>
+                                    <mat-select
+                                        formControlName="materia_destino"
+                                        [disabled]="
+                                            this.form.get('grupo_destino')
+                                                .value === null
+                                        "
+                                    >
+                                        <mat-option
+                                            *ngFor="let m of materias_destino"
+                                            [value]="m.ID"
+                                        >
+                                            {{ m.NOMBRE }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="80"
+                                    class="pr-4"
+                                >
+                                    <mat-icon matSuffix>search</mat-icon>
+                                    <mat-label>Buscar...</mat-label>
+                                    <input matInput [(ngModel)]="buscador" />
+                                </mat-form-field>
+
+                                <div
+                                    fxFlex="20"
+                                    class="pl-4"
+                                    style="
+                                        margin: 4px 0;
+                                        padding-bottom: 21.5px;
+                                    "
+                                >
+                                    <button
+                                        style="width: 100%; border-radius: 50px"
+                                        mat-flat-button
+                                        color="primary"
+                                    >
+                                        Guardar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <mat-table
+                                style="width: 100%"
+                                class="products-table"
+                                #table
+                                [dataSource]="
+                                    lista
+                                        | filter : buscador
+                                        | paginate
+                                            : {
+                                                  itemsPerPage: itemsPerPage,
+                                                  currentPage: p,
+                                                  id: 'tabla_reinscripcion'
+                                              }
+                                "
+                                [@animateStagger]="{ value: '50' }"
+                                fusePerfectScrollbar
+                                matSort
+                                (matSortChange)="sortData($event)"
+                            >
+                                <!-- Columna NOMBRE-->
+                                <ng-container matColumnDef="nombre">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="NOMBRE"
+                                    >
+                                        Nombre
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let list"
+                                    >
+                                        <p class="text-truncate">
+                                            {{ list.NOMBRE }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna APELLIDO -->
+                                <ng-container matColumnDef="apellido">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="APELLIDO"
+                                    >
+                                        Apellido
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let list"
+                                    >
+                                        <p class="category text-truncate">
+                                            {{ list.APELLIDO }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna DOCUMENTO -->
+                                <ng-container matColumnDef="documento">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="DOCUMENTO"
+                                    >
+                                        Documento
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let list"
+                                    >
+                                        <p class="text-truncate">
+                                            {{ list.DOCUMENTO }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna Botones -->
+                                <ng-container matColumnDef="botones">
+                                    <mat-header-cell
+                                        fxLayoutAlign="center center"
+                                        *matHeaderCellDef
+                                    >
+                                        Ver
+                                    </mat-header-cell>
+
+                                    <mat-cell
+                                        fxLayoutAlign="center center"
+                                        style="padding-right: 24px"
+                                        *matCellDef="let list"
+                                        fxLayout="row"
+                                    >
+                                        <button
+                                            (click)="
+                                                verInfoAlumno(list.ID_ALUMNO)
+                                            "
+                                        >
+                                            Ver info
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell
+                                        fxLayoutAlign="center center"
+                                        *matHeaderCellDef
+                                    >
+                                        <mat-checkbox
+                                            class="checkbox"
+                                            [(ngModel)]="seleccionarTodo"
+                                            (click)="seleccionarTodoFuncion()"
+                                        >
+                                        </mat-checkbox>
+                                    </mat-header-cell>
+
+                                    <mat-cell
+                                        fxLayoutAlign="center center"
+                                        style="padding-right: 24px"
+                                        *matCellDef="let list"
+                                        fxLayout="row"
+                                    >
+                                        <div>
+                                            <mat-checkbox
+                                                style="
+                                                    font-size: 10px !important;
+                                                "
+                                                class="checkbox"
+                                                [(ngModel)]="list.CHECK"
+                                                (click)="check(list)"
+                                            >
+                                            </mat-checkbox>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row
+                                    *matHeaderRowDef="
+                                        displayedColumns;
+                                        sticky: true
+                                    "
+                                ></mat-header-row>
+
+                                <mat-row
+                                    *matRowDef="
+                                        let list;
+                                        columns: displayedColumns
+                                    "
+                                    class="product"
+                                    matRipple
+                                >
+                                </mat-row>
+                            </mat-table>
+                            <div fxLayoutAlign="center center" class="mt-16">
+                                <pagination-controls
+                                    (pageChange)="p = $event"
+                                    id="tabla_reinscripcion"
+                                    autoHide="true"
+                                    responsive="true"
+                                    previousLabel="Anterior"
+                                    nextLabel="Siguiente"
+                                >
+                                </pagination-controls>
+                            </div>
+                        </div>
+                        <!-- LISTAS DEPENDIENDO QUE SELECCIONO -->
+                    </div>
+                </mat-tab>
+                <!-- TERMINA REINSCRIPCION -->
+
+                <!--EMPIEZA TAB CREAR USUARIOS-->
+                <mat-tab label="Inscribir alumno">
+                    <!--CONTENIDO-->
+                    <div
+                        class="p-24 card"
+                        fxLayout="column"
+                        [formGroup]="inscribirAlumno"
+                        fxFlex="1 0 auto"
+                        style="width: 100% !important"
+                    >
+                        <div
+                            class="mat-card card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                        >
+                            <div fxLayoutAlign="start center" class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <div fxLayoutAlign="start center">
+                                <label
+                                    >Acá puedes
+                                    <strong
+                                        >inscribir a un nuevo alumno.</strong
+                                    ></label
+                                >
+                            </div>
+                        </div>
+
+                        <div
+                            class="mat-card card p-12"
+                            fxLayout="column"
+                            fxFlex="100"
+                            style="border-radius: 5px"
+                        >
+                            <div
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                                fxFlex="1 0 auto"
+                            >
+                                <!--INPUT NOMBRE-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="50"
+                                    class="pr-4"
+                                >
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput formControlName="NOMBRE" />
+
+                                    <mat-error
+                                        >Por favor ingrese un nombre.</mat-error
+                                    >
+                                </mat-form-field>
+
+                                <!--INPUT APELLIDO-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="50"
+                                >
+                                    <mat-label>Apellido</mat-label>
+                                    <input
+                                        matInput
+                                        formControlName="APELLIDO"
+                                    />
+
+                                    <mat-error
+                                        >Por favor ingrese un
+                                        apellido.</mat-error
+                                    >
+                                </mat-form-field>
+                            </div>
+
+                            <div
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                                fxFlex="1 0 auto"
+                            >
+                                <!--INPUT CORREO-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="100"
+                                >
+                                    <mat-label>Correo</mat-label>
+                                    <input
+                                        matInput
+                                        formControlName="EMAIL"
+                                        type="email"
+                                        email
+                                    />
+
+                                    <mat-error
+                                        >Por favor ingrese un correo
+                                        valido.</mat-error
+                                    >
+                                </mat-form-field>
+                            </div>
+
+                            <div
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                                fxFlex="1 0 auto"
+                            >
+                                <!--SELECT GRUPO-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="33"
+                                    class="pr-4"
+                                >
+                                    <mat-label>Grupo</mat-label>
+                                    <mat-select
+                                        [(ngModel)]="selectGrupo"
+                                        [ngModelOptions]="{ standalone: true }"
+                                    >
+                                        <mat-option
+                                            *ngFor="let g of grupos"
+                                            [value]="g.id"
+                                            (click)="
+                                                getMateriasDelGrupo(
+                                                    g.id,
+                                                    'inscribir'
+                                                )
+                                            "
+                                            >{{ g.nombre }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <!--SELECT MATERIAS-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="34"
+                                    class="pl-4 pr-4"
+                                >
+                                    <mat-label>Materias</mat-label>
+                                    <mat-select
+                                        #selectMateria
+                                        [disabled]="selectGrupo === null"
+                                    >
+                                        <mat-option
+                                            *ngFor="let m of materias_inscribir"
+                                            [value]="m.ID"
+                                            (click)="
+                                                getListaSecciones(m.ID);
+                                                this.materiaSeleccionada = m
+                                            "
+                                            >{{ m.NOMBRE }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <!--SELECT SECCION-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="33"
+                                    class="pl-4"
+                                >
+                                    <mat-label>Seccion</mat-label>
+                                    <mat-select #selectSeccion>
+                                        <mat-option
+                                            *ngFor="let s of listaSecciones"
+                                            [value]="s.id"
+                                            (click)="
+                                                this.seccionSeleccionada = s
+                                            "
+                                        >
+                                            {{ s.nombre }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <button
+                                mat-flat-button
+                                *ngIf="selectSeccion.value != null"
+                                style="
+                                    background-color: green;
+                                    color: #fff;
+                                    border-radius: 50px;
+                                    width: fit-content;
+                                    align-self: self-end;
+                                "
+                                (click)="
+                                    agregarMateria();
+                                    selectMateria.value = null;
+                                    selectSeccion.value = null;
+                                    this.selectGrupo = null
+                                "
+                            >
+                                Agregar materia <mat-icon>add</mat-icon>
+                            </button>
+
+                            <h2 *ngIf="arrayMaterias.length > 0">
+                                Lista de materias
+                            </h2>
+
+                            <div
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                                fxFlex="1 0 auto"
+                                *ngFor="
+                                    let array of arrayMaterias;
+                                    let i = index
+                                "
+                            >
+                                <p>
+                                    {{ i + 1 }}. {{ array.nombreMateria }} -
+                                    {{ array.nombreSeccion }}
+                                </p>
+
+                                <mat-icon
+                                    style="
+                                        color: rgb(194, 33, 33);
+                                        cursor: pointer;
+                                    "
+                                    (click)="quitarMateria(i)"
+                                >
+                                    delete</mat-icon
+                                >
+                            </div>
+
+                            <!--BOTON AGREGAR-->
+
+                            <button
+                                mat-flat-button
+                                color="accent"
+                                style="margin-top: 10px"
+                                [ngClass]="
+                                    this.inscribirAlumno.invalid
+                                        ? 'disabled'
+                                        : 'boton-con-fondo'
+                                "
+                                [disabled]="this.inscribirAlumno.invalid"
+                                (click)="inscribir()"
+                            >
+                                Inscribir alumno
+                            </button>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB CREAR USUARIO-->
+
+                <!-- TAB INSCIPCION POR EXCEL -->
+                <mat-tab label="Inscripcion por excel">
+                    <!-- CONTENIDO -->
+                    <div
+                        class="p-24"
+                        fxLayout="column"
+                        fxFlex="1 0 auto"
+                        style="width: 100% !important"
+                    >
+                        <div
+                            class="mat-card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                        >
+                            <div fxLayoutAlign="start center" class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <div fxLayoutAlign="start center" class="pr-6">
+                                <label
+                                    >Acá puedes
+                                    <strong
+                                        >inscribir a varios alumnos a la misma
+                                        materia cargando un excel con los
+                                        alumnos.</strong
+                                    ></label
+                                >
+                            </div>
+                            <button
+                                mat-flat-button
+                                class="boton-excel"
+                                (click)="descargarPlantilla()"
+                            >
+                                Descargar plantilla excel
+                            </button>
+                        </div>
+
+                        <!-- boton cargar excel -->
+                        <input
+                            style="display: none"
+                            type="file"
+                            #inputExcel
+                            (change)="cargarExcel($event)"
+                        />
+                        <button
+                            mat-flat-button
+                            color="accent"
+                            style="border-radius: 50px"
+                            (click)="inputExcel.click()"
+                        >
+                            Cargar excel
+                        </button>
+                        <!-- boton cargar excel -->
+
+                        <div
+                            *ngIf="listaExcel.length > 0"
+                            class="mat-card p-12 mt-24"
+                            fxFlex="100"
+                            fxLayout="column"
+                            style="border-radius: 5px"
+                        >
+                            <mat-form-field
+                                appearance="outline"
+                                fxFlex="40"
+                                class="pr-4"
+                            >
+                                <mat-label>Grupo</mat-label>
+                                <mat-select
+                                    [(ngModel)]="gruposInscripcionExcel"
+                                >
+                                    <mat-option
+                                        *ngFor="let g of grupos"
+                                        [value]="g.id"
+                                        (click)="
+                                            getMateriasDelGrupo(g.id, 'excel')
+                                        "
+                                    >
+                                        {{ g.nombre }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <div
+                                fxFlex="100"
+                                fxLayout="row"
+                                style="align-items: center"
+                            >
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="40"
+                                    class="pl-4 pr-4"
+                                >
+                                    <mat-label
+                                        >Seleccione una materia</mat-label
+                                    >
+                                    <mat-select
+                                        [(ngModel)]="materiaIncripcionExcel"
+                                    >
+                                        <mat-option
+                                            *ngFor="let m of materias_excel"
+                                            [value]="m.ID"
+                                            >{{ m.NOMBRE }} -
+                                            {{ m.GRUPO }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <div
+                                    style="
+                                        margin: 4px 0;
+                                        padding-bottom: 21.5px;
+                                        text-align: end;
+                                    "
+                                    fxFlex="20"
+                                    class="pl-4"
+                                >
+                                    <button
+                                        (click)="inscribirAlumnosExcel()"
+                                        mat-flat-button
+                                        color="primary"
+                                        style="border-radius: 50px"
+                                    >
+                                        Inscribir ({{ this.listaExcel.length }})
+                                        alumnos
+                                    </button>
+                                </div>
+                            </div>
+
+                            <mat-table
+                                style="width: 100%"
+                                class="products-table"
+                                #table
+                                [dataSource]="
+                                    listaExcel
+                                        | filter : buscador
+                                        | paginate
+                                            : {
+                                                  itemsPerPage: itemsPerPage,
+                                                  currentPage: p2,
+                                                  id: 'tabla_excel'
+                                              }
+                                "
+                                [@animateStagger]="{ value: '50' }"
+                                fusePerfectScrollbar
+                                matSort
+                                (matSortChange)="sortData($event)"
+                            >
+                                <!-- Columna DOCUMENTO -->
+                                <ng-container matColumnDef="documento">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="DOCUMENTO"
+                                    >
+                                        Documento
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let list"
+                                    >
+                                        <p class="text-truncate">
+                                            {{ list.CI }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna NOMBRE-->
+                                <ng-container matColumnDef="nombre">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="NOMBRE"
+                                    >
+                                        Nombre
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let list"
+                                    >
+                                        <p class="text-truncate">
+                                            {{ list.NOMBRES }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna APELLIDO -->
+                                <ng-container matColumnDef="apellido">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="APELLIDO"
+                                    >
+                                        Apellido
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let list"
+                                    >
+                                        <p class="category text-truncate">
+                                            {{ list.APELLIDOS }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna EMAIL -->
+                                <ng-container matColumnDef="email">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="EMAIL"
+                                    >
+                                        Email
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let list"
+                                    >
+                                        <p class="text-truncate">
+                                            {{ list["MAILINSTITUCIONAL"] }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna CARGO -->
+                                <ng-container matColumnDef="cargo">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="CARGO"
+                                    >
+                                        Cargo
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let list"
+                                    >
+                                        <p class="text-truncate">
+                                            {{ list.CARGO }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna AREA -->
+                                <ng-container matColumnDef="area">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="AREA"
+                                    >
+                                        Area
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let list"
+                                    >
+                                        <p class="text-truncate">
+                                            {{ list.AREA }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna SEDE -->
+                                <ng-container matColumnDef="sede">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header="SEDE"
+                                    >
+                                        Sede
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let list"
+                                    >
+                                        <p class="text-truncate">
+                                            {{ list.SEDE }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell
+                                        fxLayoutAlign="center center"
+                                        *matHeaderCellDef
+                                    >
+                                        Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell
+                                        fxLayoutAlign="center center"
+                                        style="padding-right: 24px"
+                                        *matCellDef="let list; let i = index"
+                                        fxLayout="row"
+                                    >
+                                        <button
+                                            mat-flat-button
+                                            color="warn"
+                                            style="border-radius: 50px"
+                                            (click)="
+                                                eliminarAlumnoListaExcel(i)
+                                            "
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row
+                                    *matHeaderRowDef="tablaExcel; sticky: true"
+                                ></mat-header-row>
+
+                                <mat-row
+                                    *matRowDef="let list; columns: tablaExcel"
+                                    class="product"
+                                    matRipple
+                                >
+                                </mat-row>
+                            </mat-table>
+                            <div fxLayoutAlign="center center" class="mt-16">
+                                <pagination-controls
+                                    (pageChange)="p2 = $event"
+                                    id="tabla_excel"
+                                    autoHide="true"
+                                    responsive="true"
+                                    previousLabel="Anterior"
+                                    nextLabel="Siguiente"
+                                >
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / CONTENIDO -->
+                </mat-tab>
+                <!-- TERMINA TAB INSCIPCION POR EXCEL -->
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

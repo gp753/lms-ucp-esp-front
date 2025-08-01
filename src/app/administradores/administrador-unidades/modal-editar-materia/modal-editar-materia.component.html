@@ -1,0 +1,84 @@
+<div fxFlex="100" fxLayoutAlign="start" fxLayout="column" style="width: 500px" [formGroup]="form">
+    <div class="mb-24" fxLayoutAlign="center center">
+        <label style="font-size: 20px; color: #656565; font-weight: bold">Editando Materia</label>
+    </div>
+
+    <div fxFlex fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+            <mat-label>Nombre materia</mat-label>
+            <input matInput formControlName="NOMBRE" />
+            <mat-error>El nombre es requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+            <mat-label>Seleccione grupo</mat-label>
+            <mat-select matInput formControlName="iD_AGRUPADOR">
+                <mat-option *ngFor="let g of listaGrupos" [value]="g.id">{{g.nombre}}</mat-option>
+            </mat-select>
+            <mat-error>El grupo es requerido</mat-error>
+        </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" fxFlex="100">
+        <mat-label>Horas o Creditos</mat-label>
+        <input matInput formControlName="HORAS_CREDITOS" />
+        <mat-error>Las horas credito es requerida</mat-error>
+    </mat-form-field>
+
+    <div fxFlex fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+            <mat-label>Fecha Inicio</mat-label>
+            <input readonly matInput [matDatepicker]="fechaInicio" formControlName="FECHA_INICIO" />
+            <mat-datepicker-toggle style="color: #285ba7" matSuffix [for]="fechaInicio">
+            </mat-datepicker-toggle>
+            <mat-datepicker #fechaInicio></mat-datepicker>
+            <mat-error>Ingrese la fecha de inicio.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+            <mat-label>Fecha Fin</mat-label>
+            <input readonly matInput [matDatepicker]="fechaFin" formControlName="FECHA_FIN" />
+            <mat-datepicker-toggle style="color: #285ba7" matSuffix [for]="fechaFin">
+            </mat-datepicker-toggle>
+            <mat-datepicker #fechaFin></mat-datepicker>
+            <mat-error>Ingrese la fecha de finalizacion.</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="center" fxFlex="100" class="mb-24">
+        <div fxFlex="70" style="justify-content: center">
+            <input style="display: none" type="file" (change)="onSelectFile($event)" #fileInput
+                formControlName="LINK_IMAGEN" />
+            <button mat-flat-button color="accent" class="boton-con-fondo" (click)="fileInput.click()">
+                Subir imagen <mat-icon>add</mat-icon>
+            </button>
+        </div>
+
+        <mat-checkbox fxFlex="30" formControlName="PUBLICADO" style="text-align: center">{{
+            this.form.get("PUBLICADO").value ? "Publicado" : "No publicado"
+            }}</mat-checkbox>
+    </div>
+
+    <div fxLayout="row" fxFlex="100" class="mb-24" fxLayoutAlign="center">
+        <img *ngIf="this.imagenParaMostrar === ''" [src]="
+                'https://apilms.central.edu.py/media/files/' +
+                this.materia.LINK_IMAGEN
+            " style="max-width: 300px; height: auto" />
+
+        <img *ngIf="this.imagenParaMostrar != ''" [src]="this.imagenParaMostrar"
+            style="max-width: 300px; height: auto" />
+    </div>
+
+    <div fxLayout="row" style="width: 100%">
+        <div class="mr-24" style="width: 50%">
+            <button mat-raised-button color="accent" class="boton-sin-fondo" (click)="cerrar()">
+                Cancelar
+            </button>
+        </div>
+        <div style="width: 50%">
+            <button fxFlex="100" mat-raised-button color="accent" class="boton-con-fondo" (click)="guardar()">
+                Guardar
+            </button>
+        </div>
+    </div>
+</div>

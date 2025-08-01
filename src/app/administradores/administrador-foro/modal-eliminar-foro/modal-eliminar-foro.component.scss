@@ -1,0 +1,22 @@
+.boton-con-fondo {
+    background: #285ba7 !important;
+    border-radius: 50px;
+    width: 100%;
+}
+
+.boton-sin-fondo {
+    background: transparent !important;
+    border-radius: 50px;
+    border-color: #285ba7 !important;
+    border: solid;
+    border-width: 1px;
+    color: #285ba7 !important;
+    width: 100%;
+}
+
+.info {
+    font-size: 100px;
+    width: fit-content;
+    height: auto;
+    color: #2d323e;
+}

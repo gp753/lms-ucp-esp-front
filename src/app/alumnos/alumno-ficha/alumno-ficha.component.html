@@ -1,0 +1,300 @@
+<div class="fondo" fxFlex="100" fxLayout="column">
+
+    <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+        <!--<div>
+            <button mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>-->
+        <div>
+            <h1 [@animate]="{
+                value: '*',
+                params: { delay: '100ms', y: '25px' }
+            }">Ficha</h1>
+        </div>
+    </div>
+
+    <div class="p-24" fxLayout="column">
+
+        <div class="mat-card mb-24 p-12" fxLayout="row" style="border-radius: 5px;" fxLayoutAlign="start center">
+            <div class="mr-16">
+                <mat-icon class="info">info</mat-icon>
+            </div>
+            <div>
+                <label>Aquí podrás <strong>ver tu ficha.</strong></label>
+            </div>
+        </div>
+
+        <div class="mat-card p-12" style="border-radius: 5px;">
+
+            <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                <div style="display: flex;">
+                    <div *ngIf="imagenParaMostrar === null">
+                        <img style="width: 200px;" *ngIf="this.datos.alumno.FOTO_PERFIL"
+                            [src]="'https://apilms.central.edu.py/media/files/' + this.datos.alumno.FOTO_PERFIL">
+                        <img style="width: 200px;" *ngIf="this.datos.alumno.FOTO_PERFIL == null"
+                            src="../../../assets/images/logos/logoUCP9.png">
+                    </div>
+
+                    <img style="width: 200px;" *ngIf="imagenParaMostrar != null" [src]="imagenParaMostrar">
+
+                    <div class="pl-16">
+                        <div *ngIf="imagenParaMostrar === null">
+                            <input style="display: none" type="file" (change)="onSelectFile($event)" #fileInput />
+                            <button mat-flat-button class="boton-con-fondo" color="accent" (click)="fileInput.click()">
+                                Cambiar foto
+                            </button>
+                        </div>
+
+                        <div *ngIf="imagenParaMostrar != null" fxFlex fxLayout="column">
+                            <button mat-flat-button class="boton-con-fondo mb-8" color="accent" (click)="guardarFoto()">
+                                Guardar
+                            </button>
+                            <button mat-flat-button style="border-radius: 50px;" color="warn"
+                                (click)="imagenFile = null; imagenParaMostrar = null">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div style="width: 20%;">
+                    <button mat-flat-button color="accent" style="width: 100%; height: 60px;"
+                        (click)="generarFicha()">Exportar Excel</button>
+                </div> -->
+            </div>
+
+            <div class="contenedor-datos mobile">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Nombre completo</mat-label>
+                    <input matInput [value]="this.datos.alumno.NOMBRE + this.datos.alumno.APELLIDO" readonly>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>CIN°</mat-label>
+                    <input matInput [value]="this.datos.alumno.DOCUMENTO" readonly>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Antiguedad</mat-label>
+                    <input matInput [value]="this.datos.alumno.ANTIGUEDAD" readonly>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Cargo</mat-label>
+                    <input matInput [value]="this.datos.alumno.CARGO" readonly>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Area</mat-label>
+                    <input matInput [value]="this.datos.alumno.AREA" readonly>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Departamento</mat-label>
+                    <input matInput [value]="this.datos.alumno.DEPARTAMENTO" readonly>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Sursal</mat-label>
+                    <input matInput [value]="this.datos.alumno.SUCURSAL" readonly>
+                </mat-form-field>
+            </div>
+
+            <div class="contenedor-datos desktop">
+                <div style="display: flex;">
+                    <mat-form-field appearance="outline" style="width: 50%; padding-right: 5px;">
+                        <mat-label>Nombre completo</mat-label>
+                        <input matInput [value]="this.datos.alumno.NOMBRE + this.datos.alumno.APELLIDO" readonly>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" style="width: 50%; padding-left: 5px;">
+                        <mat-label>CIN°</mat-label>
+                        <input matInput [value]="this.datos.alumno.DOCUMENTO" readonly>
+                    </mat-form-field>
+                </div>
+
+                <div style="display: flex;">
+                    <mat-form-field appearance="outline" style="width: 50%; padding-right: 5px;">
+                        <mat-label>Antiguedad</mat-label>
+                        <input matInput [value]="this.datos.alumno.ANTIGUEDAD" readonly>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" style="width: 50%; padding-left: 5px;">
+                        <mat-label>Cargo</mat-label>
+                        <input matInput [value]="this.datos.alumno.CARGO" readonly>
+                    </mat-form-field>
+                </div>
+
+                <div style="display: flex;">
+                    <mat-form-field appearance="outline" style="width: 33%; padding-right: 5px;">
+                        <mat-label>Area</mat-label>
+                        <input matInput [value]="this.datos.alumno.AREA" readonly>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" style="width: 34%; padding-right: 5px; padding-left: 5px;">
+                        <mat-label>Departamento</mat-label>
+                        <input matInput [value]="this.datos.alumno.DEPARTAMENTO" readonly>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" style="width: 33%; padding-left: 5px;">
+                        <mat-label>Sursal</mat-label>
+                        <input matInput [value]="this.datos.alumno.SUCURSAL" readonly>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <mat-tab-group>
+                <mat-tab label="Cursos internos">
+
+                    <mat-table class="products-table" style="margin-top: 30px;" #table [dataSource]="tabla" matSort
+                        [@animateStagger]="{ value: '50' }" fusePerfectScrollbar>
+
+                        <ng-container matColumnDef="curso">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Curso</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate" style="white-space: normal;">{{ tabla.nombre }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tutor">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Tutor</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate" style="white-space: normal;">{{ tabla.encargado }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fecha">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">
+                                    {{tabla.fecha}}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="status">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">{{ tabla.aprovado === true ? 'Finalizado':'En proceso' }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna Acciones -->
+                        <ng-container matColumnDef="certificado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Certificado</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+
+                                <div fxLayout="row wrap" class="mb-8">
+                                    <button (click)="descargarCertificado(tabla)"
+                                        title="Debes aprobar la materia y completar la encuesta para acceder al certificado"
+                                        [disabled]="tabla.aprovado === false || tabla.encuestado === false"
+                                        class="boton-con-fondo mt-8 mr-8" mat-flat-button
+                                        color="accent">Descargar</button>
+                                </div>
+
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="tablaCursosInternos; sticky: true"></mat-header-row>
+
+                        <mat-row *matRowDef="let product; columns: tablaCursosInternos" class="product" matRipple>
+                        </mat-row>
+                    </mat-table>
+
+                    <mat-paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                    </mat-paginator>
+                </mat-tab>
+
+                <mat-tab label="Cursos externos">
+                    <mat-table class="products-table" style="margin-top: 30px;" #table
+                        [dataSource]="listaCursosExternos" matSort [@animateStagger]="{ value: '50' }"
+                        fusePerfectScrollbar>
+
+                        <ng-container matColumnDef="curso">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Titulo</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate" style="white-space: normal;">{{ tabla.titulo }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tutor">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Tutor</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate" style="white-space: normal;">{{ tabla.tutor }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="horas">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad de horas del curso
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate" style="white-space: normal;">{{ tabla.horas }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fecha">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">
+                                    {{tabla.fecha | date:'dd/MM/yyyy'}}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="estado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">{{ tabla.estado }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna Acciones -->
+                        <ng-container matColumnDef="certificado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Certificado</mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+
+                                <div fxFlex fxLayout="row wrap">
+                                    <button (click)="descargarCertificadoExterno(tabla)" class="boton-con-fondo"
+                                        mat-flat-button color="accent" style="margin: 5px">Descargar</button>
+
+                                    <!-- <button (click)="editarCursoExterno(tabla)"
+                                        style="border-radius: 50px; margin: 5px;" mat-flat-button color="primary">
+                                        <mat-icon>edit</mat-icon>
+                                    </button> -->
+
+                                    <!-- <button (click)="eliminarCursoExterno(tabla)"
+                                        style="border-radius: 50px; margin: 5px;" mat-flat-button color="warn">
+                                        <mat-icon>delete</mat-icon>
+                                    </button> -->
+                                </div>
+
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="tablaCursosExternos; sticky: true"></mat-header-row>
+
+                        <mat-row *matRowDef="let product; columns: tablaCursosExternos" class="product" matRipple>
+                        </mat-row>
+                    </mat-table>
+
+                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                        <!-- <div style="display: flex; align-items: center;">
+                            <button (click)="cargarCursoExterno()" class="boton-con-fondo" mat-flat-button
+                                color="accent">
+                                Cargar curso
+                            </button>
+                        </div> -->
+
+                        <mat-paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                        </mat-paginator>
+                    </div>
+
+                </mat-tab>
+            </mat-tab-group>
+
+
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,625 @@
+<div class="fondo" fxFlex="100" fxLayout="column">
+    <div
+        class="header"
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        fxFlex="1 0 auto"
+    >
+        <div>
+            <button mat-button (click)="volver()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>
+        <div>
+            <h1
+                [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }"
+            >
+                Ficha alumno
+            </h1>
+        </div>
+    </div>
+
+    <div class="p-24" fxLayout="column">
+        <div
+            class="mat-card mb-24 p-12"
+            fxLayout="row"
+            style="border-radius: 5px"
+            fxLayoutAlign="start center"
+        >
+            <div class="mr-16">
+                <mat-icon class="info">info</mat-icon>
+            </div>
+            <div>
+                <label
+                    >Aquí podrás
+                    <strong>ver la ficha completa del alumno.</strong></label
+                >
+            </div>
+        </div>
+
+        <div class="mat-card p-12" style="border-radius: 5px">
+            <!-- CONTENEDOR FORM E IMAGEN -->
+            <div style="display: flex; flex-direction: row">
+                <div class="contenedor-imagen">
+                    <img
+                        style="width: 200px; height: fit-content"
+                        *ngIf="this.fotoAlumno"
+                        [src]="
+                            'https://apilms.central.edu.py/media/files/' +
+                            this.fotoAlumno
+                        "
+                    />
+
+                    <img
+                        style="width: 200px; height: fit-content"
+                        *ngIf="!this.fotoAlumno"
+                        src="../../../assets/images/logos/logoUCP9.png"
+                    />
+
+                    <!-- <div style="width: 20%;">
+                <button mat-flat-button color="accent" style="width: 100%; height: 60px;"
+                    (click)="generarFicha()">Exportar Excel</button>
+            </div> -->
+                </div>
+
+                <div class="contenedor-datos ml-12 desktop">
+                    <div style="display: flex">
+                        <mat-form-field
+                            appearance="outline"
+                            style="width: 50%; padding-right: 5px"
+                        >
+                            <mat-label>Nombre completo</mat-label>
+                            <input
+                                matInput
+                                [value]="
+                                    this.datos.alumno.NOMBRE +
+                                    this.datos.alumno.APELLIDO
+                                "
+                                readonly
+                            />
+                        </mat-form-field>
+
+                        <mat-form-field
+                            appearance="outline"
+                            style="width: 50%; padding-left: 5px"
+                        >
+                            <mat-label>CIN°</mat-label>
+                            <input
+                                matInput
+                                [value]="this.datos.alumno.DOCUMENTO"
+                                readonly
+                            />
+                        </mat-form-field>
+                    </div>
+
+                    <div style="display: flex">
+                        <mat-form-field
+                            appearance="outline"
+                            style="width: 50%; padding-right: 5px"
+                        >
+                            <mat-label>Antiguedad</mat-label>
+                            <input
+                                matInput
+                                [value]="this.datos.alumno.ANTIGUEDAD"
+                                readonly
+                            />
+                        </mat-form-field>
+
+                        <mat-form-field
+                            appearance="outline"
+                            style="width: 50%; padding-left: 5px"
+                        >
+                            <mat-label>Cargo</mat-label>
+                            <input
+                                matInput
+                                [value]="this.datos.alumno.CARGO"
+                                readonly
+                            />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="desktop mt-12">
+                <mat-form-field
+                    appearance="outline"
+                    style="width: 33%; padding-right: 5px"
+                >
+                    <mat-label>Area</mat-label>
+                    <input matInput [value]="this.datos.alumno.AREA" readonly />
+                </mat-form-field>
+
+                <mat-form-field
+                    appearance="outline"
+                    style="width: 34%; padding-right: 5px; padding-left: 5px"
+                >
+                    <mat-label>Departamento</mat-label>
+                    <input
+                        matInput
+                        [value]="this.datos.alumno.DEPARTAMENTO"
+                        readonly
+                    />
+                </mat-form-field>
+
+                <mat-form-field
+                    appearance="outline"
+                    style="width: 33%; padding-left: 5px"
+                >
+                    <mat-label>Sursal</mat-label>
+                    <input
+                        matInput
+                        [value]="this.datos.alumno.SUCURSAL"
+                        readonly
+                    />
+                </mat-form-field>
+            </div>
+
+            <div class="contenedor-datos mobile">
+                <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Nombre completo</mat-label>
+                    <input
+                        matInput
+                        [value]="
+                            this.datos.alumno.NOMBRE +
+                            this.datos.alumno.APELLIDO
+                        "
+                        readonly
+                    />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>CI - N°</mat-label>
+                    <input
+                        matInput
+                        [value]="this.datos.alumno.DOCUMENTO"
+                        readonly
+                    />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Antiguedad</mat-label>
+                    <input
+                        matInput
+                        [value]="this.datos.alumno.ANTIGUEDAD"
+                        readonly
+                    />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Cargo</mat-label>
+                    <input
+                        matInput
+                        [value]="this.datos.alumno.CARGO"
+                        readonly
+                    />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Area</mat-label>
+                    <input matInput [value]="this.datos.alumno.AREA" readonly />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Departamento</mat-label>
+                    <input
+                        matInput
+                        [value]="this.datos.alumno.DEPARTAMENTO"
+                        readonly
+                    />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Sursal</mat-label>
+                    <input
+                        matInput
+                        [value]="this.datos.alumno.SUCURSAL"
+                        readonly
+                    />
+                </mat-form-field>
+            </div>
+
+            <mat-tab-group>
+                <mat-tab label="Materias">
+                    <mat-table
+                        class="products-table"
+                        style="margin-top: 30px"
+                        [dataSource]="
+                            materias
+                                | paginate
+                                    : {
+                                          itemsPerPage: itemsPerPage,
+                                          currentPage: p,
+                                          id: 'tabla_materias'
+                                      }
+                        "
+                        matSort
+                        [@animateStagger]="{ value: '50' }"
+                        fusePerfectScrollbar
+                    >
+                        <ng-container matColumnDef="curso">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Curso</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p
+                                    class="text-truncate"
+                                    style="white-space: normal"
+                                >
+                                    {{ tabla.nombre }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="estado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Estado</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">
+                                    {{
+                                        tabla.aprovado === true
+                                            ? "Finalizado"
+                                            : "En proceso"
+                                    }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="acciones">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Acciones</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <button
+                                    mat-flat-button
+                                    color="primary"
+                                    (click)="verExamenes(tabla)"
+                                >
+                                    Ver examenes
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row
+                            *matHeaderRowDef="tablaMaterias; sticky: true"
+                        ></mat-header-row>
+
+                        <mat-row
+                            *matRowDef="let product; columns: tablaMaterias"
+                            class="product"
+                            matRipple
+                        >
+                        </mat-row>
+                    </mat-table>
+
+                    <div fxLayoutAlign="center center" class="mt-16">
+                        <pagination-controls
+                            id="tabla_materias"
+                            (pageChange)="p = $event"
+                            autoHide="true"
+                            responsive="true"
+                            previousLabel="Anterior"
+                            nextLabel="Siguiente"
+                        ></pagination-controls>
+                    </div>
+                </mat-tab>
+
+                <mat-tab label="Cuotas">
+                    <mat-table
+                        class="products-table"
+                        style="margin-top: 30px"
+                        [dataSource]="
+                            cuotas
+                                | paginate
+                                    : {
+                                          itemsPerPage: itemsPerPage,
+                                          currentPage: p,
+                                          id: 'tabla_cuotas'
+                                      }
+                        "
+                        matSort
+                        [@animateStagger]="{ value: '50' }"
+                        fusePerfectScrollbar
+                    >
+                        <ng-container matColumnDef="nombre">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Nombre</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p
+                                    class="text-truncate"
+                                    style="white-space: normal"
+                                >
+                                    {{ tabla.nombre }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fecha_vencimiento">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Fecha de vencimiento</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">
+                                    {{ tabla.fecha_vencimiento }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="monto">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Monto</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">
+                                    {{ tabla.monto }} Gs.
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="estado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Estado</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p
+                                    class="text-truncate"
+                                    style="color: green"
+                                    *ngIf="tabla.estado === 'Pagada'"
+                                >
+                                    Pagada
+                                </p>
+                                <p
+                                    class="text-truncate"
+                                    style="color: goldenrod"
+                                    *ngIf="tabla.estado === 'Pendiente'"
+                                >
+                                    Pendiente
+                                </p>
+                                <p
+                                    class="text-truncate"
+                                    style="color: red"
+                                    *ngIf="tabla.estado === 'Vencida'"
+                                >
+                                    Vencida
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row
+                            *matHeaderRowDef="tablaCuotas; sticky: true"
+                        ></mat-header-row>
+
+                        <mat-row
+                            *matRowDef="let product; columns: tablaCuotas"
+                            class="product"
+                            matRipple
+                        >
+                        </mat-row>
+                    </mat-table>
+
+                    <div fxLayoutAlign="center center" class="mt-16">
+                        <pagination-controls
+                            id="tabla_cuotas"
+                            (pageChange)="p = $event"
+                            autoHide="true"
+                            responsive="true"
+                            previousLabel="Anterior"
+                            nextLabel="Siguiente"
+                        ></pagination-controls>
+                    </div>
+                </mat-tab>
+
+                <mat-tab label="Cursos externos">
+                    <mat-table
+                        class="products-table"
+                        style="margin-top: 30px"
+                        #table
+                        [dataSource]="
+                            this.datos.certificadosExternos
+                                | paginate
+                                    : {
+                                          itemsPerPage: itemsPerPage,
+                                          currentPage: p,
+                                          id: 'tabla_cursos_externos'
+                                      }
+                        "
+                        matSort
+                        [@animateStagger]="{ value: '50' }"
+                        fusePerfectScrollbar
+                    >
+                        <ng-container matColumnDef="curso">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Titulo</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p
+                                    class="text-truncate"
+                                    style="white-space: normal"
+                                >
+                                    {{ tabla.titulo }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tutor">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Tutor</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p
+                                    class="text-truncate"
+                                    style="white-space: normal"
+                                >
+                                    {{ tabla.tutor }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="horas">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Cantidad de horas del curso
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let tabla">
+                                <p
+                                    class="text-truncate"
+                                    style="white-space: normal"
+                                >
+                                    {{ tabla.horas }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fecha">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Fecha</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">
+                                    {{ tabla.fecha | date : "dd/MM/yyyy" }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="estado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Estado</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">{{ tabla.estado }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="pais">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Pais</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">{{ tabla.pais }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ciudad">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Ciudad</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">{{ tabla.ciudad }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="institucion">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Institucion</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">
+                                    {{ tabla.institucion }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tipoCapacitacion">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Tipo Capacitacion</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <p class="text-truncate">
+                                    {{ tabla.tipo_capacitacion }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna Acciones -->
+                        <ng-container matColumnDef="certificado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Certificado</mat-header-cell
+                            >
+                            <mat-cell *matCellDef="let tabla">
+                                <div fxFlex fxLayout="row wrap">
+                                    <button
+                                        (click)="
+                                            descargarCertificadoExterno(tabla)
+                                        "
+                                        class="boton-con-fondo"
+                                        mat-flat-button
+                                        color="accent"
+                                        style="margin: 5px"
+                                    >
+                                        Descargar
+                                    </button>
+
+                                    <button
+                                        (click)="editarCursoExterno(tabla)"
+                                        style="border-radius: 50px; margin: 5px"
+                                        mat-flat-button
+                                        color="primary"
+                                    >
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+
+                                    <button
+                                        (click)="eliminarCursoExterno(tabla)"
+                                        style="border-radius: 50px; margin: 5px"
+                                        mat-flat-button
+                                        color="warn"
+                                    >
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row
+                            *matHeaderRowDef="
+                                tablaContenidoExterno;
+                                sticky: true
+                            "
+                        ></mat-header-row>
+
+                        <mat-row
+                            *matRowDef="
+                                let product;
+                                columns: tablaContenidoExterno
+                            "
+                            class="product"
+                            matRipple
+                        >
+                        </mat-row>
+                    </mat-table>
+
+                    <div
+                        style="
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                        "
+                    >
+                        <div style="display: flex; align-items: center">
+                            <button
+                                (click)="cargarCursoExterno()"
+                                class="boton-con-fondo"
+                                mat-flat-button
+                                color="accent"
+                            >
+                                Cargar curso
+                            </button>
+                        </div>
+
+                        <pagination-controls
+                            id="tabla_cursos_externos"
+                            (pageChange)="p = $event"
+                            autoHide="true"
+                            responsive="true"
+                            previousLabel="Anterior"
+                            nextLabel="Siguiente"
+                        ></pagination-controls>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

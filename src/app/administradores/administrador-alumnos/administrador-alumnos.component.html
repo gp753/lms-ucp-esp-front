@@ -1,0 +1,643 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <!--HEADER NORMAL-->
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Alumnos
+                </h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto">
+            <mat-tab-group>
+                <!--EMPIEZA TAB LISTA DE ALUMNOS-->
+                <mat-tab label="Lista de alumnos">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div
+                            class="mat-card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                            fxLayoutAlign="start center"
+                        >
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                En esta vista
+                                <strong
+                                    >podrás ver y modificar los datos de los
+                                    alumnos.</strong
+                                >
+                            </label>
+                        </div>
+
+                        <div
+                            class="mat-card p-12"
+                            fxFlex="1 0 auto"
+                            fxLayout="column"
+                            style="border-radius: 5px"
+                            fxLayoutAlign="start center"
+                        >
+                            <mat-table
+                                style="width: 100%"
+                                class="products-table"
+                                #table
+                                [dataSource]="listaAlumnos"
+                                [@animateStagger]="{ value: '50' }"
+                                fusePerfectScrollbar
+                                matSort
+                            >
+                                <!-- Columna NOMBRE -->
+                                <ng-container matColumnDef="nombre">
+                                    <mat-header-cell *matHeaderCellDef>
+                                        <mat-form-field
+                                            appearance="outline"
+                                            style="width: 90%"
+                                        >
+                                            <mat-label>Nombre</mat-label>
+                                            <input
+                                                #inputNombre
+                                                matInput
+                                                (input)="
+                                                    applyFilter(
+                                                        $event,
+                                                        'nombre'
+                                                    )
+                                                "
+                                                placeholder="Buscar por nombre"
+                                            />
+                                            <mat-icon
+                                                matSuffix
+                                                (click)="
+                                                    clearFilter(
+                                                        'nombre',
+                                                        inputNombre
+                                                    )
+                                                "
+                                            >
+                                                close
+                                            </mat-icon>
+                                        </mat-form-field>
+                                        <div mat-sort-header style="width: 10%">
+                                            <mat-icon>swap_vert</mat-icon>
+                                        </div>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let alumno">{{
+                                        alumno.nombre
+                                    }}</mat-cell>
+                                </ng-container>
+
+                                <!-- Columna APELLIDO -->
+                                <ng-container matColumnDef="apellido">
+                                    <mat-header-cell *matHeaderCellDef>
+                                        <mat-form-field
+                                            appearance="outline"
+                                            style="width: 90%"
+                                        >
+                                            <mat-label>Apellido</mat-label>
+                                            <input
+                                                #inputApellido
+                                                matInput
+                                                (input)="
+                                                    applyFilter(
+                                                        $event,
+                                                        'apellido'
+                                                    )
+                                                "
+                                                placeholder="Buscar por apellido"
+                                            />
+                                            <mat-icon
+                                                matSuffix
+                                                (click)="
+                                                    clearFilter(
+                                                        'apellido',
+                                                        inputApellido
+                                                    )
+                                                "
+                                            >
+                                                close
+                                            </mat-icon>
+                                        </mat-form-field>
+                                        <div mat-sort-header style="width: 10%">
+                                            <mat-icon>swap_vert</mat-icon>
+                                        </div>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let alumno">{{
+                                        alumno.apellido
+                                    }}</mat-cell>
+                                </ng-container>
+
+                                <!-- Columna EMAIL -->
+                                <ng-container matColumnDef="email">
+                                    <mat-header-cell *matHeaderCellDef>
+                                        <mat-form-field
+                                            appearance="outline"
+                                            style="width: 90%"
+                                        >
+                                            <mat-label>Email</mat-label>
+                                            <input
+                                                #inputEmail
+                                                matInput
+                                                (input)="
+                                                    applyFilter($event, 'email')
+                                                "
+                                                placeholder="Buscar por email"
+                                            />
+                                            <mat-icon
+                                                matSuffix
+                                                (click)="
+                                                    clearFilter(
+                                                        'email',
+                                                        inputEmail
+                                                    )
+                                                "
+                                            >
+                                                close
+                                            </mat-icon>
+                                        </mat-form-field>
+                                        <div mat-sort-header style="width: 10%">
+                                            <mat-icon>swap_vert</mat-icon>
+                                        </div>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let alumno">{{
+                                        alumno.email
+                                    }}</mat-cell>
+                                </ng-container>
+
+                                <!-- Columna DOCUMENTO -->
+                                <ng-container matColumnDef="documento">
+                                    <mat-header-cell *matHeaderCellDef>
+                                        <mat-form-field
+                                            appearance="outline"
+                                            style="width: 90%"
+                                        >
+                                            <mat-label>Documento</mat-label>
+                                            <input
+                                                #inputDocumento
+                                                matInput
+                                                (input)="
+                                                    applyFilter(
+                                                        $event,
+                                                        'documento'
+                                                    )
+                                                "
+                                                placeholder="Buscar por documento"
+                                            />
+                                            <mat-icon
+                                                matSuffix
+                                                (click)="
+                                                    clearFilter(
+                                                        'documento',
+                                                        inputDocumento
+                                                    )
+                                                "
+                                            >
+                                                close
+                                            </mat-icon>
+                                        </mat-form-field>
+                                        <div mat-sort-header style="width: 10%">
+                                            <mat-icon>swap_vert</mat-icon>
+                                        </div>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let alumno">{{
+                                        alumno.documento
+                                    }}</mat-cell>
+                                </ng-container>
+
+                                <!-- Columna FILIAL -->
+                                <ng-container matColumnDef="filial">
+                                    <mat-header-cell
+                                        *matHeaderCellDef
+                                        style="width: 90%"
+                                    >
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Filial</mat-label>
+                                            <input
+                                                #inputFilial
+                                                matInput
+                                                (input)="
+                                                    applyFilter(
+                                                        $event,
+                                                        'filial'
+                                                    )
+                                                "
+                                                placeholder="Buscar por filial"
+                                            />
+                                            <mat-icon
+                                                matSuffix
+                                                (click)="
+                                                    clearFilter(
+                                                        'filial',
+                                                        inputFilial
+                                                    )
+                                                "
+                                            >
+                                                close
+                                            </mat-icon>
+                                        </mat-form-field>
+                                        <div mat-sort-header style="width: 10%">
+                                            <mat-icon>swap_vert</mat-icon>
+                                        </div>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let alumno">{{
+                                        alumno.filial
+                                    }}</mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell
+                                        fxLayoutAlign="center center"
+                                        *matHeaderCellDef
+                                    >
+                                        Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        style="
+                                            justify-content: space-evenly;
+                                            padding: 5px 0;
+                                        "
+                                        *matCellDef="let usuario"
+                                        fxLayout="row"
+                                    >
+                                        <mat-form-field
+                                            appearance="outline"
+                                            style="
+                                                width: 100%;
+                                                margin-bottom: -21.5px;
+                                            "
+                                        >
+                                            <mat-label>Acciones</mat-label>
+                                            <mat-select>
+                                                <mat-option
+                                                    (click)="verFicha(usuario)"
+                                                >
+                                                    <mat-icon
+                                                        >visibility</mat-icon
+                                                    >
+                                                    Ver ficha
+                                                </mat-option>
+
+                                                <mat-option
+                                                    (click)="
+                                                        editarAlumno(usuario)
+                                                    "
+                                                >
+                                                    <mat-icon>edit</mat-icon>
+                                                    Editar
+                                                </mat-option>
+
+                                                <mat-option
+                                                    (click)="
+                                                        eliminarAlumno(usuario)
+                                                    "
+                                                >
+                                                    <mat-icon>delete</mat-icon>
+                                                    Eliminar
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row
+                                    *matHeaderRowDef="
+                                        displayedColumns;
+                                        sticky: true
+                                    "
+                                ></mat-header-row>
+
+                                <mat-row
+                                    *matRowDef="
+                                        let product;
+                                        columns: displayedColumns
+                                    "
+                                    class="product"
+                                    matRipple
+                                >
+                                </mat-row>
+                            </mat-table>
+
+                            <mat-paginator
+                                [pageSize]="10"
+                                [pageSizeOptions]="[10, 20, 50, 100]"
+                            ></mat-paginator>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB LISTA DE ALUMNOS-->
+
+                <!--EMPIEZA TAB CREAR ALUMNO-->
+                <mat-tab label="Crear alumno">
+                    <!--CONTENIDO-->
+                    <div
+                        class="p-24"
+                        fxLayout="column"
+                        [formGroup]="formulario"
+                        fxFlex="1 0 auto"
+                        style="width: 100% !important"
+                    >
+                        <div
+                            class="mat-card card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                        >
+                            <div fxLayoutAlign="start center" class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <div fxLayoutAlign="start center">
+                                <label
+                                    >Acá puedes
+                                    <strong>crear alumnos.</strong></label
+                                >
+                            </div>
+                        </div>
+
+                        <div
+                            class="mat-card card p-12"
+                            fxLayout="column"
+                            fxFlex="100"
+                            style="border-radius: 5px"
+                        >
+                            <div
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                                fxFlex="1 0 auto"
+                            >
+                                <!--INPUT NOMBRE-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="33"
+                                    class="pr-4"
+                                >
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput formControlName="NOMBRE" />
+
+                                    <mat-error
+                                        >Por favor ingrese un nombre.</mat-error
+                                    >
+                                </mat-form-field>
+
+                                <!--INPUT APELLIDO-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="34"
+                                    class="pr-4 pl-4"
+                                >
+                                    <mat-label>Apellido</mat-label>
+                                    <input
+                                        matInput
+                                        formControlName="APELLIDO"
+                                    />
+
+                                    <mat-error
+                                        >Por favor ingrese un
+                                        apellido.</mat-error
+                                    >
+                                </mat-form-field>
+
+                                <!--INPUT DOCUMENTO-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="33"
+                                    class="pl-4"
+                                >
+                                    <mat-label>Documento</mat-label>
+                                    <input
+                                        matInput
+                                        formControlName="DOCUMENTO"
+                                    />
+
+                                    <mat-error
+                                        >Por favor ingrese un
+                                        documento.</mat-error
+                                    >
+                                </mat-form-field>
+                            </div>
+
+                            <div
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                                fxFlex="1 0 auto"
+                            >
+                                <!--INPUT CORREO-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="40"
+                                    class="pr-4"
+                                >
+                                    <mat-label>Correo</mat-label>
+                                    <input
+                                        matInput
+                                        formControlName="EMAIL"
+                                        type="email"
+                                        email
+                                    />
+
+                                    <mat-error
+                                        >Por favor ingrese un correo
+                                        valido.</mat-error
+                                    >
+                                </mat-form-field>
+
+                                <div
+                                    fxLayout="row"
+                                    fxLayoutAlign="start center"
+                                    fxFlex="1 0 auto"
+                                >
+                                    <!--SELECT CLIENTES-->
+                                    <mat-form-field
+                                        appearance="outline"
+                                        fxFlex="50"
+                                        class="pr-4"
+                                    >
+                                        <mat-label>Clientes</mat-label>
+                                        <mat-select
+                                            formControlName="CLIENTES"
+                                            multiple
+                                        >
+                                            <mat-option
+                                                *ngFor="let c of listaClientes"
+                                                [value]="c.ID"
+                                                >{{ c.NOMBRE }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <!--SELECT FINANCIAMIENTOS-->
+                                    <mat-form-field
+                                        appearance="outline"
+                                        fxFlex="50"
+                                    >
+                                        <mat-label>Financiamientos</mat-label>
+                                        <mat-select
+                                            formControlName="FINANCIAMIENTOS"
+                                            multiple
+                                        >
+                                            <mat-option
+                                                *ngFor="
+                                                    let f of listaFinanciamientos
+                                                "
+                                                [value]="f.ID"
+                                            >
+                                                {{ f.NOMBRE }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                                fxFlex="1 0 auto"
+                            >
+                                <!--SELECT MATERIAS-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="33"
+                                    class="pr-4"
+                                >
+                                    <mat-label>Materias</mat-label>
+                                    <mat-select #selectMateria>
+                                        <mat-option
+                                            *ngFor="let m of listaMaterias"
+                                            [value]="m.ID"
+                                            (click)="
+                                                getListaSecciones(m.ID);
+                                                this.materiaSeleccionada = m
+                                            "
+                                            >{{ m.NOMBRE }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <!--SELECT SECCION-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="34"
+                                    class="pl-4 pr-4"
+                                >
+                                    <mat-label>Seccion</mat-label>
+                                    <mat-select #selectSeccion>
+                                        <mat-option
+                                            *ngFor="let s of listaSecciones"
+                                            [value]="s.id"
+                                            (click)="
+                                                this.seccionSeleccionada = s
+                                            "
+                                        >
+                                            {{ s.nombre }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <!-- FILIAL -->
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="33"
+                                    class="pl-4"
+                                >
+                                    <mat-label>Filial</mat-label>
+                                    <input matInput formControlName="FILIAL" />
+
+                                    <mat-error
+                                        >Por favor ingrese una
+                                        filial.</mat-error
+                                    >
+                                </mat-form-field>
+                            </div>
+
+                            <button
+                                mat-flat-button
+                                *ngIf="selectSeccion.value != null"
+                                style="
+                                    background-color: green;
+                                    color: #fff;
+                                    border-radius: 50px;
+                                    width: fit-content;
+                                    align-self: self-end;
+                                "
+                                (click)="
+                                    agregarMateria();
+                                    selectMateria.value = null;
+                                    selectSeccion.value = null
+                                "
+                            >
+                                Agregar materia <mat-icon>add</mat-icon>
+                            </button>
+
+                            <h2 *ngIf="arrayMaterias.length > 0">
+                                Lista de materias
+                            </h2>
+
+                            <div
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                                fxFlex="1 0 auto"
+                                *ngFor="
+                                    let array of arrayMaterias;
+                                    let i = index
+                                "
+                            >
+                                <p>
+                                    {{ i + 1 }}. {{ array.nombreMateria }} -
+                                    {{ array.nombreSeccion }}
+                                </p>
+
+                                <mat-icon
+                                    style="
+                                        color: rgb(194, 33, 33);
+                                        cursor: pointer;
+                                    "
+                                    (click)="quitarMateria(i)"
+                                >
+                                    delete</mat-icon
+                                >
+                            </div>
+
+                            <!--BOTON AGREGAR-->
+
+                            <button
+                                mat-flat-button
+                                color="accent"
+                                style="margin-top: 10px"
+                                [ngClass]="
+                                    this.formulario.invalid
+                                        ? 'disabled'
+                                        : 'boton-con-fondo'
+                                "
+                                [disabled]="this.formulario.invalid"
+                                (click)="crearAlumno()"
+                            >
+                                Crear alumno
+                            </button>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB CREAR ALUMNO-->
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

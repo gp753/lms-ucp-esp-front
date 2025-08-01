@@ -1,0 +1,44 @@
+<div style="display: flex; flex-direction: column; align-items: center">
+    <div>
+        <div style="text-align: center">
+            <mat-icon class="info">error_outline</mat-icon>
+        </div>
+        <label style="font-size: 20px; color: #656565; font-weight: bold"
+            >¡Precaución!</label
+        >
+    </div>
+
+    <div style="max-width: 400px; text-align: center" class="mb-24">
+        <label style="text-align: center"
+            >¿Estás seguro que deseas eliminar este comunicado?</label
+        >
+    </div>
+
+    <div
+        style="
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        "
+    >
+        <button
+            mat-flat-button
+            color="accent"
+            class="boton-con-fondo"
+            mat-dialog-close
+        >
+            Cancelar
+        </button>
+
+        <button
+            mat-flat-button
+            color="accent"
+            class="boton-sin-fondo"
+            (click)="eliminar()"
+        >
+            Eliminar
+        </button>
+    </div>
+</div>

@@ -1,0 +1,369 @@
+<div class="page-layout simple">
+    <div fxLayout="column">
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <!--<div>
+                <button mat-button>
+                  <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Comunicados
+                </h1>
+            </div>
+        </div>
+
+        <!--CONTENIDO-->
+
+        <mat-tab-group (selectedTabChange)="tabChange($event)">
+            <mat-tab label="Lista de Comunicados">
+                <div
+                    class="p-24 card"
+                    fxLayout="column"
+                    fxFlex="1 0 auto"
+                    style="width: 100% !important"
+                >
+                    <div
+                        class="mat-card card p-12 mb-24"
+                        fxLayout="row"
+                        fxFlex="1 0 auto"
+                        style="border-radius: 5px"
+                    >
+                        <div fxLayoutAlign="start center" class="mr-12">
+                            <mat-icon class="info">info</mat-icon>
+                        </div>
+                        <div fxLayoutAlign="start center">
+                            <label
+                                >Acá puedes ver<strong
+                                    >la lista de comunicados, editarlos o
+                                    eliminarlos</strong
+                                ></label
+                            >
+                        </div>
+                    </div>
+
+                    <div
+                        class="mat-card card p-12"
+                        fxFlex="1 0 auto"
+                        fxLayout="column"
+                        style="border-radius: 5px"
+                        fxLayoutAlign="start center"
+                    >
+                        <div
+                            style="
+                                width: 100%;
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: space-between;
+                            "
+                        >
+                            <div
+                                class="mr-16"
+                                style="
+                                    padding-bottom: 21.5px;
+                                    margin: 4px 0;
+                                    width: 69%;
+                                "
+                            >
+                                <input
+                                    style="
+                                        border-radius: 50px;
+                                        height: 55px;
+                                        background: rgb(240, 240, 240);
+                                        width: 100%;
+                                    "
+                                    placeholder="Buscar..."
+                                />
+                            </div>
+
+                            <!-- <mat-form-field
+                                appearance="outline"
+                                style="width: 29%"
+                            >
+                                <mat-label>Buscar</mat-label>
+                                <mat-select>
+                                    <mat-option (click)="getForo()"
+                                        >Todos los foros</mat-option
+                                    >
+                                    <mat-option
+                                        *ngFor="let m of materias"
+                                        [value]="m.ID"
+                                        (click)="filtarForoPorMateria(m.ID)"
+                                    >
+                                        {{ m.NOMBRE }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+                        </div>
+
+                        <mat-table
+                            style="width: 100%"
+                            class="products-table"
+                            #table
+                            [dataSource]="
+                                lista
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            "
+                            [@animateStagger]="{ value: '50' }"
+                            fusePerfectScrollbar
+                            matSort
+                            (matSortChange)="sortData($event)"
+                        >
+                            <!-- Columna Descripcion -->
+                            <ng-container matColumnDef="descripcion">
+                                <mat-header-cell
+                                    fxLayoutAlign="start"
+                                    *matHeaderCellDef
+                                    mat-sort-header="descripcion"
+                                >
+                                    Descripcion
+                                </mat-header-cell>
+                                <mat-cell
+                                    fxLayoutAlign="start"
+                                    *matCellDef="let item"
+                                >
+                                    <p class="text-truncate">
+                                        {{ item.descripcion }}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Columna FECHA CREACION -->
+                            <ng-container matColumnDef="fechaCreacion">
+                                <mat-header-cell
+                                    fxLayoutAlign="start"
+                                    *matHeaderCellDef
+                                    mat-sort-header="fechaCreacion"
+                                >
+                                    Fecha Creacion
+                                </mat-header-cell>
+                                <mat-cell
+                                    fxLayoutAlign="start"
+                                    *matCellDef="let item"
+                                >
+                                    <p class="text-truncate">
+                                        {{
+                                            item.createdAt + "Z"
+                                                | date : "dd/MM/yyyy"
+                                        }}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Columna ACCIONES -->
+                            <ng-container matColumnDef="acciones">
+                                <mat-header-cell
+                                    fxLayoutAlign="start start"
+                                    *matHeaderCellDef
+                                    >Acciones
+                                </mat-header-cell>
+
+                                <mat-cell
+                                    fxLayoutAlign=" center"
+                                    *matCellDef="let item"
+                                    fxLayout="row"
+                                >
+                                    <mat-form-field
+                                        appearance="outline"
+                                        style="
+                                            width: 100%;
+                                            margin-bottom: -21px;
+                                        "
+                                    >
+                                        <mat-label>Acciones</mat-label>
+                                        <mat-select>
+                                            <mat-option
+                                                (click)="
+                                                    descargar(item.archivo)
+                                                "
+                                            >
+                                                <mat-icon>
+                                                    <span
+                                                        class="material-symbols-outlined"
+                                                    >
+                                                        download
+                                                    </span></mat-icon
+                                                >
+                                                Descargar
+                                            </mat-option>
+
+                                            <mat-option
+                                                (click)="editarComunicado(item)"
+                                            >
+                                                <mat-icon matSuffix
+                                                    >edit</mat-icon
+                                                >
+                                                Editar
+                                            </mat-option>
+
+                                            <mat-option
+                                                (click)="
+                                                    eliminarComuncado(item)
+                                                "
+                                            >
+                                                <mat-icon matSuffix
+                                                    >delete</mat-icon
+                                                >
+                                                Eliminar
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row
+                                *matHeaderRowDef="
+                                    displayedColumns;
+                                    sticky: true
+                                "
+                            ></mat-header-row>
+
+                            <mat-row
+                                *matRowDef="
+                                    let product;
+                                    columns: displayedColumns
+                                "
+                                class="product"
+                                matRipple
+                            >
+                            </mat-row>
+                        </mat-table>
+                        <div fxLayoutAlign="center center" class="mt-16">
+                            <pagination-controls
+                                (pageChange)="p = $event"
+                                autoHide="true"
+                                responsive="true"
+                                previousLabel="Anterior"
+                                nextLabel="Siguiente"
+                            ></pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Crear Comunicado">
+                <div
+                    class="p-24 card"
+                    fxLayout="column"
+                    fxFlex="1 0 auto"
+                    style="width: 100% !important"
+                >
+                    <div
+                        class="mat-card card p-12 mb-24"
+                        fxLayout="row"
+                        fxFlex="1 0 auto"
+                        style="border-radius: 5px"
+                    >
+                        <div fxLayoutAlign="start center" class="mr-12">
+                            <mat-icon class="info">info</mat-icon>
+                        </div>
+                        <div fxLayoutAlign="start center">
+                            <label
+                                >Acá puedes
+                                <strong>crear comunicados.</strong></label
+                            >
+                        </div>
+                    </div>
+
+                    <div
+                        class="mat-card card p-12"
+                        fxLayout="column"
+                        fxFlex="100"
+                        style="border-radius: 5px"
+                        [formGroup]="form"
+                    >
+                        <div fxLayout="column" fxFlex="100">
+                            <mat-form-field
+                                appearance="outline"
+                                fxFlex="50"
+                                class="pr-4"
+                            >
+                                <mat-label>Descripcion</mat-label>
+                                <input matInput formControlName="descripcion" />
+                                <mat-error>Este campo es requerido.</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field
+                                appearance="outline"
+                                fxFlex="50"
+                                class="pl-4"
+                            >
+                                <mat-label>Archivo</mat-label>
+                                <input matInput [value]="nombreArchivo" />
+
+                                <input
+                                    type="file"
+                                    style="display: none"
+                                    #archivo
+                                    (change)="onFileSelect($event)"
+                                />
+
+                                <div
+                                    style="display: flex; flex-direction: row"
+                                    matSuffix
+                                >
+                                    <!-- subir -->
+                                    <button
+                                        mat-icon-button
+                                        *ngIf="!nombreArchivo"
+                                        (click)="archivo.click()"
+                                    >
+                                        <mat-icon>attach_file</mat-icon>
+                                    </button>
+
+                                    <!-- ver -->
+                                    <button
+                                        mat-icon-button
+                                        *ngIf="nombreArchivo"
+                                        (click)="verArchivo()"
+                                    >
+                                        <mat-icon>visibility</mat-icon>
+                                    </button>
+
+                                    <!-- editar -->
+                                    <button
+                                        mat-icon-button
+                                        *ngIf="nombreArchivo"
+                                        (click)="archivo.click()"
+                                    >
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                </div>
+                                <mat-error>Este campo es requerido.</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <button
+                            mat-flat-button
+                            [class]="
+                                this.form.invalid
+                                    ? 'disabled'
+                                    : 'boton-con-fondo'
+                            "
+                            [disabled]="this.form.invalid"
+                            color="primary"
+                            (click)="crear()"
+                        >
+                            Crear Comunicado
+                        </button>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+        <!-- / CONTENIDO -->
+    </div>
+</div>

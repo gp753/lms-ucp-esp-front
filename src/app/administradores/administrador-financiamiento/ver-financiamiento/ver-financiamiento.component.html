@@ -1,0 +1,125 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+
+        <!--HEADER NORMAL-->
+        <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <div>
+                <button mat-button (click)="volver()">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Financiamiento: {{nombreFinanciamiento}}</h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxLayout="column">
+
+            <div class="p-24" fxLayout="column" fxFlex="100">
+                <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto" style="border-radius: 5px;"
+                    fxLayoutAlign="start center">
+                    <div class="mr-12">
+                        <mat-icon class="info">info</mat-icon>
+                    </div>
+                    <label>
+                        En esta vista <strong>podrás ver la lista de alumnos de este financiamiento, tambien podrás
+                            agregar o eliminar alumnos dentro el financiamiento.</strong>
+                    </label>
+                </div>
+
+                <div class="mat-card card p-12" fxFlex="1 0 auto" fxLayout="column" style="border-radius: 5px;"
+                    fxLayoutAlign="start center">
+
+                    <div
+                        style="display: flex; width: 100%; flex-direction: row; justify-content: space-between; align-items: center;">
+                        <div class="matFormField" style="width: 80%; padding-right: 5px;">
+                            <input [(ngModel)]="termino" style="
+                                    border-radius: 50px;
+                                    height: 55px;
+                                    background: rgb(240, 240, 240);
+                                    width: 100%;
+                                " placeholder="Buscar..." />
+                        </div>
+
+                        <div style="width: 20%; padding-left: 5px; margin: 4px 0; padding-bottom: 21.5px;">
+                            <button (click)="agregarAlumno()" mat-flat-button color="primary"
+                                style="border-radius: 50px;">Agregar alumno</button>
+                        </div>
+                    </div>
+
+                    <mat-table style="width: 100%" class="products-table" #table [dataSource]="
+                            lista
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            " [@animateStagger]="{ value: '50' }" fusePerfectScrollbar matSort
+                        (matSortChange)="sortData($event)">
+                        <!-- Columna NOMBRE -->
+                        <ng-container matColumnDef="nombre">
+                            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="nombre">
+                                Nombre
+                            </mat-header-cell>
+                            <mat-cell fxLayoutAlign="start" *matCellDef="let tipo">
+                                <p class="text-truncate">
+                                    {{tipo.NOMBRE}}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna APELLIDO -->
+                        <ng-container matColumnDef="apellido">
+                            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="apellido">
+                                Apellido
+                            </mat-header-cell>
+                            <mat-cell fxLayoutAlign="start" *matCellDef="let tipo">
+                                <p class="text-truncate">
+                                    {{tipo.APELLIDO}}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna ACCIONES -->
+                        <ng-container matColumnDef="acciones">
+                            <mat-header-cell fxLayoutAlign="start start" *matHeaderCellDef>Acciones
+                            </mat-header-cell>
+
+                            <mat-cell fxLayoutAlign="start" style="justify-content: space-evenly; padding: 5px 0;"
+                                *matCellDef="let tipo" fxLayout="row">
+
+                                <!-- <button mat-flat-button color="primary" (click)='verFinanciamiento(tipo.ID)'
+                                    class="mr-4">
+                                    <mat-icon>visibility</mat-icon>
+                                </button> -->
+
+                                <!-- <button mat-flat-button color="accent" (click)='editarFinanciamiento(tipo)'
+                                    class="mr-4">
+                                    <mat-icon>edit</mat-icon>
+                                </button> -->
+
+                                <button mat-flat-button color="warn" (click)='eliminarAlumno(tipo)'>
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+                        <mat-row *matRowDef="let product; columns: displayedColumns" class="product" matRipple>
+                        </mat-row>
+                    </mat-table>
+                    <div fxLayoutAlign="center center" class="mt-16">
+                        <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"
+                            previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

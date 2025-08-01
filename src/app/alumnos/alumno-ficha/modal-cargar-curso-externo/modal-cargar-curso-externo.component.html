@@ -1,0 +1,58 @@
+<div fxLayout="column" fxFlex="100">
+    <div [formGroup]="formulario" fxLayout="column" fxFlex="100">
+        <div fxLayout="row" fxFlex="100">
+            <mat-form-field appearance="outline" fxFlex="33" class="pr-4">
+                <mat-label>Titulo</mat-label>
+                <input matInput formControlName="titulo" />
+                <mat-error>Por favor ingrese un titulo.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="34" class="pl-4 pr-4">
+                <mat-label>Tutor</mat-label>
+                <input matInput formControlName="tutor" />
+                <mat-error>Por favor ingrese un tutor.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="33" class="pl-4">
+                <mat-label>Estado</mat-label>
+                <input matInput formControlName="estado" />
+                <mat-error>Por favor ingrese el estado de su curso.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxFlex="100">
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>Fecha</mat-label>
+                <input readonly matInput [matDatepicker]="startDatePicker" formControlName="fecha" />
+
+                <mat-datepicker-toggle style="color: #285ba7" matSuffix [for]="startDatePicker">
+                </mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+                <mat-error>Ingrese la fecha.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Cantidad de hora de curso (Opcional)</mat-label>
+                <input matInput formControlName="horas" />
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="center" fxFlex="100" class="mb-24">
+            <div fxFlex="70">
+                <input style="display: none" type="file" (change)="onSelectFile($event)" #fileInput />
+                <button mat-flat-button color="accent" class="boton-con-fondo" (click)="fileInput.click()">
+                    Subir archivo <mat-icon>add</mat-icon>
+                </button>
+            </div>
+            <div fxLayout="column" fxFlex="100" class="mb-24" fxLayoutAlign="center">
+                <button *ngIf="this.formulario.get('urlCertificado').value" mat-flat-button color="primary"
+                    style="border-radius: 50px;" (click)="abrirArchivo()">Abrir archivo</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction:row; justify-content: space-between;">
+        <button class="boton-sin-fondo" mat-flat-button color="warn" mat-dialog-close>Cancelar</button>
+        <button class="boton-con-fondo" mat-flat-button color="accent" (click)="crear()">Crear</button>
+    </div>
+</div>

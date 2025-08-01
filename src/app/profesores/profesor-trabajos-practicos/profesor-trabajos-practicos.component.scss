@@ -1,0 +1,62 @@
+.fondo {
+    background: #f7f7f7;
+}
+
+.header {
+    background: linear-gradient(to right, #014666 0%, #285ba7 100%);
+    max-height: 65px;
+    color: #fff;
+}
+
+.info {
+    font-size: 50px;
+    width: fit-content;
+    height: auto;
+    color: #285ba7;
+}
+
+.boton-con-fondo {
+    background: #285ba7 !important;
+    border-radius: 50px;
+}
+
+.eliminar {
+    background: transparent !important;
+    border-radius: 50px;
+    border-color: #285ba7 !important;
+    border: solid;
+    border-width: 1px;
+    color: #285ba7 !important;
+    width: fit-content;
+}
+
+.actualizar {
+    background: #285ba7 !important;
+    border-radius: 50px;
+    width: fit-content;
+}
+
+.card {
+    max-width: 1000px;
+    width: 100%;
+}
+
+.revisar {
+    background: transparent !important;
+    border-radius: 50px;
+    border-color: #285ba7 !important;
+    border: solid;
+    border-width: 1px;
+    color: #285ba7 !important;
+    width: 100%;
+}
+
+.editar {
+    background: transparent !important;
+    border-radius: 50px;
+    border-color: #169937 !important;
+    border: solid;
+    border-width: 1px;
+    color: #169937 !important;
+    width: 100%;
+}

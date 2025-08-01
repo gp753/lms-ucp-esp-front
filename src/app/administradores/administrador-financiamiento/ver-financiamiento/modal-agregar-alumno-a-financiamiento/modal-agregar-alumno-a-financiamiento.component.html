@@ -1,0 +1,25 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+
+    <div fxFlex="100" fxLayout="column" class="mb-12" [formGroup]="formulario" style="width: 100% !important;">
+
+        <mat-form-field appearance="outline">
+            <mat-label>Alumnos</mat-label>
+            <mat-select formControlName="ALUMNOS" multiple>
+                <mat-option *ngFor="let c of listaAlumnos" [value]="c.ID">{{c.NOMBRE}} {{c.APELLIDO}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" style="width: 100%;">
+        <div class="mr-24" style="width: 50%;">
+            <button mat-flat-button color="accent" class="boton-sin-fondo" mat-dialog-close>Cancelar</button>
+        </div>
+        <div style="width: 50%;">
+            <button [disabled]="this.formulario.invalid" fxFlex="100" mat-flat-button color="accent"
+                [ngClass]="this.formulario.invalid ? 'disabled':'boton-con-fondo'" style="border-radius: 50px;"
+                (click)="crear()">Agregar
+                alumno</button>
+        </div>
+    </div>
+</div>

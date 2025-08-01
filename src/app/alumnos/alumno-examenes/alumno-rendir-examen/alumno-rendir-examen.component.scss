@@ -1,0 +1,46 @@
+.card {
+    max-width: 1000px;
+    width: 100%;
+}
+
+.boton-con-fondo {
+    background: #285ba7 !important;
+    border-radius: 50px;
+    width: 30%;
+}
+
+.disabled {
+    border-radius: 50px;
+    width: 30%;
+}
+
+.boton-sin-fondo {
+    background: transparent !important;
+    border-radius: 50px;
+    border-color: #285ba7 !important;
+    border: solid;
+    border-width: 1px;
+    color: #285ba7 !important;
+    width: 30%;
+}
+
+.header {
+    background: #014666;
+    height: 65px !important;
+    color: #fff;
+}
+
+hr {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: #d6d6d6;
+    height: 1px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+::ng-deep .mat-radio-label {
+    white-space: normal !important;
+}

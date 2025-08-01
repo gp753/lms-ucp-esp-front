@@ -1,0 +1,59 @@
+<div style="height: 64px; background: #f7f7f7 !important" fxLayoutAlign="row">
+    <div fxLayoutAlign=" center" fxFlex="1 0 auto">
+        <!--<img fxHide.gt-md src="assets/images/logos/logochico.jpg" />-->
+        <img style="max-height: 64px; max-width: 280px" src="assets/images/logos/logoNavbarUCP.png" />
+    </div>
+
+    <div class="buttons" fxLayoutAlign="end center" fxFlex="1 0 auto">
+        <button mat-icon-button class="toggle-sidebar-folded" (click)="toggleSidebarFolded()" fxHide.lt-lg>
+            <mat-icon class="secondary-text">menu</mat-icon>
+        </button>
+
+        <button mat-icon-button class="toggle-sidebar-opened" (click)="toggleSidebarOpened()" fxHide.gt-md>
+            <mat-icon class="secondary-text">arrow_back</mat-icon>
+        </button>
+    </div>
+</div>
+
+<div class="navbar-scroll-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground" fusePerfectScrollbar
+    [fusePerfectScrollbarOptions]="{ suppressScrollX: true }">
+    <!--<div class="user" fxLayout="column" [ngClass]="fuseConfig.layout.navbar.secondaryBackground">
+
+        <div class="h3 username">Charlie Adams</div>
+        <div class="h5 email hint-text mt-8">adams.charlie@mail.com</div>
+        <div class="avatar-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground">
+            <img class="avatar" src="assets/images/avatars/Velazquez.jpg">
+        </div>
+
+    </div>-->
+
+    <!--MENU ADMINISTRADOR-->
+    <div class="navbar-content" *ngIf="role === '2'" style="background-color: #2d323e">
+        <!--<span>Módulo de exámenes</span>-->
+        <fuse-navigation class="material2" layout="vertical"></fuse-navigation>
+    </div>
+
+    <!--MENU PROFESOR-->
+    <div class="navbar-content" *ngIf="role === '3'" style="background-color: #014666">
+        <!--<span>Módulo de exámenes</span>-->
+        <fuse-navigation class="material2" layout="vertical"></fuse-navigation>
+    </div>
+
+    <!--MENU ALUMNO Y CLIENTE2-->
+    <div class="navbar-content" *ngIf="role === '1' || role === '8'" style="background-color: #285ba7">
+        <!--<span>Módulo de exámenes</span>-->
+        <fuse-navigation class="material2" layout="vertical"></fuse-navigation>
+    </div>
+
+    <!--MENU CLIENTE-->
+    <div class="navbar-content" *ngIf="role === '4'" style="background-color: #2d323e">
+        <!--<span>Módulo de exámenes</span>-->
+        <fuse-navigation class="material2" layout="vertical"></fuse-navigation>
+    </div>
+
+    <!--MENU SEGUIMIENTO-->
+    <div class="navbar-content" *ngIf="role === '5'" style="background-color: #2d323e">
+        <!--<span>Módulo de exámenes</span>-->
+        <fuse-navigation class="material2" layout="vertical"></fuse-navigation>
+    </div>
+</div>

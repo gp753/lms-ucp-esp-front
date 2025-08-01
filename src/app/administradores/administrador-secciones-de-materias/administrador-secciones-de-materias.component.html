@@ -1,0 +1,157 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <div>
+                <button mat-button routerLink="/administrador-unidades">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Secciones de materia</h1>
+            </div>
+        </div>
+
+
+        <div fxFlex="1 0 auto">
+            <div class="p-24" fxLayout="column" style="width: 100% !important;">
+
+                <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto" style="border-radius: 5px;"
+                    fxLayoutAlign="start center">
+
+                    <div class="mr-12">
+                        <mat-icon class="info">info</mat-icon>
+                    </div>
+                    <label>
+                        Acá podrás
+                        <strong>ver, crear, y editar todas las secciones de la materia</strong>
+                    </label>
+                </div>
+
+                <div class="mat-card card p-24" fxLayout="column" style="border-radius: 5px;">
+                    <!-- <div class="h2 mb-24">Preguntas</div>-->
+                    <!--ACA EMPIEZA LA TABLA-->
+
+                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-24">
+                        <mat-form-field appearance="outline" fxFlex="65" class="pr-4">
+                            <mat-label>Buscar</mat-label>
+                            <input [(ngModel)]="term" matInput [ngModelOptions]="{ standalone: true }" />
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" fxFlex="15" class="pr-4 pl-4">
+                            <mat-label>Mostrar</mat-label>
+                            <mat-select [(value)]="itemsPerPage" (selectionChange)="p = 1">
+                                <mat-option value="5"> 5 </mat-option>
+                                <mat-option value="10"> 10 </mat-option>
+                                <mat-option value="15"> 15 </mat-option>
+                                <mat-option value="20"> 20 </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <div fxFlex="20" style="
+                        padding-bottom: 21.5px;
+                        margin-top: 4px;
+                        margin-bottom: 4px;
+                    ">
+                            <button mat-flat-button color="accent" class="boton-con-fondo2" style="width: 100%"
+                                (click)="crear()">
+                                Crear seccion <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <!--ACA TERMINA SELECCIONAR MOSTRAR-->
+
+                    <mat-table fxFlex="1 0 auto" class="products-table" #table [dataSource]="
+                                listaSecciones
+                                    | filter: term
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            " [@animateStagger]="{ value: '50' }" fusePerfectScrollbar matSort
+                        (matSortChange)="sortData($event)">
+                        <!-- Columna PROFESOR -->
+                        <ng-container matColumnDef="profesor">
+                            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="profesor">
+                                Profesor
+                            </mat-header-cell>
+                            <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                                <p class="text-truncate">
+                                    {{ lista.profesor }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna NOMBRE -->
+                        <ng-container matColumnDef="nombre">
+                            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="nombre">
+                                Nombre
+                            </mat-header-cell>
+                            <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                                <p class="text-truncate">
+                                    {{ lista.nombre }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna FECHA INICIO -->
+                        <ng-container matColumnDef="inicio">
+                            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="inicio">
+                                Fecha de inicio
+                            </mat-header-cell>
+                            <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                                <p class="text-truncate">
+                                    {{ lista.inicio | date:'dd/MM/yyyy' }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna FECHA FIN -->
+                        <ng-container matColumnDef="fin">
+                            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="fin">
+                                Fecha fin
+                            </mat-header-cell>
+                            <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                                <p class="text-truncate">
+                                    {{ lista.fin | date:'dd/MM/yyyy' }}
+                                </p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Columna ACCIONES -->
+                        <ng-container matColumnDef="acciones">
+                            <mat-header-cell fxLayoutAlign="start start" *matHeaderCellDef>Acciones
+                            </mat-header-cell>
+
+                            <mat-cell fxLayoutAlign="center center" *matCellDef="let product" fxLayout="row">
+                                <button mat-raised-button color="primary"
+                                    style="border-radius: 50px; width: fit-content; margin-right: 4px; height: fit-content;"
+                                    (click)='editar(product)'>
+                                    Ver / Editar
+                                </button>
+
+                                <button mat-raised-button color="warn"
+                                    style="border-radius: 50px; width: fit-content; height: fit-content;"
+                                    (click)='eliminar(product)'>
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+                        <mat-row *matRowDef="let product; columns: displayedColumns" class="product" matRipple>
+                        </mat-row>
+                    </mat-table>
+                    <div fxLayoutAlign="center center" class="mt-16">
+                        <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"
+                            previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

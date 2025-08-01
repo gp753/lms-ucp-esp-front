@@ -1,0 +1,404 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+
+        <!--HEADER NORMAL-->
+        <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Financiamiento</h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto">
+            <mat-tab-group [(selectedIndex)]="tabIndex" (selectedTabChange)="tabChange($event)">
+
+                <!--EMPIEZA TAB CREAR FINANCIAMIENTO-->
+                <mat-tab label="Crear financiamiento">
+                    <!--CONTENIDO-->
+                    <div class="p-24 card" fxLayout="column" [formGroup]="formulario" fxFlex="1 0 auto"
+                        style="width: 100% !important;">
+
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;">
+                            <div fxLayoutAlign="start center" class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <div fxLayoutAlign="start center">
+                                <label>Acá puedes <strong>crear un financiamiento.</strong></label>
+                            </div>
+                        </div>
+
+                        <div class="mat-card card p-12" fxLayout="column" fxFlex="100" style="border-radius: 5px;">
+
+                            <div fxFlex="100" fxLayout="row">
+                                <!--INPUT NOMBRE-->
+                                <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput formControlName="NOMBRE" />
+
+                                    <mat-error>Por favor ingrese un nombre.</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                    <mat-label>Materia</mat-label>
+                                    <mat-select formControlName="ID_MATERIA">
+                                        <mat-option *ngFor="let c of listaMaterias" [value]="c.ID">
+                                            {{c.NOMBRE}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error>Por favor seleccione una materia.</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="100" fxLayout="row">
+                                <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                                    <mat-label>Fecha Inicio</mat-label>
+                                    <input readonly matInput [matDatepicker]="startDatePicker"
+                                        formControlName="fecha_inicio" />
+
+                                    <mat-datepicker-toggle style="color: #285ba7" matSuffix [for]="startDatePicker">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #startDatePicker></mat-datepicker>
+                                    <mat-error>Ingrese la fecha de inicio.</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                    <mat-label>Fecha vencimiento</mat-label>
+                                    <input readonly matInput [matDatepicker]="vencimientoDatePicker"
+                                        formControlName="fecha_fin" />
+
+                                    <mat-datepicker-toggle style="color: #285ba7" matSuffix
+                                        [for]="vencimientoDatePicker">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #vencimientoDatePicker></mat-datepicker>
+                                    <mat-error>Ingrese la fecha de vencimiento.</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- SELECT CLIENTE ( SOLO PARA SUPERADMIN ) -->
+                            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                <mat-label>Cliente</mat-label>
+                                <mat-select formControlName="ID_CLIENTE">
+                                    <mat-option *ngFor="let c of listaClientes" [value]="c.ID">
+                                        {{c.NOMBRE}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Por favor seleccione un cliente.</mat-error>
+                            </mat-form-field>
+
+                            <div formArrayName="TIPOS">
+                                <div *ngFor="let item of this.financiamientos.controls; let i = index"
+                                    [formGroupName]="i">
+                                    <div fxFlex="100" fxLayout="row">
+                                        <!-- SELECT TIPO FINANCIAMIENTO -->
+                                        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                            <mat-label>Tipo financiamiento</mat-label>
+                                            <mat-select formControlName="ID_TIPO">
+                                                <mat-option *ngFor="let c of listaTipoFinanciamiento" [value]="c.ID">
+                                                    {{c.NOMBRE}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error>Por favor seleccione un tipo de financiamiento.</mat-error>
+                                        </mat-form-field>
+
+                                        <!-- INPUT CANTIDAD -->
+                                        <mat-form-field appearance="outline" fxFlex="20" class="pr-4 pl-4">
+                                            <mat-label>Cantidad</mat-label>
+                                            <input matInput type="number" formControlName="CANTIDAD" />
+
+                                            <mat-error>Por favor ingrese una cantidad.</mat-error>
+                                        </mat-form-field>
+
+                                        <!-- INPUT MONTO -->
+                                        <mat-form-field appearance="outline" fxFlex="20" class="pr-4">
+                                            <mat-label>Monto</mat-label>
+                                            <input matInput type="number" formControlName="MONTO" />
+
+                                            <mat-error>Por favor ingrese un monto.</mat-error>
+                                        </mat-form-field>
+
+                                        <button mat-flat-button color="warn" fxFlex="10"
+                                            style="height: 58px; margin-top: 4px;"
+                                            (click)="quitarTipoFinanciamiento(i)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button mat-flat-button style="
+                            width: fit-content;
+                            border-radius: 50%;
+                            align-self: center;
+                            height: 60px;
+                            margin-bottom: 50px;;
+                            background-color: green;
+                            color: #fff;" (click)="agregarTipoFinanciamiento()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+
+                            <!--BOTON AGREGAR-->
+
+                            <button mat-flat-button color="accent"
+                                [ngClass]="this.formulario.invalid ? 'disabled':'boton-con-fondo'"
+                                [disabled]="this.formulario.invalid" (click)="crearFinanciamiento()">
+                                Crear tipo financiamiento
+                            </button>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB CREAR FINANCIAMIENTO-->
+
+                <!--EMPIEZA TAB LISTA FINANCIAMIENTO-->
+                <mat-tab label="Lista de financiamientos">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;" fxLayoutAlign="start center">
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                En esta vista <strong>podrás ver y modificar los datos de los tipos de
+                                    financiamiento.</strong>
+                            </label>
+                        </div>
+
+                        <div class="mat-card card p-12" fxFlex="1 0 auto" fxLayout="column" style="border-radius: 5px;"
+                            fxLayoutAlign="start center">
+
+                            <mat-table style="width: 100%" class="products-table" #table [dataSource]="
+                            lista
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            " [@animateStagger]="{ value: '50' }" fusePerfectScrollbar matSort
+                                (matSortChange)="sortData($event)">
+                                <!-- Columna NOMBRE -->
+                                <ng-container matColumnDef="nombre">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="nombre">
+                                        Nombre
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let tipo">
+                                        <p class="text-truncate">
+                                            {{tipo.NOMBRE}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna FECHA INICIO -->
+                                <ng-container matColumnDef="fecha_inicio">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef
+                                        mat-sort-header="fecha_inicio">
+                                        Fecha inicio
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let tipo">
+                                        <p class="text-truncate">
+                                            {{tipo.fecha_inicio | date:'dd/MM/yyyy'}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna FECHA VENCIMIENTO -->
+                                <ng-container matColumnDef="fecha_vencimiento">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef
+                                        mat-sort-header="fecha_vencimiento">
+                                        Fecha vencimiento
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let tipo">
+                                        <p class="text-truncate">
+                                            {{tipo.fecha_fin | date:'dd/MM/yyyy'}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell fxLayoutAlign="start start" *matHeaderCellDef>Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell fxLayoutAlign="start"
+                                        style="justify-content: space-evenly; padding: 5px 0;" *matCellDef="let tipo"
+                                        fxLayout="row">
+
+                                        <button mat-flat-button color="primary" (click)='verFinanciamiento(tipo)'
+                                            class="mr-4">
+                                            <mat-icon>visibility</mat-icon>
+                                        </button>
+
+                                        <button mat-flat-button color="accent" (click)='editarFinanciamiento(tipo)'
+                                            class="mr-4">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+
+                                        <button mat-flat-button color="warn" (click)='eliminarFinanciamiento(tipo)'>
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+                                <mat-row *matRowDef="let product; columns: displayedColumns" class="product" matRipple>
+                                </mat-row>
+                            </mat-table>
+                            <div fxLayoutAlign="center center" class="mt-16">
+                                <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"
+                                    previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB LISTA DE FINANCIAMIENTO-->
+
+                <!--EMPIEZA TAB EDITAR FINANCIAMIENTO-->
+                <mat-tab label="Editar financiamiento" *ngIf="tabEditar === true">
+                    <!--CONTENIDO-->
+                    <div class="p-24 card" fxLayout="column" [formGroup]="formulario" fxFlex="1 0 auto"
+                        style="width: 100% !important;">
+
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;">
+                            <div fxLayoutAlign="start center" class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <div fxLayoutAlign="start center">
+                                <label>Acá puedes <strong>editar un financiamiento.</strong></label>
+                            </div>
+                        </div>
+
+                        <div class="mat-card card p-12" fxLayout="column" fxFlex="100" style="border-radius: 5px;">
+
+                            <div fxFlex="100" fxLayout="row">
+                                <!--INPUT NOMBRE-->
+                                <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput formControlName="NOMBRE" />
+
+                                    <mat-error>Por favor ingrese un nombre.</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                    <mat-label>Materia</mat-label>
+                                    <mat-select formControlName="ID_MATERIA">
+                                        <mat-option *ngFor="let c of listaMaterias" [value]="c.ID">
+                                            {{c.NOMBRE}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error>Por favor seleccione una materia.</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex="100" fxLayout="row">
+                                <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                                    <mat-label>Fecha Inicio</mat-label>
+                                    <input readonly matInput [matDatepicker]="startDatePicker"
+                                        formControlName="fecha_inicio" />
+
+                                    <mat-datepicker-toggle style="color: #285ba7" matSuffix [for]="startDatePicker">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #startDatePicker></mat-datepicker>
+                                    <mat-error>Ingrese la fecha de inicio.</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                    <mat-label>Fecha vencimiento</mat-label>
+                                    <input readonly matInput [matDatepicker]="vencimientoDatePicker"
+                                        formControlName="fecha_fin" />
+
+                                    <mat-datepicker-toggle style="color: #285ba7" matSuffix
+                                        [for]="vencimientoDatePicker">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #vencimientoDatePicker></mat-datepicker>
+                                    <mat-error>Ingrese la fecha de vencimiento.</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- SELECT CLIENTE ( SOLO PARA SUPERADMIN ) -->
+                            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                <mat-label>Cliente</mat-label>
+                                <mat-select formControlName="ID_CLIENTE">
+                                    <mat-option *ngFor="let c of listaClientes" [value]="c.ID">
+                                        {{c.NOMBRE}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Por favor seleccione un cliente.</mat-error>
+                            </mat-form-field>
+
+                            <div formArrayName="TIPOS">
+                                <div *ngFor="let a of this.arrayTipos; let i = index">
+                                    <div fxFlex="100" fxLayout="row">
+                                        <!-- SELECT TIPO FINANCIAMIENTO -->
+                                        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                            <mat-label>Tipo financiamiento</mat-label>
+                                            <mat-select [(ngModel)]="a.ID_TIPO" [ngModelOptions]="{standalone: true}">
+                                                <mat-option *ngFor="let c of listaTipoFinanciamiento" [value]="c.ID">
+                                                    {{c.NOMBRE}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error>Por favor seleccione un tipo de financiamiento.</mat-error>
+                                        </mat-form-field>
+
+                                        <!-- INPUT CANTIDAD -->
+                                        <mat-form-field appearance="outline" fxFlex="20" class="pr-4 pl-4">
+                                            <mat-label>Cantidad</mat-label>
+                                            <input matInput type="number" [(ngModel)]="a.CANTIDAD"
+                                                [ngModelOptions]="{standalone: true}" />
+
+                                            <mat-error>Por favor ingrese una cantidad.</mat-error>
+                                        </mat-form-field>
+
+                                        <!-- INPUT MONTO -->
+                                        <mat-form-field appearance="outline" fxFlex="20" class="pr-4">
+                                            <mat-label>Monto</mat-label>
+                                            <input matInput type="number" [(ngModel)]="a.MONTO"
+                                                [ngModelOptions]="{standalone: true}" />
+
+                                            <mat-error>Por favor ingrese un monto.</mat-error>
+                                        </mat-form-field>
+
+                                        <button mat-flat-button color="warn" fxFlex="10"
+                                            style="height: 58px; margin-top: 4px;"
+                                            (click)="quitarTipoFinanciamientoDesdeEditar(i)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button mat-flat-button style="
+                                 width: fit-content;
+                                 border-radius: 50%;
+                                 align-self: center;
+                                 height: 60px;
+                                 margin-bottom: 50px;;
+                                 background-color: green;
+                                 color: #fff;" (click)="agregarTipoFinanciamientoDesdeEditar()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+
+                            <!--BOTON AGREGAR-->
+
+                            <button mat-flat-button color="accent"
+                                [ngClass]="this.formulario.invalid || this.arrayTipos.length === 0 ? 'disabled':'boton-con-fondo'"
+                                [disabled]="this.formulario.invalid || this.arrayTipos.length === 0"
+                                (click)="guardarCambios()">
+                                Guardar cambios
+                            </button>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB EDITAR FINANCIAMIENTO-->
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

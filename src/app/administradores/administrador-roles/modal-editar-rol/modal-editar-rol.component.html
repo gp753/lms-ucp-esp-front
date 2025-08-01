@@ -1,0 +1,24 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+
+    <div fxFlex="100" fxLayout="column" class="mb-12" [formGroup]="formulario" style="width: 100% !important;">
+        <!--INPUT NOMBRE-->
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" />
+
+            <mat-error>Por favor ingrese un nombre.</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" style="width: 100%;">
+        <div class="mr-24" style="width: 50%;">
+            <button mat-flat-button color="accent" class="boton-sin-fondo"
+                (click)="cerrarDialog('cancelar')">Cancelar</button>
+        </div>
+        <div style="width: 50%;">
+            <button [disabled]="this.formulario.invalid" fxFlex="100" mat-flat-button color="accent"
+                [ngClass]="this.formulario.invalid ? 'disabled':'boton-con-fondo'"
+                (click)="cerrarDialog('eliminar')">Guardar</button>
+        </div>
+    </div>
+</div>

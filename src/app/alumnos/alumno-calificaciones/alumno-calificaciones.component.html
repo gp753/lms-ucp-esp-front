@@ -1,0 +1,167 @@
+<div fxLayout="column" fxFlex>
+
+
+    <!--HEADER-->
+    <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+        <!--<div>
+            <button mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>-->
+        <div>
+            <h1 [@animate]="{
+                value: '*',
+                params: { delay: '100ms', y: '25px' }
+            }">Calificaciones</h1>
+        </div>
+    </div>
+    <!-- / HEADER-->
+
+    <div fxLayout="column" class="p-24">
+        <!--CARD AVISO-->
+
+        <div class="mat-card p-12" fxLayout="row" fxLayoutAlign="start center" style="border-radius: 5px;">
+            <div class="mr-8">
+                <mat-icon style="font-weight: lighter;font-size: 50px;width: fit-content;height: auto;color: #2295d3;">
+                    info</mat-icon>
+            </div>
+
+            <div>
+                <label>En esta sección <strong>podrás ver el avance de tus estudios</strong></label>
+            </div>
+        </div>
+        <!-- / CARD AVISO-->
+
+        <!--CONTENIDO-->
+        <div fxFlex="100" fxLayout="column">
+
+            <div fxLayout="column" class="mt-24 mb-24">
+                <div style="background: #F0F0F0; border-top-left-radius: 5px; border-top-right-radius: 5px; height: 42px;"
+                    fxLayoutAlign="start center">
+                    <label style="font-size: 16px; color: #656565; margin-left: 20px;">Información del
+                        alumno</label>
+                </div>
+
+                <div class="contenedor-info-alumno">
+                    <div class="encolumnar contenedor-foto">
+                        <!-- <div class="card-foto">
+                            <img class="foto"
+                                src="https://revistaeducacionvirtual.com/wp-content/uploads/2016/10/estudiante-feliz.jpg">
+                        </div> -->
+
+                        <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+                            <h1 class="tit">{{datos['nombre']}}</h1>
+                            <!-- <label style="color: #656565;">Alumna de "Materia"</label> -->
+                        </div>
+                    </div>
+
+                    <div class="contenedor-datos">
+                        <div fxLayout="column" fxFlex="1 0 auto">
+                            <div fxLayout="column" style="margin-bottom: 10px;">
+                                <label class="cont">Número de documento</label>
+                                <label class="cont" style="font-weight: bold;">
+                                    {{datos.documento == null ?'-':datos.documento}}</label>
+                            </div>
+
+                            <!-- <div fxLayout="column">
+                                    <label class="cont">Unidad académica</label>
+                                    <label class="cont" style="font-weight: bold;">Pregrado UCP</label>
+                                </div> -->
+                        </div>
+
+                        <div fxLayout="column" fxFlex="1 0 auto">
+                            <div fxLayout="column" style="margin-bottom: 10px;">
+                                <label class="cont">Estado</label>
+                                <label class="cont" style="font-weight: bold;">Cursando</label>
+                            </div>
+                        </div>
+
+                        <!-- <div fxLayout="column" fxFlex="1 0 auto">
+                            <div fxLayout="column">
+                                <label class="cont">Porcentaje avance</label>
+                                <label class="cont" style="font-weight: bold;">20%</label>
+                            </div>
+                            <div fxLayout="column" style="margin-bottom: 10px;">
+                                    <label class="cont">Año de ingreso</label>
+                                    <label class="cont" style="font-weight: bold;">2022</label>
+                                </div>
+
+                                <div fxLayout="column">
+                                    <label class="cont">Regido por reglamento</label>
+                                    <label class="cont" style="font-weight: bold;">Reglamento 2022</label>
+                                </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+
+            <div fxLayout="column" fxFlex="100" class="desktop">
+                <div class="header-tabla" fxLayoutAlign="start" fxLayout="row">
+                    <div fxFlex='50' fxLayoutAlign="start center">
+                        <mat-icon style="color: #fff; margin-right: 10px; margin-left: 10px;">star</mat-icon>
+                        <label style="color: #fff;">Materias</label>
+                    </div>
+
+                    <div fxFlex='25' fxLayoutAlign="start center">
+                        <label style="color: #fff;">Puntaje</label>
+                    </div>
+
+                    <div fxFlex='25' fxLayoutAlign="start center" style="margin-right: 10px;">
+                        <label style="color: #fff;">Estado</label>
+                    </div>
+
+                </div>
+                <div class="mat-card p-16" fxLayout="row" fxFlex="100"
+                    *ngFor="let c of datos['alumnoMateriasCalificaciones']">
+
+                    <div fxLayout="column" fxFlex="50">
+                        <label class="mb-8" style="color: #656565;">{{c.nombre}}</label>
+                    </div>
+
+                    <div fxLayout="column" fxFlex="25">
+                        <label class="mb-8" style="color: #656565;">{{c.puntaje}}</label>
+                    </div>
+
+                    <div fxLayout="column" fxFlex="25">
+                        <label class="mb-8" *ngIf="c.estado == 'Aprobado'" style=" color: #2aa559">{{c.estado}}</label>
+                        <label class="mb-8" *ngIf="c.estado == 'Pendiente'"
+                            style=" color: #FFBD2E;">{{c.estado}}</label>
+                        <label class="mb-8" *ngIf="c.estado == 'Reprobado'"
+                            style=" color: #c41818;">{{c.estado}}</label>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOBILE -->
+            <div class="mobile">
+                <div *ngFor="let c of datos['alumnoMateriasCalificaciones']">
+                    <h1>Materia</h1>
+                    <p>{{c.nombre}}</p>
+                    <div style="display: flex; flex-direction: row; width: 100%;">
+                        <div style="width: 50%;">
+                            <h1>Puntaje</h1>
+                            <p>{{c.puntaje}}</p>
+                        </div>
+                        <div style="width: 50%;">
+                            <h1>Materia</h1>
+                            <label class="mb-8" *ngIf="c.estado == 'Aprobado'"
+                                style=" color: #2aa559">{{c.estado}}</label>
+                            <label class="mb-8" *ngIf="c.estado == 'Pendiente'"
+                                style=" color: #FFBD2E;">{{c.estado}}</label>
+                            <label class="mb-8" *ngIf="c.estado == 'Reprobado'"
+                                style=" color: #c41818;">{{c.estado}}</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- / MOBILE -->
+
+        </div>
+        <!-- / CONTENIDO-->
+    </div>
+
+
+
+</div>

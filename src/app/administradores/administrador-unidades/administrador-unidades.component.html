@@ -1,0 +1,851 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+        <!--HEADER NORMAL-->
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Unidades
+                </h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto">
+            <mat-tab-group
+                [(selectedIndex)]="tabIndex"
+                (selectedTabChange)="tabChage($event)"
+            >
+                <!-- EMPIEZA TAB MATERIAS -->
+                <mat-tab label="Materias">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div
+                            class="mat-card card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                            fxLayoutAlign="start center"
+                        >
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                Acá puedes
+                                <strong>crear una Materia</strong>
+                            </label>
+                        </div>
+
+                        <div
+                            class="mat-card card p-12"
+                            fxLayout="column"
+                            fxFlex="100"
+                            style="border-radius: 5px"
+                        >
+                            <div
+                                fxFlex="100"
+                                fxLayout="row"
+                                fxLayoutAlign="end center"
+                            >
+                                <!-- <div class="matFormField mr-16" fxFlex="70">
+                                    <input
+                                        style="
+                                            border-radius: 50px;
+                                            height: 55px;
+                                            background: rgb(240, 240, 240);
+                                            width: 100%;
+                                        "
+                                        placeholder="Buscar..."
+                                    />
+                                </div> -->
+
+                                <div
+                                    fxFlex="30"
+                                    style="
+                                        padding-bottom: 21.5px;
+                                        margin-top: 4px;
+                                        margin-bottom: 4px;
+                                    "
+                                >
+                                    <button
+                                        mat-flat-button
+                                        color="accent"
+                                        class="boton-con-fondo"
+                                        style="width: 100%"
+                                        (click)="modalCrearMateria()"
+                                    >
+                                        Crear materia <mat-icon>add</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <mat-table
+                                fxFlex="1 0 auto"
+                                class="products-table"
+                                #table
+                                [dataSource]="lista"
+                                [@animateStagger]="{ value: '50' }"
+                                fusePerfectScrollbar
+                            >
+                                <!-- Columna NOMBRE -->
+                                <ng-container matColumnDef="nombre">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                    >
+                                        <mat-form-field
+                                            appearance="outline"
+                                            style="width: 90%"
+                                        >
+                                            <mat-label>
+                                                {{ "Nombre" }}</mat-label
+                                            >
+                                            <input
+                                                (click)="
+                                                    $event.stopPropagation()
+                                                "
+                                                (keydown.space)="
+                                                    $event.stopPropagation()
+                                                "
+                                                (keyup)="filter('NOMBRE')"
+                                                [(ngModel)]="filters.NOMBRE"
+                                                matInput
+                                                type="text"
+                                                placeholder="Nombre"
+                                            />
+                                            <button
+                                                mat-icon-button
+                                                matSuffix
+                                                (click)="filters.NOMBRE = ''"
+                                                (click)="filter('NOMBRE')"
+                                            >
+                                                <mat-icon>clear</mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let m"
+                                    >
+                                        <p>{{ m.NOMBRE }}</p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna IMAGEN -->
+                                <ng-container matColumnDef="imagen">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                    >
+                                        Imagen
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let m"
+                                    >
+                                        <img
+                                            style="width: 90px; padding: 10px 0"
+                                            [src]="
+                                                'https://apilms.central.edu.py/media/files/' +
+                                                m.LINK_IMAGEN
+                                            "
+                                        />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna GRUPO -->
+                                <ng-container matColumnDef="grupo">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                    >
+                                        <mat-form-field
+                                            appearance="outline"
+                                            style="width: 90%"
+                                        >
+                                            <mat-label>
+                                                {{ "Grupo" }}</mat-label
+                                            >
+                                            <input
+                                                (click)="
+                                                    $event.stopPropagation()
+                                                "
+                                                (keydown.space)="
+                                                    $event.stopPropagation()
+                                                "
+                                                (keyup)="filter('GRUPO')"
+                                                [(ngModel)]="filters.GRUPO"
+                                                matInput
+                                                type="text"
+                                                placeholder="Grupo"
+                                            />
+                                            <button
+                                                mat-icon-button
+                                                matSuffix
+                                                (click)="filters.GRUPO = ''"
+                                                (click)="filter('GRUPO')"
+                                            >
+                                                <mat-icon>clear</mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let m"
+                                    >
+                                        <p>{{ m.GRUPO }}</p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna PUBLICADO -->
+                                <ng-container matColumnDef="publicado">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                    >
+                                        <mat-form-field
+                                            appearance="outline"
+                                            style="width: 90%"
+                                        >
+                                            <mat-label>
+                                                {{ "Publicado" }}</mat-label
+                                            >
+                                            <mat-select
+                                                [(ngModel)]="filters.PUBLICADO"
+                                                (ngModelChange)="
+                                                    filter('PUBLICADO')
+                                                "
+                                            >
+                                                <mat-option [value]="''"
+                                                    >Todo</mat-option
+                                                >
+                                                <mat-option [value]="true"
+                                                    >Publicado</mat-option
+                                                >
+                                                <mat-option [value]="false"
+                                                    >No Publicado</mat-option
+                                                >
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let m"
+                                    >
+                                        <p>
+                                            {{
+                                                m.PUBLICADO
+                                                    ? "Publicado"
+                                                    : "No publicado"
+                                            }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="Acciones">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start start"
+                                        *matHeaderCellDef
+                                        >Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell
+                                        fxLayoutAlign="center"
+                                        *matCellDef="let m"
+                                        fxLayout="column"
+                                        class="p-4"
+                                    >
+                                        <mat-select
+                                            class="selector"
+                                            placeholder="Acciones"
+                                        >
+                                            <mat-option
+                                                style="color: #285ba7"
+                                                (click)="mostrarUnidades(m)"
+                                            >
+                                                Ver unidades
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #caad5f"
+                                                (click)="editarMateria(m)"
+                                            >
+                                                Editar materia
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #d427cb"
+                                                (click)="duplicarMateria(m)"
+                                            >
+                                                Duplicar materia
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #39ac4c"
+                                                (click)="secciones(m)"
+                                            >
+                                                Secciones
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #97ac39"
+                                                (click)="verAlumnos(m)"
+                                            >
+                                                Ver alumnos
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #9a5fca"
+                                                (click)="
+                                                    configurarCertificados(m)
+                                                "
+                                            >
+                                                Configurar Certificados
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #5fbeca"
+                                                (click)="descargarPDF(m)"
+                                            >
+                                                Ver Certificado
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #d42727"
+                                                (click)="eliminarMateria(m)"
+                                            >
+                                                Eliminar materia
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row
+                                    *matHeaderRowDef="
+                                        displayedColumns;
+                                        sticky: true
+                                    "
+                                ></mat-header-row>
+
+                                <mat-row
+                                    *matRowDef="
+                                        let lista;
+                                        columns: displayedColumns
+                                    "
+                                    class="product"
+                                    matRipple
+                                >
+                                </mat-row>
+                            </mat-table>
+                            <mat-paginator
+                                [pageSize]="10"
+                                [pageSizeOptions]="[10, 20, 50, 100]"
+                            ></mat-paginator>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!-- TERMINA TAB MATERIAS -->
+
+                <!-- EMPIEZA TAB VER UNIDADES -->
+                <mat-tab label="Unidades" *ngIf="verUnidades">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div
+                            class="mat-card card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                            fxLayoutAlign="start center"
+                        >
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                Acá puedes
+                                <strong
+                                    >ver, editar y o eliminar unidades de la
+                                    materia</strong
+                                >
+                            </label>
+                        </div>
+
+                        <div
+                            class="mat-card card p-12"
+                            fxLayout="column"
+                            fxFlex="100"
+                            style="border-radius: 5px"
+                        >
+                            <div
+                                fxFlex="100"
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                            >
+                                <div class="matFormField mr-16" fxFlex="70">
+                                    <input
+                                        style="
+                                            border-radius: 50px;
+                                            height: 55px;
+                                            background: rgb(240, 240, 240);
+                                            width: 100%;
+                                        "
+                                        placeholder="Buscar..."
+                                    />
+                                </div>
+
+                                <div
+                                    fxFlex="30"
+                                    style="
+                                        padding-bottom: 21.5px;
+                                        margin-top: 4px;
+                                        margin-bottom: 4px;
+                                    "
+                                >
+                                    <button
+                                        mat-flat-button
+                                        color="accent"
+                                        class="boton-con-fondo2"
+                                        style="width: 100%"
+                                        (click)="modalCrearUnidad()"
+                                    >
+                                        Crear unidad
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <mat-table
+                                fxFlex="1 0 auto"
+                                class="products-table"
+                                #table
+                                [dataSource]="
+                                    unidades
+                                        | paginate
+                                            : {
+                                                  itemsPerPage: itemsPerPage,
+                                                  currentPage: p_unidades,
+                                                  id: 'tabla_unidades'
+                                              }
+                                "
+                                [@animateStagger]="{ value: '50' }"
+                                fusePerfectScrollbar
+                                matSort
+                            >
+                                <ng-container matColumnDef="nombre">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                    >
+                                        Nombre
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let u"
+                                    >
+                                        <p style="color: #656565 !important">
+                                            {{ u.NOMBRE }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="materia">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                    >
+                                        Materia
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let u"
+                                    >
+                                        <p style="color: #656565 !important">
+                                            {{ u.MATERIA }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="link">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                    >
+                                        Link manual
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let u"
+                                    >
+                                        <img
+                                            style="
+                                                cursor: pointer;
+                                                width: 30px;
+                                                height: fit-content;
+                                                align-self: center;
+                                            "
+                                            src="assets/icons/iconos-angular-material/download.svg"
+                                            (click)="
+                                                descargarManual(u.LINK_MANUAL)
+                                            "
+                                        />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="educaplay">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                    >
+                                        Educaplay
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start center"
+                                        *matCellDef="let u"
+                                    >
+                                        <mat-icon
+                                            *ngIf="u.mostrar === true"
+                                            style="
+                                                cursor: pointer;
+                                                margin-right: 5px;
+                                            "
+                                            (click)="
+                                                linkEducapla(u.LINK_EDUCAPLAY)
+                                            "
+                                        >
+                                            link</mat-icon
+                                        >
+
+                                        <p *ngIf="u.mostrar === false">
+                                            No hay link
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start start"
+                                        *matHeaderCellDef
+                                        >Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell
+                                        fxLayoutAlign=" center"
+                                        *matCellDef="let u"
+                                        fxLayout="row"
+                                    >
+                                        <mat-select
+                                            class="selector"
+                                            placeholder="Acciones"
+                                        >
+                                            <mat-option
+                                                style="color: #285ba7"
+                                                (click)="mostrarSubunidades(u)"
+                                            >
+                                                Ver sub-unidades
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #5fbeca"
+                                                (click)="modalEditarUnidad(u)"
+                                            >
+                                                Editar unidad
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #d42727"
+                                                (click)="modalEliminarUnidad(u)"
+                                            >
+                                                Eliminar unidad
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row
+                                    *matHeaderRowDef="
+                                        tablaUnidades;
+                                        sticky: true
+                                    "
+                                ></mat-header-row>
+
+                                <mat-row
+                                    *matRowDef="
+                                        let lista;
+                                        columns: tablaUnidades
+                                    "
+                                    class="product"
+                                    matRipple
+                                >
+                                </mat-row>
+                            </mat-table>
+
+                            <div
+                                style="
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                "
+                                *ngIf="this.unidades.length === 0"
+                            >
+                                <mat-icon class="info2">info</mat-icon>
+                                <h1>No hay unidades para mostrar</h1>
+                            </div>
+
+                            <div fxLayoutAlign="center center" class="mt-16">
+                                <pagination-controls
+                                    (pageChange)="p_unidades = $event"
+                                    id="tabla_unidades"
+                                    autoHide="true"
+                                    responsive="true"
+                                    previousLabel="Anterior"
+                                    nextLabel="Siguiente"
+                                >
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!-- TERMINA TAB VER UNIDADES -->
+
+                <!-- EMPIEZA TAB SUBUNIDADES -->
+                <mat-tab label="Sub-unidades" *ngIf="verSubunidades">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div
+                            class="mat-card card p-12 mb-24"
+                            fxLayout="row"
+                            fxFlex="1 0 auto"
+                            style="border-radius: 5px"
+                            fxLayoutAlign="start center"
+                        >
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                Acá puedes
+                                <strong
+                                    >ver, editar y o eliminar sub-unidades de la
+                                    unidad</strong
+                                >
+                            </label>
+                        </div>
+
+                        <div
+                            class="mat-card card p-12"
+                            fxLayout="column"
+                            fxFlex="100"
+                            style="border-radius: 5px"
+                        >
+                            <div
+                                fxFlex="100"
+                                fxLayout="row"
+                                fxLayoutAlign="start center"
+                            >
+                                <div class="matFormField mr-16" fxFlex="70">
+                                    <input
+                                        style="
+                                            border-radius: 50px;
+                                            height: 55px;
+                                            background: rgb(240, 240, 240);
+                                            width: 100%;
+                                        "
+                                        placeholder="Buscar..."
+                                    />
+                                </div>
+
+                                <div
+                                    fxFlex="30"
+                                    style="
+                                        padding-bottom: 21.5px;
+                                        margin-top: 4px;
+                                        margin-bottom: 4px;
+                                    "
+                                >
+                                    <button
+                                        mat-flat-button
+                                        color="accent"
+                                        class="boton-con-fondo3"
+                                        style="width: 100%"
+                                        (click)="modalCrearSubunidad()"
+                                    >
+                                        Crear sub-unidad
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <mat-table
+                                fxFlex="1 0 auto"
+                                class="products-table"
+                                #table
+                                [dataSource]="
+                                    subunidades
+                                        | paginate
+                                            : {
+                                                  itemsPerPage: itemsPerPage,
+                                                  currentPage: p_subUnidades,
+                                                  id: 'tabla_subUnidades'
+                                              }
+                                "
+                                [@animateStagger]="{ value: '50' }"
+                                fusePerfectScrollbar
+                                matSort
+                            >
+                                <ng-container matColumnDef="titulo">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header
+                                    >
+                                        Titulo
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let s"
+                                    >
+                                        <p style="color: #656565 !important">
+                                            {{ s.TITULO }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="texto">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header
+                                    >
+                                        Texto
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let s"
+                                    >
+                                        <p style="color: #656565 !important">
+                                            {{ s.TEXTO }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="unidad">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start"
+                                        *matHeaderCellDef
+                                        mat-sort-header
+                                    >
+                                        Unidad
+                                    </mat-header-cell>
+                                    <mat-cell
+                                        fxLayoutAlign="start"
+                                        *matCellDef="let s"
+                                    >
+                                        <p style="color: #656565 !important">
+                                            {{ s.UNIDAD }}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell
+                                        fxLayoutAlign="start start"
+                                        *matHeaderCellDef
+                                        >Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell
+                                        fxLayoutAlign=" center"
+                                        *matCellDef="let s"
+                                        fxLayout="row"
+                                    >
+                                        <mat-select
+                                            class="selector"
+                                            placeholder="Acciones"
+                                        >
+                                            <mat-option
+                                                style="color: #285ba7"
+                                                (click)="verSubUnidad(s)"
+                                            >
+                                                Ver sub-unidad
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #5fbeca"
+                                                (click)="
+                                                    modalEditarSubunidad(s)
+                                                "
+                                            >
+                                                Editar sub-unidad
+                                            </mat-option>
+
+                                            <mat-option
+                                                style="color: #d42727"
+                                                (click)="
+                                                    modalEliminarSubunidad(s)
+                                                "
+                                            >
+                                                Eliminar sub-unidad
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row
+                                    *matHeaderRowDef="
+                                        tablaSubUnidades;
+                                        sticky: true
+                                    "
+                                ></mat-header-row>
+
+                                <mat-row
+                                    *matRowDef="
+                                        let lista;
+                                        columns: tablaSubUnidades
+                                    "
+                                    class="product"
+                                    matRipple
+                                >
+                                </mat-row>
+                            </mat-table>
+
+                            <div
+                                style="
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                "
+                                *ngIf="this.subunidades.length === 0"
+                            >
+                                <mat-icon class="info2">info</mat-icon>
+                                <h1>No hay sub-unidades para mostrar</h1>
+                            </div>
+
+                            <div fxLayoutAlign="center center" class="mt-16">
+                                <pagination-controls
+                                    (pageChange)="p_subUnidades = $event"
+                                    id="tabla_subUnidades"
+                                    autoHide="true"
+                                    responsive="true"
+                                    previousLabel="Anterior"
+                                    nextLabel="Siguiente"
+                                >
+                                </pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!-- TERMINA TAB SUBUNIDADES -->
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

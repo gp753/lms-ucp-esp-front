@@ -1,0 +1,81 @@
+<div
+    style="display: flex; flex-direction: column; align-items: center"
+    [formGroup]="form"
+>
+    <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Descripcion</mat-label>
+        <input matInput formControlName="descripcion" />
+        <mat-error>Este campo es requerido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Archivo</mat-label>
+        <input matInput [value]="nombreArchivo" />
+
+        <input
+            type="file"
+            style="display: none"
+            #archivo
+            (change)="onFileSelect($event)"
+        />
+
+        <div style="display: flex; flex-direction: row" matSuffix>
+            <!-- subir -->
+            <button
+                mat-icon-button
+                *ngIf="!nombreArchivo"
+                (click)="archivo.click()"
+            >
+                <mat-icon>attach_file</mat-icon>
+            </button>
+
+            <!-- ver -->
+            <button
+                mat-icon-button
+                *ngIf="nombreArchivo"
+                (click)="verArchivo()"
+            >
+                <mat-icon>visibility</mat-icon>
+            </button>
+
+            <!-- editar -->
+            <button
+                mat-icon-button
+                *ngIf="nombreArchivo"
+                (click)="archivo.click()"
+            >
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
+        <mat-error>Este campo es requerido.</mat-error>
+    </mat-form-field>
+</div>
+
+<div
+    style="
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    "
+>
+    <button
+        mat-flat-button
+        color="accent"
+        class="boton-sin-fondo"
+        mat-dialog-close
+    >
+        Cancelar
+    </button>
+
+    <button
+        [disabled]="this.form.invalid"
+        mat-flat-button
+        color="accent"
+        [ngClass]="this.form.invalid ? 'disabled' : 'boton-con-fondo'"
+        (click)="guardar()"
+    >
+        Guardar
+    </button>
+</div>

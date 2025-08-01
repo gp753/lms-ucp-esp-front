@@ -1,0 +1,349 @@
+<div class="page-layout simple">
+    <div fxLayout="column">
+        <div
+            class="header"
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxFlex="1 0 auto"
+        >
+            <!--<div>
+                <button mat-button>
+                  <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1
+                    [@animate]="{
+                        value: '*',
+                        params: { delay: '100ms', y: '25px' }
+                    }"
+                >
+                    Foro
+                </h1>
+            </div>
+        </div>
+
+        <!--CONTENIDO-->
+
+        <mat-tab-group (selectedTabChange)="tabChange($event)">
+            <mat-tab label="Lista foros">
+                <div
+                    class="p-24 card"
+                    fxLayout="column"
+                    fxFlex="1 0 auto"
+                    style="width: 100% !important"
+                >
+                    <div
+                        class="mat-card card p-12 mb-24"
+                        fxLayout="row"
+                        fxFlex="1 0 auto"
+                        style="border-radius: 5px"
+                    >
+                        <div fxLayoutAlign="start center" class="mr-12">
+                            <mat-icon class="info">info</mat-icon>
+                        </div>
+                        <div fxLayoutAlign="start center">
+                            <label
+                                >Acá puedes ver<strong
+                                    >la lista de foros, editarlas o
+                                    eliminarlas</strong
+                                ></label
+                            >
+                        </div>
+                    </div>
+
+                    <div
+                        class="mat-card card p-12"
+                        fxFlex="1 0 auto"
+                        fxLayout="column"
+                        style="border-radius: 5px"
+                        fxLayoutAlign="start center"
+                    >
+                        <div
+                            style="
+                                width: 100%;
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: space-between;
+                            "
+                        >
+                            <div
+                                class="mr-16"
+                                style="
+                                    padding-bottom: 21.5px;
+                                    margin: 4px 0;
+                                    width: 69%;
+                                "
+                            >
+                                <input
+                                    style="
+                                        border-radius: 50px;
+                                        height: 55px;
+                                        background: rgb(240, 240, 240);
+                                        width: 100%;
+                                    "
+                                    placeholder="Buscar..."
+                                />
+                            </div>
+
+                            <mat-form-field
+                                appearance="outline"
+                                style="width: 29%"
+                            >
+                                <mat-label>Buscar por materia</mat-label>
+                                <mat-select>
+                                    <mat-option (click)="getForo()"
+                                        >Todos los foros</mat-option
+                                    >
+                                    <mat-option
+                                        *ngFor="let m of materias"
+                                        [value]="m.ID"
+                                        (click)="filtarForoPorMateria(m.ID)"
+                                    >
+                                        {{ m.NOMBRE }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <mat-table
+                            style="width: 100%"
+                            class="products-table"
+                            #table
+                            [dataSource]="
+                                foros
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            "
+                            [@animateStagger]="{ value: '50' }"
+                            fusePerfectScrollbar
+                            matSort
+                            (matSortChange)="sortData($event)"
+                        >
+                            <!-- Columna MATERIA -->
+                            <ng-container matColumnDef="materia">
+                                <mat-header-cell
+                                    fxLayoutAlign="start"
+                                    *matHeaderCellDef
+                                    mat-sort-header="materia"
+                                >
+                                    Materia
+                                </mat-header-cell>
+                                <mat-cell
+                                    fxLayoutAlign="start"
+                                    *matCellDef="let f"
+                                >
+                                    <p class="text-truncate">
+                                        {{ f.MATERIA }}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Columna TITULO -->
+                            <ng-container matColumnDef="titulo">
+                                <mat-header-cell
+                                    fxLayoutAlign="start"
+                                    *matHeaderCellDef
+                                    mat-sort-header="titulo"
+                                >
+                                    Titulo
+                                </mat-header-cell>
+                                <mat-cell
+                                    fxLayoutAlign="start"
+                                    *matCellDef="let f"
+                                >
+                                    <p class="category text-truncate">
+                                        {{ f.TITULO }}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Columna TITULO -->
+                            <ng-container matColumnDef="descripcion">
+                                <mat-header-cell
+                                    fxLayoutAlign="start"
+                                    *matHeaderCellDef
+                                    mat-sort-header="descripcion"
+                                >
+                                    Descripcion
+                                </mat-header-cell>
+                                <mat-cell
+                                    fxLayoutAlign="start"
+                                    *matCellDef="let f"
+                                >
+                                    <p class="category text-truncate">
+                                        {{ f.DESCRIPCION }}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Columna ACCIONES -->
+                            <ng-container matColumnDef="acciones">
+                                <mat-header-cell
+                                    fxLayoutAlign="start start"
+                                    *matHeaderCellDef
+                                    >Acciones
+                                </mat-header-cell>
+
+                                <mat-cell
+                                    fxLayoutAlign=" center"
+                                    *matCellDef="let f"
+                                    fxLayout="row"
+                                >
+                                    <mat-select
+                                        class="selector"
+                                        placeholder="Acciones"
+                                    >
+                                        <mat-option
+                                            style="color: #285ba7"
+                                            (click)="verForo(f)"
+                                        >
+                                            Ver foro
+                                        </mat-option>
+
+                                        <mat-option
+                                            style="color: #5fbeca"
+                                            (click)="editarForo(f)"
+                                        >
+                                            Editar foro
+                                        </mat-option>
+
+                                        <mat-option
+                                            style="color: #d42727"
+                                            (click)="eliminarForo(f)"
+                                        >
+                                            Eliminar foro
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row
+                                *matHeaderRowDef="
+                                    displayedColumns;
+                                    sticky: true
+                                "
+                            ></mat-header-row>
+
+                            <mat-row
+                                *matRowDef="
+                                    let product;
+                                    columns: displayedColumns
+                                "
+                                class="product"
+                                matRipple
+                            >
+                            </mat-row>
+                        </mat-table>
+                        <div fxLayoutAlign="center center" class="mt-16">
+                            <pagination-controls
+                                (pageChange)="p = $event"
+                                autoHide="true"
+                                responsive="true"
+                                previousLabel="Anterior"
+                                nextLabel="Siguiente"
+                            ></pagination-controls>
+                        </div>
+
+                        <h1
+                            *ngIf="this.foros.length === 0 && filtadoPorMateria"
+                        >
+                            Esta materia aun no tiene fotos
+                        </h1>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Crear foro">
+                <div
+                    class="p-24 card"
+                    fxLayout="column"
+                    fxFlex="1 0 auto"
+                    style="width: 100% !important"
+                >
+                    <div
+                        class="mat-card card p-12 mb-24"
+                        fxLayout="row"
+                        fxFlex="1 0 auto"
+                        style="border-radius: 5px"
+                    >
+                        <div fxLayoutAlign="start center" class="mr-12">
+                            <mat-icon class="info">info</mat-icon>
+                        </div>
+                        <div fxLayoutAlign="start center">
+                            <label
+                                >Acá puedes <strong>crear foros.</strong></label
+                            >
+                        </div>
+                    </div>
+
+                    <div
+                        class="mat-card card p-12"
+                        fxLayout="column"
+                        fxFlex="100"
+                        style="border-radius: 5px"
+                        [formGroup]="formForo"
+                    >
+                        <div fxLayout="column" fxFlex="100">
+                            <div fxFlex="100" fxLayout="row">
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="50"
+                                    class="pr-4"
+                                >
+                                    <mat-label>Titulo</mat-label>
+                                    <input matInput formControlName="TITULO" />
+                                    <mat-error
+                                        >El titulo es requerido</mat-error
+                                    >
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="outline"
+                                    fxFlex="50"
+                                    class="pl-4"
+                                >
+                                    <mat-label>Seleccione la materia</mat-label>
+                                    <mat-select formControlName="ID_MATERIA">
+                                        <mat-option
+                                            *ngFor="let m of materias"
+                                            [value]="m.ID"
+                                            >{{ m.NOMBRE }}</mat-option
+                                        >
+                                    </mat-select>
+                                    <mat-error
+                                        >La materia es requerido</mat-error
+                                    >
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <mat-form-field appearance="outline" fxFlex="100">
+                            <mat-label>Descripcion</mat-label>
+                            <input matInput formControlName="DESCRIPCION" />
+                            <mat-error>La descipcion es requerida</mat-error>
+                        </mat-form-field>
+
+                        <button
+                            mat-flat-button
+                            [class]="
+                                this.formForo.invalid
+                                    ? 'disabled'
+                                    : 'boton-con-fondo'
+                            "
+                            [disabled]="this.formForo.invalid"
+                            color="primary"
+                            (click)="agregarForo()"
+                        >
+                            Crear foro
+                        </button>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+        <!-- / CONTENIDO -->
+    </div>
+</div>

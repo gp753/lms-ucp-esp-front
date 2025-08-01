@@ -1,0 +1,123 @@
+<div fxLayout="column" fxFlex="1 0 auto" [formGroup]="form">
+    <div fxLayoutAlign="start center">
+        <h1 style="font-weight: bold;">Editar trabajo practico</h1>
+    </div>
+
+    <div fxFlex="1 0 auto" fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Fecha Inicio</mat-label>
+            <input readonly matInput [matDatepicker]="startDatePicker" formControlName="fecha_inicio" name="start" />
+
+            <mat-datepicker-toggle style="color: #285ba7" matSuffix [for]="startDatePicker">
+            </mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+            <mat-error>Ingrese la fecha de inicio.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Hora Inicio</mat-label>
+
+            <input matInput type="time" step="60" formControlName="hora_inicio" name="start" />
+
+            <mat-error>Ingrese la hora de inicio.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
+            <mat-label>Fecha Fin</mat-label>
+            <input readonly matInput [matDatepicker]="endDatePicker" formControlName="fecha_fin" name="start" />
+
+            <mat-datepicker-toggle style="color: #285ba7" matSuffix [for]="endDatePicker">
+            </mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+            <mat-error style="height: 27px">Ingrese la fecha de entrega.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Hora Fin</mat-label>
+            <input matInput type="time" step="60" formControlName="hora_fin" name="start" />
+
+            <mat-error>Ingrese la hora limite.</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxFlex="1 0 auto" fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Titulo</mat-label>
+            <input matInput formControlName="titulo" placeholder="Escriba el titulo del trabajo aqui" />
+            <mat-error>Por favor ingrese un titulo.</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxFlex=" 1 0 auto">
+        <mat-form-field appearance="outline" fxFlex="75" class="pr-4">
+            <mat-label>Formato de entrega</mat-label>
+            <input matInput formControlName="formatoEntrega" placeholder="Ejemplo: PDF 5 páginas máximo " />
+            <mat-error>Por favor ingrese el formato de
+                entrega.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Puntaje Maximo</mat-label>
+            <input type="number" matInput formControlName="calificacion" placeholder="Ej: 10" />
+            <mat-error>Por favor ingrese el puntaje maximo.</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxFlex=" 1 0 auto">
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Instrucciones</mat-label>
+            <textarea style="height: 150px" matInput formControlName="instrucciones"
+                placeholder="Escriba los requisitos técnicos del trabajo"></textarea>
+            <mat-error>Por favor ingrese las intrucciones.</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxFlex=" 1 0 auto" fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
+            <mat-label>Adjuntar enlace</mat-label>
+            <input matInput formControlName="link" placeholder="Ingrese el link aqui" />
+            <mat-error>Por favor ingrese un link.</mat-error>
+        </mat-form-field>
+
+        <div fxLayout="row" fxLayoutAlign="center center" fxFlex="30">
+            <div style="
+                                            margin-bottom: 4px;
+                                            margin-top: 4px;
+                                            padding-bottom: 21.5px;
+                                        ">
+                <label> Ver enlace :</label>
+                <!--<a
+                                            [href]="
+                                                'https://api.ucpvirtual.com.br/storage/medicina/trabalhos/' +
+                                                tpParaEditar.caminho
+                                            "
+                                            target="_blank"
+                                        >--><a style="cursor: pointer;">
+                    documento
+                </a>
+            </div>
+
+            <div style="
+                                            margin-bottom: 4px;
+                                            margin-top: 4px;
+                                            padding-bottom: 21.5px;
+                                        ">
+                <button mat-button color="accent" (click)="fileInput.click()">
+                    <mat-icon>edit</mat-icon>
+                    <input (change)="handleFileInput($event.target.files)" #fileInput type="file"
+                        style="display: none" />
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="end" fxFlex="1 0 auto">
+        <button mat-raised-button color="accent" class="eliminar mr-12" (click)="modalEliminar()">
+            Eliminar trabajo
+        </button>
+        <button mat-raised-button color="accent" class="boton-con-fondo" (click)="actualizar()">
+            Actualizar trabajo
+        </button>
+    </div>
+
+</div>

@@ -1,0 +1,63 @@
+<div fxFelx="100" fxLayout="column" [formGroup]="form" *ngIf="mostrarPreguntas === false">
+    <div fxFlex="100" fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex="40" class="pr-4">
+            <mat-label>Titulo</mat-label>
+            <input matInput formControlName="TITULO">
+            <mat-error>El titulo es requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="40" class="pl-4 pr-4">
+            <mat-label>Seleccione la materia</mat-label>
+            <mat-select formControlName="ID_MATERIA">
+                <mat-option *ngFor="let m of materias" [value]="m.ID">{{m.NOMBRE}}</mat-option>
+            </mat-select>
+            <mat-error>La materia es requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="20" class="pl-4">
+            <mat-label>Cantidad de intentos</mat-label>
+            <input matInput formControlName="CANTIDAD_INTENTOS" type="number">
+            <mat-error>La cantidad de intentos es requerido</mat-error>
+        </mat-form-field>
+    </div>
+
+    <button mat-flat-button color="accent" class="boton-con-fondo mb-8" (click)="mostrarPreguntas = true">Ver
+        preguntas</button>
+
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <button mat-flat-button color="accent" class="boton-sin-fondo"
+            (click)="cerrarDialog('cancelar')">Cancelar</button>
+
+        <button mat-flat-button color="accent" class="boton-con-fondo"
+            (click)="cerrarDialog('guardar')">Guardar</button>
+    </div>
+</div>
+
+<div fxFelx="100" fxLayout="column" *ngIf="mostrarPreguntas === true">
+    <button mat-flat-button color="accent" class="boton-con-fondo" (click)="mostrarPreguntas = false">Volver</button>
+
+    <div *ngFor="let p of preguntas;" class="card">
+        <div style="display: flex; flex-direction: row; align-items: center;">
+            <h1 class="mr-8">{{p.pregunta}}</h1>
+
+            <button mat-flat-button color="accent" class="mr-4" (click)="editarPregunta(p)">
+                <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-flat-button color="warn" (click)="eliminarPregunta(p)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap;">
+            <div style="display: flex; flex-direction: row;width: 50%; align-items: center;"
+                *ngFor="let r of p.respuestas; let i = index">
+                <p>{{i+1}} - {{r.respuesta}}</p>
+
+                <button mat-flat-button color="accent" class="ml-8 mr-8" (click)="editarRespuesta(r)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

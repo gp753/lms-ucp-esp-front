@@ -1,0 +1,90 @@
+<div fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-24">
+        <mat-form-field appearance="outline" fxFlex="75" class="pr-4">
+            <mat-label>Buscar</mat-label>
+            <input [(ngModel)]="term" matInput [ngModelOptions]="{ standalone: true }" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Mostrar</mat-label>
+            <mat-select [(value)]="itemsPerPage" (selectionChange)="p = 1">
+                <mat-option value="5"> 5 </mat-option>
+                <mat-option value="10"> 10 </mat-option>
+                <mat-option value="15"> 15 </mat-option>
+                <mat-option value="20"> 20 </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <!--ACA TERMINA SELECCIONAR MOSTRAR-->
+
+    <mat-table fxFlex="1 0 auto" class="products-table" #table [dataSource]="
+                                lista
+                                    | filter: term
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            " [@animateStagger]="{ value: '50' }" fusePerfectScrollbar>
+
+        <!-- Columna NOMBRE -->
+        <ng-container matColumnDef="nombre">
+            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="nombre">
+                Nombre
+            </mat-header-cell>
+            <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                <p class="text-truncate">
+                    {{ lista.NOMBRE }}
+                </p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Columna APELLIDO -->
+        <ng-container matColumnDef="apellido">
+            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="apellido">
+                Apellido
+            </mat-header-cell>
+            <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                <p class="text-truncate">
+                    {{ lista.APELLIDO }}
+                </p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Columna DOCUMENTO -->
+        <ng-container matColumnDef="documento">
+            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="documento">
+                Documento
+            </mat-header-cell>
+            <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                <p class="text-truncate">
+                    {{ lista.DOCUMENTO }}
+                </p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Columna ACCIONES -->
+        <ng-container matColumnDef="asistencia">
+            <mat-header-cell fxLayoutAlign="start start" *matHeaderCellDef>Asistencia
+            </mat-header-cell>
+
+            <mat-cell fxLayoutAlign="center" *matCellDef="let product" fxLayout="column">
+                <mat-slide-toggle style="margin-left: 10px;" [(ngModel)]="product.presente">
+                </mat-slide-toggle>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+        <mat-row *matRowDef="let product; columns: displayedColumns" class="product" matRipple>
+        </mat-row>
+    </mat-table>
+
+    <div fxLayoutAlign="center center" class="mt-16" fxLayout="row">
+        <pagination-controls style="margin: 0 auto;" (pageChange)="p = $event" autoHide="true" responsive="true"
+            previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+
+        <button mat-flat-button color="primary" class="boton-con-fondo">Finalizar
+            asistencia</button>
+    </div>
+</div>

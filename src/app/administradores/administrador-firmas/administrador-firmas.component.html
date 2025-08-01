@@ -1,0 +1,181 @@
+<div class="page-layout simple">
+    <div fxFlex="1 0 auto" fxLayout="column">
+
+        <!--HEADER NORMAL-->
+        <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <!--<div>
+                <button mat-button>
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>-->
+            <div>
+                <h1 [@animate]="{
+                    value: '*',
+                    params: { delay: '100ms', y: '25px' }
+                }">Firmas</h1>
+            </div>
+        </div>
+        <!-- / HEADER NORMAL-->
+
+        <div fxFlex="1 0 auto">
+            <mat-tab-group (selectedTabChange)="tabChange($event)">
+
+                <!--EMPIEZA TAB CREAR ENCUESTA-->
+                <mat-tab label="Crear Firma">
+                    <!--CONTENIDO-->
+                    <div class="p-24 card" fxLayout="column" fxFlex="1 0 auto" style="width: 100% !important;">
+
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;">
+                            <div fxLayoutAlign="start center" class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <div fxLayoutAlign="start center">
+                                <label>Acá puedes <strong>cargar firmas.</strong></label>
+                            </div>
+                        </div>
+
+                        <div class="mat-card card p-12" fxLayout="column" fxFlex="100" style="border-radius: 5px;">
+
+                            <!--INPUT TITULO-->
+                            <div [formGroup]="formulario" fxLayout="column" fxFlex="100">
+                                <mat-form-field appearance="outline" fxFlex="100">
+                                    <mat-label>NOMBRE</mat-label>
+                                    <input matInput formControlName="NOMBRE" />
+                                    <mat-error>Por favor ingrese un nombre para el firmante.</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" fxFlex="100">
+                                    <mat-label>CARGO</mat-label>
+                                    <input matInput formControlName="CARGO" />
+                                    <mat-error>Por favor ingrese un cargo para el firmante.</mat-error>
+                                </mat-form-field>
+
+                                <div fxLayout="row" fxLayoutAlign="center" fxFlex="100" class="mb-24">
+                                    <div fxFlex="70">
+                                        <input style="display: none" type="file" (change)="onSelectFile($event)" #fileInput />
+                                        <button mat-flat-button color="accent" class="boton-con-fondo" (click)="fileInput.click()">
+                                            Subir imagen <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
+                                    <div fxLayout="row" fxFlex="100" class="mb-24" fxLayoutAlign="center">
+                                        <img [src]="imagenParaMostrar" style="max-width: 300px; height: auto" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
+                            <div style="margin-top: 20px; justify-content: space-between;" fxLayout="row"
+                                fxFlex="1 0 auto">
+
+                                <button mat-flat-button color="accent"
+                                    [ngClass]="this.formulario.invalid || imagenFile=== undefined ? 'disabled':'boton-con-fondo'"
+                                    [disabled]="this.formulario.invalid || imagenFile=== undefined"
+                                    (click)="guardarFirma()">
+                                    Guardar Firma
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB CREAR ENCUESTA-->
+
+                <!--EMPIEZA TAB LISTA DE ENCUESTAS-->
+                <mat-tab label="Lista de firmas">
+                    <div class="p-24" fxLayout="column" fxFlex="100">
+                        <div class="mat-card card p-12 mb-24" fxLayout="row" fxFlex="1 0 auto"
+                            style="border-radius: 5px;" fxLayoutAlign="start center">
+                            <div class="mr-12">
+                                <mat-icon class="info">info</mat-icon>
+                            </div>
+                            <label>
+                                En esta vista <strong>podrás ver, modificar y eliminar las firmas.</strong>
+                            </label>
+                        </div>
+
+                        <div class="mat-card card p-12" fxFlex="1 0 auto" fxLayout="column" style="border-radius: 5px;"
+                            fxLayoutAlign="start center">
+
+                            <mat-table style="width: 100%" class="products-table" #table [dataSource]="
+                                listaFirmas
+                                    | paginate
+                                        : {
+                                              itemsPerPage: itemsPerPage,
+                                              currentPage: p
+                                          }
+                            " [@animateStagger]="{ value: '50' }" fusePerfectScrollbar matSort
+                                (matSortChange)="sortData($event)">
+                                <!-- Columna nombre -->
+                                <ng-container matColumnDef="NOMBRE">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="NOMBRE">
+                                        Nombre
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let firma">
+                                        <p class="text-truncate">
+                                            {{firma.NOMBRE}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna Cargo -->
+                                <ng-container matColumnDef="CARGO">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="CARGO">
+                                        Cargo
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let firma">
+                                        <p class="category text-truncate">
+                                            {{firma.CARGO}}
+                                        </p>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna Cargo -->
+                                <ng-container matColumnDef="FIRMA_URL">
+                                    <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="FIRMA_URL">
+                                        Firma
+                                    </mat-header-cell>
+                                    <mat-cell fxLayoutAlign="start" *matCellDef="let firma">
+                                        <a [href]="'https://apilms.central.edu.py/media/files/' + firma.FIRMA_URL" target="_blank">
+                                            <img [src]="'https://apilms.central.edu.py/media/files/' + firma.FIRMA_URL" alt="">
+                                        </a>
+                                        
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Columna ACCIONES -->
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell fxLayoutAlign="start center" *matHeaderCellDef>Acciones
+                                    </mat-header-cell>
+
+                                    <mat-cell fxLayoutAlign="start"
+                                        style="justify-content: space-evenly; padding: 5px 0;"
+                                        *matCellDef="let firma" fxLayout="row">
+                                        <button mat-flat-button color="accent" class="mr-4"
+                                            >
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+
+                                        <button mat-flat-button color="warn" >
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+                                <mat-row *matRowDef="let product; columns: displayedColumns" class="product" matRipple>
+                                </mat-row>
+                            </mat-table>
+                            <div fxLayoutAlign="center center" class="mt-16">
+                                <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true"
+                                    previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <!--TERMINA TAB LISTA DE AENCUESTAS-->
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

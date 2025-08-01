@@ -1,0 +1,65 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+
+    <div fxFlex="100" fxLayout="column" class="mb-12" [formGroup]="formulario" style="width: 100% !important;">
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <!--INPUT NOMBRE-->
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="NOMBRE" />
+
+                <mat-error>Por favor ingrese un nombre.</mat-error>
+            </mat-form-field>
+
+            <!--INPUT APELLIDO-->
+            <mat-form-field appearance="outline" fxFlex="50">
+                <mat-label>Apellido</mat-label>
+                <input matInput formControlName="APELLIDO" />
+
+                <mat-error>Por favor ingrese un apellido.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <!--INPUT CORREO-->
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>Correo</mat-label>
+                <input matInput formControlName="EMAIL" email type="email" />
+
+                <mat-error>Por favor ingrese un correo valido.</mat-error>
+            </mat-form-field>
+
+            <!--INPUT TELEFONO-->
+            <mat-form-field appearance="outline" fxFlex="50">
+                <mat-label>Rol</mat-label>
+                <mat-select formControlName="ID_ROL">
+                    <mat-option *ngFor="let rol of roles" [value]="rol.ID">{{rol.NOMBRE}}
+                    </mat-option>
+                </mat-select>
+
+                <mat-error>Por favor seleccione un rol.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <!--SELECT CLIENTES-->
+        <mat-form-field appearance="outline">
+            <mat-label>Clientes</mat-label>
+            <mat-select formControlName="CLIENTES" multiple>
+                <mat-option *ngFor="let c of listaClientes" [value]="c.ID">{{c.NOMBRE}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" style="width: 100%;">
+        <div class="mr-24" style="width: 50%;">
+            <button mat-flat-button color="accent" class="boton-sin-fondo"
+                (click)="cerrarDialog('cancelar')">Cancelar</button>
+        </div>
+        <div style="width: 50%;">
+            <button [disabled]="this.formulario.invalid" fxFlex="100" mat-flat-button color="accent"
+                [ngClass]="this.formulario.invalid ? 'disabled':'boton-con-fondo'"
+                (click)="cerrarDialog('guardar')">Guardar</button>
+        </div>
+    </div>
+</div>

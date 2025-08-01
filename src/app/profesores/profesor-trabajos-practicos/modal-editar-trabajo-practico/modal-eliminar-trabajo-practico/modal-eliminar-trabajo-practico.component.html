@@ -1,0 +1,15 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+    <div class="mb-24">
+        <mat-icon class="icono">error_outline</mat-icon>
+    </div>
+
+    <div class="mb-24" fxLayout="column" fxLayoutAlign="center center">
+        <label style="font-size: 20px; font-weight: bold;">¿Estas seguro que desea eliminar el trabajo practico?</label>
+        <label style="font-weight: bold;">Este cambio no es reversible</label>
+    </div>
+
+    <div style="width: 100%;" fxLayout="row">
+        <button mat-raised-button color="accent" class="eliminar mr-8" (click)="eliminar()">Si, eliminar</button>
+        <button mat-raised-button color="accent" class="boton-con-fondo" (click)="cancelar()">Cancelar</button>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+    <div style="display: flex; flex-direction: column;" *ngIf="alumno">
+        <label>Nombre: {{alumno.NOMBRE}}</label>
+        <label>Apellido: {{alumno.APELLIDO}}</label>
+        <label>Documento: {{alumno.DOCUMENTO}}</label>
+        <label>Email: {{alumno.EMAIL}}</label>
+    </div>
+
+    <div style="display: flex; flex-direction: column; margin: 30px;" *ngIf="alumno">
+        <div *ngFor="let materia of materias" style="margin: 5px;">
+            <label>{{materia.nombre}}: </label> <label style="color: green;" *ngIf="materia.aprovado">Aprobado</label> <label *ngIf="!materia.aprovado">Pendiente</label>
+        </div>
+    </div>
+</div>

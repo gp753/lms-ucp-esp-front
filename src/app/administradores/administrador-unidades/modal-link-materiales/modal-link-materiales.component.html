@@ -1,0 +1,29 @@
+<div fxFlex="100" fxLayoutAlign="start" fxLayout="column" style="width: 500px">
+    <div class="mb-24" fxLayoutAlign="center center">
+        <label style="font-size: 20px; color: #656565; font-weight: bold">Cargar Link de materiales</label>
+    </div>
+
+    <div class="mb-24" style="width: 100%">
+        <input [(ngModel)]="link" style="
+                border-radius: 5px;
+                border: solid;
+                border-color: rgb(184, 184, 184);
+                border-width: 1.5px;
+                padding: 10px;
+                width: 100%;
+            " />
+    </div>
+
+    <div fxLayout="row" style="width: 100%">
+        <div class="mr-24" style="width: 50%">
+            <button mat-raised-button color="accent" class="boton-sin-fondo" (click)="cerrar()">
+                Cancelar
+            </button>
+        </div>
+        <div style="width: 50%">
+            <button fxFlex="100" mat-raised-button color="accent" class="boton-con-fondo" (click)="guardar()">
+                Guardar
+            </button>
+        </div>
+    </div>
+</div>

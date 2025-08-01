@@ -1,0 +1,13 @@
+.stepper-desktop {
+    ::ng-deep .mat-horizontal-stepper-header {
+        pointer-events: none !important;
+    }
+}
+
+.stepper-mobile {
+    display: none;
+
+    ::ng-deep .mat-horizontal-stepper-header {
+        pointer-events: none !important;
+    }
+}

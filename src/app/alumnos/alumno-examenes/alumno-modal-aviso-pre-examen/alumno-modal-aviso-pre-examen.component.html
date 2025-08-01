@@ -1,0 +1,45 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+
+    <div fxFlex="100" fxLayout="column" class="mb-24">
+        <div style="text-align: center;">
+            <mat-icon class="info">error_outline</mat-icon>
+        </div>
+        <label style="font-size: 20px; color: #656565; font-weight: bold;">¿Seguro que desea rendir este examen?</label>
+    </div>
+
+    <div style="max-width: 600px; text-align: center;" class="mb-24" fxLayout="column">
+
+        <!-- <label style="text-align: center; font-weight: bold;" class="mb-8">El examen quedara disponible a partir de la
+            fecha y hora
+            establecida por la
+            universidad.</label>
+
+        <label style="text-align: center;" class="mb-8"> - A partir del momento que el alumno rinde un examen, tendra 45
+            minutos para responder.</label>
+
+        <label style="text-align: center;" class="mb-8"> - La prueba tiene alternativa UNICA y el tiempo empieza a
+            contar despues de
+            iniciar el examen.</label>
+
+        <label style="text-align: center;" class="mb-8"> - Una vez haya respondido las preguntas, el alumno tendra que
+            hacer click en
+            finalizar. De esta forma
+            quedara grabado en el sistema de datos las respuestas.</label>
+
+        <label style="text-align: center;"> - Despues de finalizado el examen, no podra modificar las preguntas, el
+            examen estara cerrado para el
+            alumno.</label> -->
+
+    </div>
+
+    <div fxLayout="row" style="width: 100%;">
+        <div class="mr-24" style="width: 50%;">
+            <button mat-raised-button color="accent" class="boton-sin-fondo" (click)="cerrarDialog()">Cancelar</button>
+        </div>
+        <div style="width: 50%;">
+            <button fxFlex="100" mat-raised-button color="accent" class="boton-con-fondo"
+                (click)="rendirExamen()">Continuar</button>
+        </div>
+    </div>
+
+</div>

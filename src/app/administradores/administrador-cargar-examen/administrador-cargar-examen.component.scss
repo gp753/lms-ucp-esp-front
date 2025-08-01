@@ -1,0 +1,41 @@
+.header {
+    background: linear-gradient(to right, #2d323e 0%, #285ba7 100%);
+    max-height: 65px;
+    color: #fff;
+}
+
+.info {
+    font-size: 50px;
+    width: fit-content;
+    height: auto;
+    color: #285ba7;
+}
+
+.boton-con-fondo {
+    background: #285ba7 !important;
+    border-radius: 50px;
+}
+.card {
+    max-width: 1000px;
+    width: 100%;
+}
+
+// .widthCheckBox {
+//     display: flex;
+//     justify-content: space-between;
+//     flex-wrap: wrap;
+//     width: 49%;
+
+//     ::ng-deep .mat-checkbox-layout {
+//         width: 100%;
+//     }
+
+//     ::ng-deep .mat-checkbox-label {
+//         width: 100%;
+//     }
+
+//     ::ng-deep .mat-checkbox-inner-container {
+//         margin: unset;
+//         margin-right: 8px;
+//     }
+// }

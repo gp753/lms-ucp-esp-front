@@ -1,0 +1,99 @@
+.boton-sin-fondo {
+    background: transparent !important;
+    border-radius: 50px;
+    border-color: #285ba7 !important;
+    border: solid;
+    border-width: 1px;
+    color: #285ba7 !important;
+}
+
+.boton-con-fondo {
+    background: #285ba7 !important;
+    border-radius: 50px;
+}
+
+.fondo {
+    background: #f7f7f7;
+}
+
+.header {
+    background: linear-gradient(to right, #2d323e 0%, #285ba7 100%);
+    max-height: 65px;
+    color: #fff;
+}
+.info {
+    font-size: 50px;
+    width: fit-content;
+    height: auto;
+    color: #285ba7;
+}
+.card {
+    // max-width: 1200px;
+    width: 100%;
+}
+
+.recuadro {
+    width: 200px;
+    border-radius: 5px;
+    padding: 3%;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 1%;
+    text-align: center;
+
+    h1 {
+        font-size: 50px;
+        margin: 0;
+    }
+}
+
+.recuadro:hover {
+    cursor: pointer;
+    background-color: #ddd;
+}
+
+.mat-cell {
+    padding-right: 10px;
+}
+
+.matFormField {
+    padding-bottom: 21.5px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.checkbox {
+    ::ng-deep .mat-checkbox-inner-container {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media screen and (max-width: 1366px) {
+    .recuadro {
+        width: 185px;
+    }
+}
+.mat-column-index,
+.mat-column-acciones {
+    min-width: 50px;
+    max-width: 50px;
+    padding: 0 5px;
+}
+.mat-column-estado {
+    min-width: 80px;
+    padding: 0 5px;
+}
+.mat-column-nombre,
+.mat-column-apellido,
+.mat-column-documento,
+.mat-column-email,
+.mat-column-intentos,
+.mat-column-filial,
+.mat-column-ultimo_ingreso {
+    min-width: 160px;
+    padding: 0 5px;
+}

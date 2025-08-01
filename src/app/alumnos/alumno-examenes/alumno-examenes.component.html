@@ -1,0 +1,120 @@
+<div class="fondo" fxFlex="100" fxLayout="column">
+
+    <div class="header" fxLayout="row" fxLayoutAlign="center center" fxFlex="1 0 auto">
+        <!--<div>
+            <button mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>-->
+        <div>
+            <h1 [@animate]="{
+                value: '*',
+                params: { delay: '100ms', y: '25px' }
+            }">Exámenes</h1>
+        </div>
+    </div>
+
+    <div class="p-24" fxLayout="column">
+
+        <div class="mat-card mb-24 p-12" fxLayout="row" style="border-radius: 5px;" fxLayoutAlign="start center">
+            <div class="mr-16">
+                <mat-icon class="info">info</mat-icon>
+            </div>
+            <div>
+                <label>Aquí podrás <strong>rendir tus exámenes</strong>. Recuerda que para habilitar el examen debes
+                    tener 100% de avance en las unidades de la materia</label>
+            </div>
+        </div>
+
+        <h1 *ngIf="examenes.length == 0">Esta materia aun no tiene exámenes.</h1>
+
+        <div>
+            <mat-accordion [multi]="true">
+
+                <mat-expansion-panel [expanded]="true" *ngFor="let e of examenes">
+                    <mat-expansion-panel-header style="background: #014666 !important; height: 48px !important;">
+                        <mat-panel-title style="color: #fff;" fxLayout="row">
+                            <mat-icon class="mr-12">assignment</mat-icon> Evaluación
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <div fxFlex="100" fxLayout="row wrap" fxLayoutAlign="start" class="pt-16">
+                        <!-- <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex
+                            style="min-width: fit-content !important;">
+                            <label style="white-space: nowrap;">Fecha de inicio</label>
+                            <label style="font-weight: bold; white-space: nowrap;">28-06-2022</label>
+                        </div> -->
+
+                        <!-- <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                            <label style="white-space: nowrap;">Fecha de entrega</label>
+                            <label style="font-weight: bold;white-space: nowrap;">28-06-2022</label>
+                        </div> -->
+
+                        <!-- <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                            <label style="white-space: nowrap;">Tiempo estimado</label>
+                            <label style="font-weight: bold;white-space: nowrap;">120 min</label>
+                        </div> -->
+
+                        <!-- <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                            <label style="white-space: nowrap;">Puntaje</label>
+                            <label style="font-weight: bold;white-space: nowrap;">-</label>
+                        </div> -->
+
+                        <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                            <label style="white-space: nowrap;">Estado</label>
+                            <label *ngIf="e.estado == 'Pendiente'"
+                                style="font-weight: bold; color: #FFBD2E; white-space: nowrap;">Pendiente</label>
+                            <label *ngIf="e.estado == 'Aprobado'"
+                                style="font-weight: bold; color: #00ffb3; white-space: nowrap;">Aprobado</label>
+                            <label *ngIf="e.estado == 'Reprobado'"
+                                style="font-weight: bold; color: #c41818; white-space: nowrap;">Reprobado</label>
+                        </div>
+
+                        <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                            <label style="white-space: nowrap;">Materia</label>
+                            <label style="font-weight: bold;white-space: nowrap;">{{e.materia}}</label>
+                        </div>
+
+
+                        <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                            <label style="white-space: nowrap;">Nombre</label>
+                            <label style="font-weight: bold;white-space: nowrap;">{{e.nombre}}</label>
+                        </div>
+
+                        <div fxLayout="column" fxLayoutAlign="center center" class="mr-12" fxFlex>
+                            <label style="white-space: nowrap;">Intentos restantes</label>
+                            <label
+                                style="font-weight: bold;white-space: nowrap;">{{e.intentoS_RESTANTES}}/{{e.totaL_INTENTOS}}
+                            </label>
+                        </div>
+
+
+                        <div fxLayout="row" fxLayoutAlign="center center" fxFlex>
+                            <button *ngIf="(e.estado === 'Pendiente' || e.estado == 'Reprobado')  && e.habilitado == true && e.intentoS_RESTANTES > 0"
+                                mat-flat-button color="accent" class="boton-con-fondo mr-12"
+                                style="border-radius: 50px !important; width: 123px !important;"
+                                (click)="avisoRendir(e)">Rendir</button>
+
+                            <!-- <button *ngIf="e.intentoS_RESTANTES > 0 && e.habilitado == true" mat-flat-button
+                                color="accent" class="boton-con-fondo mr-12"
+                                style="border-radius: 50px !important; width: 123px !important;"
+                                (click)="avisoRendir(e)">Rendir</button> -->
+
+                            <button
+                                title="Debes tener 100% de avance en todas las unidades de la materia para habilitar el examen"
+                                *ngIf="e.estado === 'Pendiente' && e.habilitado == false" disabled="true"
+                                mat-flat-button color="warn" class="botonDisabled mr-12"
+                                style="border-radius: 50px !important; width: 123px !important;">Rendir</button>
+
+                            <button *ngIf="e.estado != 'Pendiente'" mat-flat-button color="accent"
+                                class="boton-sin-fondo mr-12"
+                                style="border-radius: 50px !important; width: 123px !important;"
+                                (click)="verExamen(e)">Ver examen</button>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,81 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+
+    <div fxLayout="row" fxLayoutAlign="start center" [formGroup]="form" style="width: 100% !important;">
+        <!--SELECCIONAR CARRERA-->
+        <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+            <mat-label>Carrera</mat-label>
+            <mat-select required formControlName="carrera">
+                <mat-option *ngFor="let carrera of carreras" [value]="carrera.id" (click)="getSemestres(carrera.id)">
+                    {{ carrera.nombre }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija una carrara.</mat-error>
+        </mat-form-field>
+
+        <!--SELECCIONAR SEMESTRE-->
+        <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Semestre</mat-label>
+            <mat-select required formControlName="semestre">
+                <mat-option *ngFor="let semestre of semestres" [value]="semestre.id">
+                    {{ semestre.nombre }}
+                </mat-option>
+            </mat-select>
+            <mat-error>Por favor elija un semestre.</mat-error>
+        </mat-form-field>
+    </div>
+
+    <mat-table style="width: 100%" class="products-table" #table [dataSource]="
+    materias
+        | paginate
+            : {
+                  itemsPerPage: itemsPerPage,
+                  currentPage: p
+              }
+" [@animateStagger]="{ value: '50' }" fusePerfectScrollbar matSort (matSortChange)="sortData($event)">
+        <!-- Columna MATERIA -->
+        <ng-container matColumnDef="materia">
+            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="materia">
+                Materia
+            </mat-header-cell>
+            <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                <p class="text-truncate">
+                    {{lista.materia}}
+                </p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Columna PROFESOR -->
+        <ng-container matColumnDef="profesor">
+            <mat-header-cell fxLayoutAlign="start" *matHeaderCellDef mat-sort-header="profesor">
+                Profesor
+            </mat-header-cell>
+            <mat-cell fxLayoutAlign="start" *matCellDef="let lista">
+                <p class="text-truncate">
+                    {{lista.profesor}}
+                </p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Columna ACCIONES -->
+        <ng-container matColumnDef="acciones">
+            <mat-header-cell fxLayoutAlign="start start" *matHeaderCellDef>Acciones
+            </mat-header-cell>
+
+            <mat-cell fxLayoutAlign="start" *matCellDef="let lista" fxLayout="row">
+                <button mat-button color="accent" style="color: #12971e;" (click)="agregarMateria()">
+                    Agregar <mat-icon>add</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+        <mat-row *matRowDef="let product; columns: displayedColumns" class="product" matRipple>
+        </mat-row>
+    </mat-table>
+    <div fxLayoutAlign="center center" class="mt-16">
+        <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true" previousLabel="Anterior"
+            nextLabel="Siguiente"></pagination-controls>
+    </div>
+
+</div>

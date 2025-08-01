@@ -1,0 +1,129 @@
+<div fxFlex="100" fxLayout="row" id="academy-course" *ngIf="subunidades.length > 0">
+    <!--STEPER DE LA IZQ-->
+
+    <!-- SIDEBAR -->
+    <fuse-sidebar class="sidebar" name="academy-course-left-sidebar-1" position="left" lockedOpen="gt-sm">
+        <!-- SIDEBAR CONTENT -->
+        <div class="content" fusePerfectScrollbar>
+            <div class="steps">
+                <!-- ESTO MUESTRA LOS STEPS QUE SON CLICKEABLES -->
+                <div class="step" *ngFor="
+                        let step of subunidades;
+                        let i = index;
+                        let last = last;
+                        let first = first
+                    " (click)="gotoStep(i)" [ngClass]="{
+                        current: pos === i,
+                        completed: pos > i,
+                        last: last,
+                        first: first
+                    }">
+                    <div class="index">
+                        <span>{{ i + 1 }}</span>
+                    </div>
+                    <div class="title">{{ step.TITULO }}</div>
+                </div>
+                <!-- ESTO MUESTRA LOS STEPS QUE SON CLICKEABLES -->
+            </div>
+        </div>
+        <!-- / SIDEBAR CONTENT -->
+    </fuse-sidebar>
+    <!-- / SIDEBAR -->
+    <!-- / STEPER DE LA IZQ-->
+
+    <div fxFlex="100" fxLayout="column" style="display: block !important">
+        <!--HEADER-->
+        <div class="header" fxLayout="row" fxLayoutAlign="start center">
+            <div>
+                <button mat-button [routerLink]="['/tabs-materias', id_materia]">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+            </div>
+            <div>
+                <h1>{{ subunidades[pos].TITULO }}</h1>
+            </div>
+        </div>
+        <!--HEADER-->
+
+        <!-- SIDEBAR MOBILE -->
+        <fuse-sidebar class="sidebar" name="academy-course-left-sidebar-2" position="left" lockedOpen="lt-md">
+            <!-- SIDEBAR CONTENT -->
+            <div class="content" fusePerfectScrollbar>
+                <div class="steps">
+                    <!-- ESTO MUESTRA LOS STEPS QUE SON CLICKEABLES -->
+                    <div class="step" *ngFor="
+                        let step of subunidades;
+                        let i = index;
+                        let last = last;
+                        let first = first
+                    " (click)="gotoStep(i)" [ngClass]="{
+                        current: pos === i,
+                        completed: pos > i,
+                        last: last,
+                        first: first
+                    }">
+                        <div class="index">
+                            <span>{{ i + 1 }}</span>
+                        </div>
+                        <div class="title">{{ step.TITULO }}</div>
+                    </div>
+                    <!-- ESTO MUESTRA LOS STEPS QUE SON CLICKEABLES -->
+                </div>
+            </div>
+            <!-- / SIDEBAR CONTENT -->
+        </fuse-sidebar>
+        <!-- SIDEBAR MOBILE -->
+
+        <!--CONTENIDO-->
+        <div class="p-24" fxLayoutAlign="center center" fxLayout="column">
+            <div style="height: auto" class="mb-12 ancho">
+                <div class="container">
+                    <iframe class="responsive-iframe" [src]="subunidades[pos].videoSeguro" frameborder="0"
+                        allow=" autoplay;  encrypted-media;" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="ancho" style="margin-bottom: 5px" fxLayoutAlign="end">
+                <button mat-button>
+                    <mat-icon>thumb_up</mat-icon>
+                </button>
+                <button mat-button>
+                    <mat-icon>thumb_down</mat-icon>
+                </button>
+                <button mat-button>
+                    <mat-icon>outlined_flag</mat-icon>
+                </button>
+            </div>
+
+            <hr />
+
+            <!-- <div style="margin-top: 5px; width: 70%" fxLayout="column" *ngIf="unidades[pos].contenido !== ' '">
+                <quill-view [content]="unidades[pos].contenido" format="html" theme="snow"></quill-view>
+            </div> -->
+
+            <div fxLayout="column" class="mb-12 ancho">
+                <div class="mt-12 mb-12">
+                    <label class="titulo-pregunta">
+                        {{subunidades[pos].PREGUNTA}}</label>
+                </div>
+
+
+                <mat-radio-group [(ngModel)]="subunidades[pos].arrayRespuestas.respuestaSeleccionada"
+                    aria-label="Select an option" fxLayout="column">
+                    <mat-radio-button *ngFor="let r of subunidades[pos].arrayRespuestas" [value]="r.correcta"
+                        (click)="seleccionada(r.correcta)">
+                        {{r.texto}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <div class="mt-8 ancho" fxLayoutAlign="end">
+                <button mat-raised-button color="accent" class="boton-con-fondo"
+                    (click)="modalRespuesta(subunidades[pos])">
+                    Responder
+                </button>
+            </div>
+        </div>
+        <!-- / CONTENIDO-->
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+
+    <div fxFlex="100" fxLayout="column" class="mb-24">
+        <div style="text-align: center;">
+            <mat-icon class="info">error_outline</mat-icon>
+        </div>
+        <label style="font-size: 20px; color: #656565; font-weight: bold;">¡Precaución!</label>
+    </div>
+
+    <div style="max-width: 400px; text-align: center; display: flex; flex-direction: column;" class="mb-24">
+        <label style="text-align: center; margin-bottom: 10px;">¿Estás seguro que deseas eliminar este seccion?</label>
+
+        <label style="text-align: center; margin-bottom: 4px;"><strong>{{this.data.nombre}}</strong></label>
+
+        <label style="text-align: center; margin-bottom: 4px;">Profesor: <strong>{{this.data.profesor}}</strong></label>
+
+        <label style="text-align: center; margin-bottom: 4px;">
+            Inicio: <strong>{{this.data.inicio | date: 'dd/MM/yyyy'}}</strong>
+            / Fin: <strong>{{this.data.fin | date:'dd/MM/yyyy'}}</strong>
+        </label>
+
+        <label style="text-align: center;" *ngFor="let x of this.data.horarios">
+            Dia: <strong>{{x.dia}}</strong>
+            / Hora inicio: <strong>{{x.hora_inicio}}</strong>
+            / Hora fin: <strong>{{x.hora_fin}}</strong>
+        </label>
+    </div>
+
+    <div fxLayout="row" style="width: 100%;">
+        <div class="mr-24" style="width: 50%;">
+            <button mat-raised-button color="accent" class="boton-con-fondo" mat-dialog-close>Cancelar</button>
+        </div>
+        <div style="width: 50%;">
+            <button fxFlex="100" mat-raised-button color="accent" class="boton-sin-fondo"
+                (click)="eliminar()">Eliminar</button>
+        </div>
+    </div>
+
+</div>

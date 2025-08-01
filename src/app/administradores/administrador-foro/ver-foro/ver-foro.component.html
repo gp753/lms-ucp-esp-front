@@ -1,0 +1,237 @@
+<!--VISTA PRINCIPAL-->
+<div [fxHide]="entrarForo === true" fxLayout="column" class="p-24">
+    <div
+        class="mat-card p-12 mb-12"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+    >
+        <div class="mr-8">
+            <mat-icon
+                style="
+                    font-weight: lighter;
+                    font-size: 50px;
+                    width: fit-content;
+                    height: auto;
+                    color: #2295d3;
+                "
+                >info</mat-icon
+            >
+        </div>
+
+        <div>
+            <h1 style="font-size: 16px">
+                El presente foro esta diseñado para que puedas interactuar con
+                tus compañeros y el tutor del curso. Aquí podés realizar todas
+                las preguntas que te ayuden a aclarar tus dudas de la unidad,
+                así como cualquier duda de índole técnico. Te invitamos a
+                interactuar, para nutrirte y ayudar a tus compañeros a que
+                puedan llegar juntos al objetivo principal que es el de aprobar
+                la presente capacitación. ¡Éxitos!
+            </h1>
+        </div>
+    </div>
+
+    <div>
+        <!--FORO DE UNIDAD-->
+        <div fxLayout="column">
+            <!--header-->
+            <div
+                class="p-12"
+                style="
+                    background: #028ccc;
+                    border-top-left-radius: 5px;
+                    border-top-right-radius: 5px;
+                "
+            >
+                <label style="color: #fff; font-weight: bold"
+                    >Foros de {{ datosForo["MATERIA"] }}</label
+                >
+            </div>
+            <!--/ header-->
+
+            <!--contenido-->
+            <div
+                fxLayout="row"
+                class="p-24 card-foro"
+                fxLayoutAlign="start center"
+                (click)="
+                    entrarForoFuncion(foro?.ID, foro?.TITULO, foro?.DESCRIPCION)
+                "
+                *ngFor="let foro of forosDeLaMateria"
+            >
+                <div
+                    style="max-width: 60px; max-height: 60px; margin-right: 5%"
+                >
+                    <img
+                        style="width: 100%; height: 100%"
+                        src="assets/images/grupo-de-chat.png"
+                    />
+                </div>
+
+                <div fxLayout="column" style="margin-right: 5%">
+                    <h1
+                        style="
+                            font-size: 16px;
+                            color: #656565;
+                            font-weight: bold;
+                        "
+                    >
+                        {{ foro?.TITULO }}
+                    </h1>
+                    <label
+                        style="font-size: 16px; color: #656565; cursor: pointer"
+                        >{{ foro?.DESCRIPCION }}</label
+                    >
+                </div>
+
+                <div fxLayoutAlign="end center" fxFlex>
+                    <div fxLayout="column" fxLayoutAlign="center center">
+                        <label
+                            style="
+                                font-size: 16px;
+                                color: #656565;
+                                font-weight: bold;
+                                cursor: pointer;
+                            "
+                            >{{ foro?.PUBLICACIONES }}</label
+                        >
+                        <label
+                            style="
+                                font-size: 16px;
+                                color: #656565;
+                                cursor: pointer;
+                            "
+                            >Publicaciones</label
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+            <!--/ contenido-->
+        </div>
+    </div>
+</div>
+
+<!--CUANDO ENTRAS A LA DISCUSION-->
+<div [fxShow]="entrarDiscusion === true" fxLayout="column" class="p-24">
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <button mat-button (click)="entrarDiscusionFuncion()">
+            <mat-icon style="color: #028ccc">arrow_back</mat-icon>
+        </button>
+        <h1
+            class="mb-24"
+            style="color: #2d323e; font-weight: bold; font-size: 25px"
+        >
+            {{ nombreForo }}
+        </h1>
+    </div>
+
+    <div class="mb-12">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div class="card-foto">
+                <img class="foto" src="assets/images/grupo-de-chat.png" />
+            </div>
+
+            <div fxLayout="column" fxLayoutAlign="start">
+                <div fxLayout="row" fxLayoutAlign="start center">
+                    <h1
+                        style="
+                            font-weight: bold;
+                            color: #000000;
+                            font-size: 20px;
+                        "
+                    >
+                        {{ nombreForo }}
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-24">
+            <label style="color: #656565">{{ descripcionForo }}</label>
+        </div>
+
+        <!--BOTONES DE INTERACCION-->
+        <div class="mt-12 mb-12" fxLayout="row" fxLayoutAlign="start center">
+            <button mat-button style="color: #656565; margin-right: 3%">
+                <mat-icon style="color: #acacac !important"
+                    >chat_bubble</mat-icon
+                >
+                {{ respuestasForo.length }}
+                Comentarios
+            </button>
+        </div>
+        <!-- / BOTONES DE INTERACCION-->
+
+        <div>
+            <quill-editor
+                [(ngModel)]="respuestaComentarioQuill"
+                required
+                [styles]="editorStyle"
+                [modules]="configuracion"
+                placeholder="Agregar un comentario..."
+            >
+            </quill-editor>
+
+            <button
+                mat-flat-button
+                [disabled]="respuestaComentarioQuill == null"
+                [ngClass]="
+                    respuestaComentarioQuill == null
+                        ? 'disabled'
+                        : 'boton-con-fondo'
+                "
+                (click)="crearComentario()"
+            >
+                <mat-icon>chat_bubble</mat-icon> Contestar
+            </button>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="mt-12" *ngFor="let respuesta of respuestasForo">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div class="card-foto">
+                <div
+                    class="foto"
+                    style="background: #285ba7"
+                    fxLayoutAlign="center center"
+                >
+                    <label style="color: #fff; font-size: 45px"
+                        >{{ respuesta.USUARIO[0]
+                        }}{{
+                            respuesta.USUARIO.split(
+                                "
+                        "
+                            )[1][0]
+                        }}</label
+                    >
+                </div>
+            </div>
+
+            <div fxLayout="column" fxFlex="100" fxLayoutAlign="start start">
+                <div fxLayout="column">
+                    <label style="color: #656565; font-weight: bold">{{
+                        respuesta?.USUARIO
+                    }}</label>
+                    <label>{{
+                        respuesta?.FECHA | date : "dd/MM/yyyy, HH:mm"
+                    }}</label>
+                </div>
+
+                <quill-view
+                    class="sacarPadding"
+                    [content]="respuesta?.TEXTO"
+                    format="html"
+                    theme="snow"
+                >
+                </quill-view>
+
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / CUANDO ENTRAS A LA DISCUSION-->

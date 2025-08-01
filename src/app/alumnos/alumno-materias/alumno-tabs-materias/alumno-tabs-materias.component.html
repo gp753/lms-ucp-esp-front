@@ -1,0 +1,61 @@
+<div class="fondo" fxFlex="100" fxLayout="column">
+
+    <div class="header" fxLayout="row" fxFlex="1 0 auto" fxLayoutAlign="start center">
+        <div style="margin-right: 20px;">
+            <button mat-button routerLink="/materias">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>
+        <div>
+            <h1 [@animate]="{
+                value: '*',
+                params: { delay: '100ms', y: '25px' }
+            }">{{materia.NOMBRE}}</h1>
+        </div>
+    </div>
+
+    <div>
+        <mat-tab-group [selectedIndex]="selectedIndex">
+            <!--TAB 1-->
+            <mat-tab [label]="materia.NOMBRE">
+                <app-alumno-materias-tab-uno (childToParent)="childToParent($event)"></app-alumno-materias-tab-uno>
+            </mat-tab>
+
+            <!--TAB 2-->
+            <mat-tab label="Examenes">
+                <!-- <app-alumno-materias-tab-dos></app-alumno-materias-tab-dos> -->
+                <app-alumno-examenes [id_materia]="this.id_materia"></app-alumno-examenes>
+            </mat-tab>
+
+            <!--TAB 3-->
+            <!-- <mat-tab label="Trabajos Practicos">
+                <app-alumno-materias-tab-tres></app-alumno-materias-tab-tres>
+            </mat-tab> -->
+
+            <!--TAB 4-->
+            <!-- <mat-tab label="Live">
+                <app-alumno-materias-tab-cuatro></app-alumno-materias-tab-cuatro>
+            </mat-tab> -->
+
+            <!--TAB 5-->
+            <!-- <mat-tab label="Grabados">
+                <app-alumno-materias-tab-cinco></app-alumno-materias-tab-cinco>
+            </mat-tab> -->
+
+            <!--TAB 6-->
+            <!-- <mat-tab label="Libros de Disciplina">
+                <app-alumno-materias-tab-seis></app-alumno-materias-tab-seis>
+            </mat-tab> -->
+
+            <!--TAB 7-->
+            <mat-tab label="Foro">
+                <app-alumno-materias-tab-siete></app-alumno-materias-tab-siete>
+            </mat-tab>
+
+            <!--TAB 8-->
+            <!-- <mat-tab label="Información general">
+                <app-alumno-materias-tab-ocho></app-alumno-materias-tab-ocho>
+            </mat-tab> -->
+        </mat-tab-group>
+    </div>
+</div>

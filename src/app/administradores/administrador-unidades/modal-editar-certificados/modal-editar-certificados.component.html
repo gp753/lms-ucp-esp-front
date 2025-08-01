@@ -1,0 +1,54 @@
+<div fxFlex="100" fxLayoutAlign="start" fxLayout="column" style="width: 700px">
+    <div class="mb-24" fxLayoutAlign="center center">
+        <label style="font-size: 20px; color: #656565; font-weight: bold"
+            >Configuracion de certificados
+        </label>
+    </div>
+    <div
+        fxFlex="100"
+        fxLayoutAlign="start"
+        fxLayout="column"
+        style="width: 500px"
+        [formGroup]="form"
+    >
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Firma 1</mat-label>
+            <mat-select formControlName="ID_FIRMA1">
+                <mat-option *ngFor="let item of listaFirmas" [value]="item.ID">{{item.NOMBRE}} - {{item.CARGO}}</mat-option>
+            </mat-select>
+            <mat-error>La firma 1 es requerida</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Firma 2</mat-label>
+            <mat-select formControlName="ID_FIRMA2">
+                <mat-option *ngFor="let item of listaFirmas" [value]="item.ID">{{item.NOMBRE}} - {{item.CARGO}}</mat-option>
+            </mat-select>
+            <mat-error>La firma 2 es requerida</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" style="width: 100%">
+        <div class="mr-24" style="width: 50%">
+            <button
+                mat-raised-button
+                color="accent"
+                class="boton-sin-fondo"
+                (click)="cerrar()"
+            >
+                Cancelar
+            </button>
+        </div>
+        <div style="width: 50%">
+            <button
+                
+                mat-raised-button
+                color="accent"
+                class="boton-con-fondo"
+                (click)="crear()"
+            >
+                Guardar
+            </button>
+        </div>
+    </div>
+</div>

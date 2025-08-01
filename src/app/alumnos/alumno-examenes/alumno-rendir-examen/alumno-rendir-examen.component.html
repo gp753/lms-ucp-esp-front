@@ -1,0 +1,51 @@
+<div fxFlex="100" fxLayout="column">
+    <!--HEADER-->
+    <div class="header" fxLayout="row" fxLayoutAlign="start center">
+        <div>
+            <button mat-button routerLink="/examenes">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </div>
+        <div fxLayout="column">
+            <label><strong>Evaluación</strong></label>
+            <!-- <label><strong>Tiempo restante: 0:10:19</strong></label> -->
+        </div>
+    </div>
+    <!--HEADER-->
+
+    <!-- CONTENIDO -->
+    <div class="p-24" fxFlex="100">
+        <div class="mat-card card p-24" fxLayout="column" fxLayoutAlign="start" style="border-radius: 5px;">
+
+            <div fxLayout="column" fxLayoutAlign="start" *ngFor="let e of examen; let i = index">
+
+                <label class="mb-12" style="font-weight: bold;">{{i+1}} - {{e.pregunta}}</label>
+
+                <div>
+                    <mat-radio-group fxLayout="column">
+                        <mat-radio-button *ngFor="let r of e.respuestas" [value]="r.iD_RESPUESTA"
+                            (click)="agregarRespuesta(r.iD_RESPUESTA, e.iD_PREGUNTA)">
+                            {{r.respuesta}}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <hr>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="end center">
+                <!-- <button mat-raised-button color="accent" class="boton-sin-fondo mr-24"
+                    routerLink="/examenes">Volver</button> -->
+
+                <span *ngIf="this.respuestasSeleccionadas.length < this.examen.length"
+                    style="color: red; margin-right: 10px;">Responda todas las preguntas antes de entregar el examen,
+                    faltan: {{this.examen.length - this.respuestasSeleccionadas.length }}</span>
+
+                <button mat-flat-button color="accent"
+                    [ngClass]="this.respuestasSeleccionadas.length < this.examen.length ? 'disabled':'boton-con-fondo'"
+                    [disabled]="this.respuestasSeleccionadas.length < this.examen.length"
+                    (click)="finalizarExamen()">Finalizar</button>
+            </div>
+
+        </div>
+    </div>
+    <!-- CONTENIDO -->
+</div>

@@ -1,0 +1,25 @@
+.fondo {
+    background: #f7f7f7;
+}
+
+.header {
+    background: linear-gradient(to right, #014666 0%, #285ba7 100%);
+    max-height: 65px;
+    color: #fff;
+}
+
+.card {
+    max-width: 300px;
+    max-height: 450px;
+    border-radius: 5px;
+}
+
+.boton-sin-fondo {
+    background: transparent !important;
+    border-radius: 50px;
+    border-color: #285ba7 !important;
+    border: solid;
+    border-width: 1px;
+    color: #285ba7 !important;
+    width: 100%;
+}

@@ -1,0 +1,121 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+
+    <div fxFlex="100" fxLayout="column" class="mb-12" [formGroup]="formulario" style="width: 100% !important;">
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <!--INPUT NOMBRE-->
+            <mat-form-field appearance="outline" fxFlex="33" class="pr-4">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="NOMBRE" />
+
+                <mat-error>Por favor ingrese un nombre.</mat-error>
+            </mat-form-field>
+
+            <!--INPUT APELLIDO-->
+            <mat-form-field appearance="outline" fxFlex="34" class="pr-4 pl-4">
+                <mat-label>Apellido</mat-label>
+                <input matInput formControlName="APELLIDO" />
+
+                <mat-error>Por favor ingrese un apellido.</mat-error>
+            </mat-form-field>
+
+            <!--INPUT DOCUMENTO-->
+            <mat-form-field appearance="outline" fxFlex="33" class="pl-4">
+                <mat-label>Documento</mat-label>
+                <input matInput formControlName="DOCUMENTO" />
+
+                <mat-error>Por favor ingrese un documento.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <!--INPUT CORREO-->
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>Correo</mat-label>
+                <input matInput formControlName="EMAIL" email type="email" />
+
+                <mat-error>Por favor ingrese un correo valido.</mat-error>
+            </mat-form-field>
+
+            <!--SELECT CLIENTES-->
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Clientes</mat-label>
+                <mat-select formControlName="CLIENTES" multiple>
+                    <mat-option *ngFor="let c of listaClientes" [value]="c.ID">{{c.NOMBRE}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <!--SELECT FINANCIAMIENTOS-->
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>Financiamientos</mat-label>
+                <mat-select formControlName="FINANCIAMIENTOS" multiple>
+                    <mat-option *ngFor="let f of listaFinanciamientos" [value]="f.ID">
+                        {{f.NOMBRE}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- FILIAL -->
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Filial</mat-label>
+                <input matInput formControlName="FILIAL" />
+
+                <mat-error>Por favor ingrese una filial.</mat-error>
+            </mat-form-field>
+        </div>
+
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <!--SELECT MATERIAS-->
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>Materias</mat-label>
+                <mat-select #selectMateria>
+                    <mat-option *ngFor="let m of listaMaterias" [value]="m.ID"
+                        (click)="getListaSecciones(m.ID); this.materiaSeleccionada = m">{{m.NOMBRE}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!--SELECT SECCION-->
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Seccion</mat-label>
+                <mat-select #selectSeccion>
+                    <mat-option *ngFor="let s of listaSecciones" [value]="s.id" (click)="this.seccionSeleccionada = s">
+                        {{s.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <button mat-flat-button *ngIf="selectSeccion.value != null"
+            style="background-color: green; color: #fff; border-radius: 50px; width: fit-content; align-self: self-end;"
+            (click)="agregarMateria(); selectMateria.value = null; selectSeccion.value = null">
+            Agregar materia <mat-icon>add</mat-icon>
+        </button>
+
+        <h2 *ngIf="arrayMaterias.length > 0">Lista de materias</h2>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto"
+            *ngFor="let array of arrayMaterias; let i = index">
+            <p>{{i+1}}. {{array.nombreMateria}} - {{array.nombreSeccion}}</p>
+
+
+            <mat-icon style="color:rgb(194, 33, 33); cursor: pointer;" (click)='quitarMateria(i)'>
+                delete</mat-icon>
+        </div>
+    </div>
+
+    <div fxLayout="row" style="width: 100%;">
+        <div class="mr-24" style="width: 50%;">
+            <button mat-flat-button color="accent" class="boton-sin-fondo" mat-dialog-close>Cancelar</button>
+        </div>
+        <div style="width: 50%;">
+            <button [disabled]="this.formulario.invalid" fxFlex="100" mat-flat-button color="accent"
+                [ngClass]="this.formulario.invalid ? 'disabled':'boton-con-fondo'" style="border-radius: 50px;"
+                (click)="guardar()">Guardar</button>
+        </div>
+    </div>
+</div>
