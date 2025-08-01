@@ -198,9 +198,17 @@
                                     class="progress-wrapper"
                                     (click)="seek($event, 'student')"
                                 >
-                                    <div class="progress-base">
+                                    <div
+                                        class="progress-base"
+                                        [class.indeterminate]="
+                                            studentAudio.usingEstimate &&
+                                            studentAudio.playing
+                                        "
+                                    >
+                                        <!-- sólo mostrar relleno si hay duración definida -->
                                         <div
                                             class="progress-filled"
+                                            *ngIf="!studentAudio.usingEstimate"
                                             [style.width.%]="
                                                 (studentAudio.progress || 0) *
                                                 100
@@ -215,9 +223,11 @@
                                         }}
                                         /
                                         {{
-                                            formatTime(
-                                                studentAudio.duration || 0
-                                            )
+                                            studentAudio.duration
+                                                ? formatTime(
+                                                      studentAudio.duration
+                                                  )
+                                                : "--:--"
                                         }}
                                     </div>
                                 </div>

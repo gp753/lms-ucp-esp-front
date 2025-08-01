@@ -423,5 +423,27 @@ button:disabled {
   opacity: .5;
   cursor: not-allowed;
 }
+.progress-base.indeterminate {
+  position: relative;
+  background: #dfe3e8;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -40%;
+    top: 0;
+    height: 100%;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: slide 1s infinite;
+  }
+}
+
+@keyframes slide {
+  to {
+    left: 100%;
+  }
+}
 
 

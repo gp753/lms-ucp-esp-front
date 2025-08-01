@@ -32,6 +32,10 @@ interface AudioData {
     currentTime?: number;
     progress?: number; // 0..1
     rafId?: number;
+    // nuevos para la sincronización inicial
+    playStartedAt?: number;
+    initialSyncInterval?: any;
+    firstPlayHappened?: boolean;
 }
 // parche rápido: evita errores de tipo, no es tan estricto
 declare var MediaRecorder: any;
@@ -382,6 +386,25 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
     }
 
     // ------------------ grabación del alumno ------------------
+    private async ensureDurationFromBlob(target: AudioData) {
+        if (target.duration && target.duration > 0) return;
+        if (!target.blob) return;
+
+        try {
+            const arrayBuffer = await target.blob.arrayBuffer();
+            const AudioContextClass =
+                (window as any).AudioContext ||
+                (window as any).webkitAudioContext;
+            if (!AudioContextClass) return; // no soportado, se cae en fallback
+            const audioCtx = new AudioContextClass();
+            const decoded = await audioCtx.decodeAudioData(arrayBuffer);
+            target.duration = decoded.duration;
+            // Nota: no es necesario cerrar el context en muchas implementaciones antiguas
+        } catch (e) {
+            console.warn("Fallo al decodificar audio para sacar duración:", e);
+        }
+    }
+
     async startRecording() {
         if (this.studentAudio.recording) return;
 
@@ -405,7 +428,7 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
                 }
             };
 
-            recorder.onstop = () => {
+            recorder.onstop = async () => {
                 const blob = new Blob(this.studentAudio.chunks, {
                     type: "audio/webm",
                 });
@@ -415,6 +438,15 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
                 }
                 this.studentAudio.url = URL.createObjectURL(blob);
                 this.studentAudio.recording = false;
+
+                // reset visuales
+                this.studentAudio.currentTime = 0;
+                this.studentAudio.progress = 0;
+
+                // obtener duración real mediante decodificación
+                await this.ensureDurationFromBlob(this.studentAudio);
+
+                // preparar el elemento de audio con duración ya conocida
                 this.setupAudioElement("student");
                 this._changeDetectorRef.detectChanges();
             };
@@ -444,89 +476,147 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
             who === "student" ? this.studentAudio : this.professorAudio;
         if (!target.url) return;
 
-        if (target.audioEl) {
-            target.audioEl.pause();
-            target.audioEl.currentTime = 0;
+        // Solo creamos/recreamos si no existe o cambió la fuente
+        if (!target.audioEl || target.audioEl.src !== target.url) {
             if (target.rafId) {
                 cancelAnimationFrame(target.rafId);
             }
-        } else {
+
             target.audioEl = new Audio(target.url);
+            target.audioEl.preload = "metadata";
+
+            const audio = target.audioEl;
+
+            audio.onloadedmetadata = () => {
+                target.duration = isFinite(audio.duration) ? audio.duration : 0;
+                // sincronizamos currentTime si es válido
+                target.currentTime = isFinite(audio.currentTime)
+                    ? audio.currentTime
+                    : 0;
+                target.progress = target.duration
+                    ? target.currentTime! / target.duration!
+                    : 0;
+                this._changeDetectorRef.detectChanges();
+            };
+
+            audio.ontimeupdate = () => {
+                target.currentTime = isFinite(audio.currentTime)
+                    ? audio.currentTime
+                    : 0;
+                if (
+                    target.duration &&
+                    isFinite(target.duration) &&
+                    target.duration > 0
+                ) {
+                    target.progress = target.currentTime! / target.duration!;
+                } else {
+                    target.progress = 0;
+                }
+                this._changeDetectorRef.detectChanges();
+            };
+
+            audio.onended = () => {
+                target.playing = false;
+                if (target.rafId) {
+                    cancelAnimationFrame(target.rafId);
+                }
+                target.currentTime = target.duration;
+                target.progress = 1;
+                this._changeDetectorRef.detectChanges();
+            };
+
+            audio.onplay = () => {
+                target.playing = true;
+                this.updateFrame(who);
+                this._changeDetectorRef.detectChanges();
+            };
+
+            audio.onpause = () => {
+                target.playing = false;
+                if (target.rafId) {
+                    cancelAnimationFrame(target.rafId);
+                }
+                this._changeDetectorRef.detectChanges();
+            };
         }
-
-        target.audioEl.src = target.url!;
-        target.audioEl.preload = "metadata";
-
-        target.audioEl.onloadedmetadata = () => {
-            const dur = target.audioEl!.duration;
-            target.duration = isFinite(dur) ? dur : 0;
-            target.currentTime = 0;
-            target.progress = 0;
-            this._changeDetectorRef.detectChanges();
-        };
-
-        target.audioEl.ontimeupdate = () => {
-            target.currentTime = isFinite(target.audioEl!.currentTime)
-                ? target.audioEl!.currentTime
-                : 0;
-            if (target.duration && isFinite(target.duration)) {
-                target.progress = target.currentTime! / target.duration!;
-            } else {
-                target.progress = 0;
-            }
-            this._changeDetectorRef.detectChanges();
-        };
-
-        target.audioEl.onended = () => {
-            target.playing = false;
-            if (target.rafId) {
-                cancelAnimationFrame(target.rafId);
-            }
-            target.currentTime = target.duration;
-            target.progress = 1;
-            this._changeDetectorRef.detectChanges();
-        };
     }
 
     togglePlay(who: "student" | "professor") {
         const target =
             who === "student" ? this.studentAudio : this.professorAudio;
         if (!target.url) return;
+
         this.setupAudioElement(who);
         if (!target.audioEl) return;
 
+        // si ya terminó, reiniciamos
+        if (
+            target.duration &&
+            target.currentTime !== undefined &&
+            target.currentTime >= target.duration
+        ) {
+            target.audioEl.currentTime = 0;
+        }
+
         if (target.playing) {
             target.audioEl.pause();
-            target.playing = false;
-            if (target.rafId) {
-                cancelAnimationFrame(target.rafId);
-            }
         } else {
-            target.audioEl.play();
+            // marcamos inicio de reproducción para estimar
+            target.playStartedAt = performance.now();
+            const playPromise = target.audioEl.play();
+
             target.playing = true;
+            // arranca el loop de refresco
             this.updateFrame(who);
+
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    // en caso de error con play, igual mantenemos el loop y estimación
+                });
+            }
         }
-        this._changeDetectorRef.detectChanges();
     }
 
     private updateFrame(who: "student" | "professor") {
         const target =
             who === "student" ? this.studentAudio : this.professorAudio;
         if (!target.audioEl) return;
+        const audio = target.audioEl;
 
-        target.currentTime = isFinite(target.audioEl.currentTime)
-            ? target.audioEl.currentTime
-            : 0;
-        target.duration = isFinite(target.audioEl.duration)
-            ? target.audioEl.duration
-            : 0;
-        target.progress = target.duration
-            ? target.currentTime! / target.duration!
-            : 0;
+        // Si el audio ya avanza (más que un umbral), usamos currentTime real
+        const realProgressAvailable = audio.currentTime > 0.05;
 
+        if (realProgressAvailable) {
+            // cancelamos cualquier estimación previa
+            target.currentTime = isFinite(audio.currentTime)
+                ? audio.currentTime
+                : 0;
+        } else if (target.playStartedAt && target.playing) {
+            // estimación manual mientras currentTime no avanza
+            const elapsed = (performance.now() - target.playStartedAt) / 1000;
+            target.currentTime = Math.min(elapsed, target.duration || elapsed);
+        } else {
+            target.currentTime = isFinite(audio.currentTime)
+                ? audio.currentTime
+                : 0;
+        }
+
+        // duración preferida del elemento (o la ya decodificada)
+        target.duration = isFinite(audio.duration)
+            ? audio.duration
+            : target.duration || 0;
+
+        // progreso calculado
+        target.progress =
+            target.duration && target.duration > 0
+                ? Math.min(target.currentTime! / target.duration!, 1)
+                : 0;
+
+        // si sigue reproduciendo, seguimos el loop
         if (target.playing) {
             target.rafId = requestAnimationFrame(() => this.updateFrame(who));
         }
+
         this._changeDetectorRef.detectChanges();
     }
 
@@ -557,6 +647,11 @@ export class AlumnoContinuarUnidadComponent implements OnInit, OnChanges {
             .toString()
             .padStart(2, "0");
         return `${minutes}:${seconds}`;
+    }
+
+    formatDuration(sec?: number): string {
+        if (!sec || !isFinite(sec) || sec <= 0) return "--:--";
+        return this.formatTime(sec);
     }
 
     // ------------------ acciones del alumno ------------------
